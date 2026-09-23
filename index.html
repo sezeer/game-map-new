@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+    <title>Game Map</title>
+    <link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#9e9482">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="icon" href="icon-192.png">
+
+<meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="black-translucent"
+>
+
+<meta
+    name="apple-mobile-web-app-title"
+    content="Game Map"
+>
+
+    <link
+        rel="stylesheet"
+        href="vendor/maplibre-gl.css"
+    >
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Teko:wght@500;600;700&display=swap"
+    rel="stylesheet"
+>
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+</head>
+
+<body>
+
+    <div id="map"></div>
+    
+    <div id="searchBox">
+
+    <input
+        id="searchInput"
+        aria-label="Yer ara"
+        type="text"
+        placeholder="Nereye?"
+        autocomplete="off"
+    >
+
+    <button id="searchButton">
+        ARA
+    </button>
+
+    <button id="routeButton">
+        ROTA
+    </button>
+
+    <div id="searchResults"></div>
+
+</div>
+
+
+<div id="routeInfo">
+
+    <span id="routeTime">
+        -- dk
+    </span>
+
+    <span>•</span>
+
+    <span id="routeDistance">
+        -- km
+    </span>
+
+</div>
+
+
+<div id="navigationInstruction">
+
+    <span id="navigationArrow"></span>
+
+    <div id="navigationWords">
+        <span id="navigationDistance"></span>
+        <span id="navigationAction"></span>
+        <span id="navigationRoad"></span>
+    </div>
+
+</div>
+
+
+<div id="speedHud">
+
+    <span id="speedValue">
+        0
+    </span>
+
+    <span id="speedUnit">
+        KM/H
+    </span>
+
+</div>
+</div>
+    
+    <button id="locationButton">KONUMUM</button>
+
+    <script src="vendor/maplibre-gl.js"></script>
+
+    <aside id="mapTools" aria-label="Harita araçları">
+        <div id="connectionStatus" role="status">GPS kapalı</div>
+        <button id="toolsToggle" aria-expanded="false" aria-controls="toolsPanel">MENÜ</button>
+        <section id="toolsPanel" hidden aria-label="Harita menüsü">
+            <h2>YOL ARKADAŞIN</h2>
+            <button id="pickDestination">HARİTADAN HEDEF SEÇ</button>
+            <button id="saveFavorite">HEDEFİ FAVORİYE EKLE</button>
+            <button id="voiceToggle" aria-pressed="false">SES: KAPALI</button>
+            <button id="wakeToggle" aria-pressed="false">EKRANI AÇIK TUT: KAPALI</button>
+            <button id="cancelRoute">ROTAYI TEMİZLE</button>
+            <h3>FAVORİLER</h3><div id="favoritePlaces"></div>
+            <h3>SON HEDEFLER</h3><div id="recentPlaces"></div>
+        </section>
+    </aside>
+    <div id="routeChoices" aria-label="Alternatif araç rotaları"></div>
+    <div id="appNotice" role="status" hidden></div>
+    <script src="app.js"></script>
+    <script src="features.js"></script>
+
+</body>
+
+</html>

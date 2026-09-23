@@ -1,0 +1,30 @@
+GAME MAP — GÜNCELLENEN SÜRÜM
+
+Bu klasör tüm uygulama dosyalarını içerir. Eski dosyalar değiştirilmemiştir.
+Mevcut web sitenize bu klasörün bütün içeriğini birlikte yükleyin.
+Telefonda konum ve ekranı açık tutma için HTTPS üzerinden açın.
+Bilgisayarda denemek için bir yerel web sunucusundan localhost ile açın.
+index.html dosyasına çift tıklamak konum ve çevrimdışı özellikler için yeterli değildir.
+
+KULLANIM
+1. KONUMUM ile konum izni verin.
+2. Yer arayın veya MENÜ > HARİTADAN HEDEF SEÇ ile haritaya dokunun.
+3. ROTA ile güzergâhları alın; sunulursa alternatif rotayı seçin.
+4. BAŞLAT ile navigasyona geçin. İPTAL ile durdurun.
+5. Menüden sesli yönlendirmeyi ve ekranı açık tutmayı açabilirsiniz.
+6. Hedefi favorilere ekleyip Ev veya İş gibi bir ad verebilirsiniz.
+7. ROTAYI TEMİZLE, bekleyen rota hesaplamasını da iptal eder.
+
+SINIRLAR
+- Bu sürüm araç rotası kullanır. Yaya rotası ve canlı trafik bilgisi yoktur.
+- Alternatifler yalnızca servis birden fazla rota döndürürse görünür.
+- Favoriler ve son hedefler yalnızca bu tarayıcıda saklanır.
+- Türkçe ses ve ekranı açık tutma cihaz/tarayıcı desteğine bağlıdır.
+- Çevrimdışı önbellek uygulama dosyaları içindir; çevrimdışı harita/arama/rota indirme değildir.
+- Harita, arama ve rota için mevcut dış servislerin erişilebilir olması gerekir.
+- Gerçek telefon GPS'i, sürüş sırasındaki dönüşler ve ses çıktısı cihazda denenmelidir.
+
+Yazdıkça aramada kamuya açık Nominatim yedeği kaldırıldı; Photon kullanılıyor.
+Nominatim otomatik tamamlama kısıtı: https://operations.osmfoundation.org/policies/nominatim/
+Rota servisi: https://project-osrm.org/docs/v5.24.0/api/
+Ekran desteği: https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API

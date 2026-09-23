@@ -1,0 +1,1327 @@
+/* =========================================================
+   GAME MAP — CLEAN STYLESHEET
+   Tek kaynaklı HUD / mobil / iPhone safe-area düzeni
+   ========================================================= */
+
+:root {
+    --map-bg: #9e9482;
+
+    --hud-bg: rgba(8, 8, 8, 0.94);
+    --hud-bg-soft: rgba(18, 18, 18, 0.94);
+    --hud-text: #ffffff;
+    --hud-muted: #aaa;
+    --hud-border: #b9b9b9;
+    --hud-outline: #111;
+    --hud-shadow: rgba(0, 0, 0, 0.55);
+
+    --accent-green: #9fbd32;
+    --accent-green-light: #c7e64b;
+    --accent-pink: #b02a78;
+    --accent-pink-light: #d05b9c;
+
+    --panel-gap: 8px;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: var(--map-bg);
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+input:focus-visible,
+[role="button"]:focus-visible {
+    outline: 3px solid #ffde7b;
+    outline-offset: 3px;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+/* =========================================================
+   HARİTA
+   ========================================================= */
+
+#map {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    background: var(--map-bg);
+}
+
+/* =========================================================
+   ORTAK HUD DİLİ
+   ========================================================= */
+
+#searchBox,
+#routeInfo,
+#navigationInstruction,
+#speedHud,
+#locationButton,
+#mapTools,
+#routeChoices {
+    font-family: "Teko", Impact, sans-serif;
+    text-transform: uppercase;
+}
+
+#searchBox,
+#routeInfo,
+#navigationInstruction,
+#speedHud,
+#locationButton {
+    color: var(--hud-text);
+    background: var(--hud-bg);
+    border: 2px solid var(--hud-outline);
+    outline: 1px solid var(--hud-border);
+    border-radius: 0;
+    box-shadow: 4px 4px 0 var(--hud-shadow);
+}
+
+/* =========================================================
+   ARAMA / ROTA PANELİ — MASAÜSTÜ
+   ========================================================= */
+
+#searchBox {
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    left: auto;
+    z-index: 2000;
+
+    display: flex;
+    align-items: stretch;
+    gap: 5px;
+
+    width: 430px;
+    max-width: calc(100vw - 28px);
+    padding: 5px;
+}
+
+#searchInput {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 38px;
+    padding: 0 11px;
+
+    color: #fff;
+    background: #151515;
+    border: 1px solid #666;
+    border-radius: 0;
+    outline: none;
+
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: none;
+}
+
+#searchInput::placeholder {
+    color: #aaa;
+    opacity: 1;
+}
+
+#searchButton,
+#routeButton {
+    flex: 0 0 auto;
+    height: 38px;
+    padding: 0 12px;
+
+    border-radius: 0;
+    cursor: pointer;
+
+    font-family: "Black Ops One", Impact, sans-serif;
+    font-size: 14px;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+#searchButton {
+    min-width: 66px;
+    color: #fff;
+    background: #151515;
+    border: 1px solid #777;
+    text-shadow: 2px 2px 0 #000;
+}
+
+#routeButton {
+    min-width: 76px;
+    color: #101010;
+    background: var(--accent-green);
+    border: 2px solid #111;
+    outline: 1px solid var(--accent-green-light);
+    box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.28);
+}
+
+#searchButton:active,
+#routeButton:active {
+    transform: translateY(1px);
+}
+
+/* Navigasyonda arama alanı tamamen kapanır; sadece İPTAL kalır */
+body.navigation-active #searchInput,
+body.navigation-active #searchButton,
+body.navigation-active #searchResults {
+    display: none !important;
+}
+
+body.navigation-active #searchBox {
+    top: 18px;
+    right: 20px;
+    left: auto;
+
+    width: auto;
+    max-width: none;
+    padding: 0;
+
+    background: transparent;
+    border: 0;
+    outline: 0;
+    box-shadow: none;
+}
+
+body.navigation-active #routeButton {
+    width: 104px;
+    min-width: 104px;
+    height: 44px;
+
+    color: #fff;
+    background: var(--accent-pink);
+    border-color: #111;
+    outline-color: var(--accent-pink-light);
+    text-shadow: 2px 2px 0 #000;
+}
+
+/* =========================================================
+   ARAMA SONUÇLARI
+   ========================================================= */
+
+#searchResults {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    z-index: 2100;
+
+    display: none;
+    max-height: 300px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+    background: rgba(8, 8, 8, 0.98);
+    border: 2px solid #111;
+    outline: 1px solid #999;
+    box-shadow: 4px 4px 0 var(--hud-shadow);
+}
+
+.searchResultItem {
+    position: relative;
+    min-height: 62px;
+    padding: 10px 78px 10px 13px;
+
+    color: #fff;
+    background: rgba(10, 10, 10, 0.98);
+    border-bottom: 1px solid #393939;
+
+    font-family: Arial, sans-serif;
+    cursor: pointer;
+}
+
+.searchResultItem:last-child {
+    border-bottom: 0;
+}
+
+.searchResultItem:hover,
+.searchResultItem:focus-within {
+    background: #242424;
+}
+
+.searchResultName {
+    display: block;
+    overflow: hidden;
+    color: #fff;
+
+    font-size: 15px;
+    font-weight: 800;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.searchResultAddress {
+    display: block;
+    margin-top: 4px;
+    overflow: hidden;
+
+    color: #aaa;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.25;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.searchResultDistance {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+
+    color: #d95aa8;
+    font-family: "Teko", Arial, sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* =========================================================
+   ROTA BİLGİSİ
+   ========================================================= */
+
+#routeInfo {
+    position: fixed;
+    top: 72px;
+    right: 20px;
+    left: auto;
+    z-index: 1700;
+
+    display: none;
+    min-width: 138px;
+    padding: 8px 12px;
+
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.4px;
+    text-align: center;
+    white-space: nowrap;
+    text-shadow: 2px 2px 0 #000;
+}
+
+#routeInfo span {
+    display: inline-block;
+}
+
+/* =========================================================
+   NAVİGASYON TALİMATI
+   ========================================================= */
+
+#navigationInstruction {
+    position: fixed;
+    top: 22px;
+    left: 22px;
+    z-index: 1800;
+
+    display: none;
+    align-items: center;
+    gap: 14px;
+
+    width: 300px;
+    min-height: 92px;
+    padding: 10px 16px;
+}
+
+body.navigation-active #navigationInstruction {
+    display: flex;
+}
+
+#navigationArrow {
+    flex: 0 0 86px;
+    width: 86px;
+
+    color: #fff;
+    font-family: Arial, sans-serif;
+    font-size: 48px;
+    font-weight: 900;
+    line-height: 1;
+    text-align: center;
+    -webkit-text-stroke: 1px #000;
+    text-shadow: 3px 3px 0 #000;
+}
+
+#navigationWords {
+    display: flex;
+    flex: 1 1 auto;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+}
+
+#navigationDistance {
+    color: #fff;
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: 0.7px;
+    white-space: nowrap;
+    text-shadow: 2px 2px 0 #000;
+}
+
+#navigationAction {
+    margin-top: 5px;
+
+    color: #d3d3d3;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    text-shadow: 2px 2px 0 #000;
+}
+
+#navigationRoad {
+    display: none;
+    margin-top: 7px;
+    overflow: hidden;
+
+    color: #b5b5b5;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 0.4px;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 0 #000;
+}
+
+#navigationInstruction.turn-now {
+    outline-color: var(--accent-pink);
+    box-shadow:
+        4px 4px 0 var(--hud-shadow),
+        0 0 14px rgba(176, 42, 120, 0.75);
+    animation: turnPulse 0.72s ease-in-out infinite alternate;
+}
+
+#navigationInstruction.turn-now #navigationDistance {
+    color: #fff;
+}
+
+#navigationInstruction.turn-now #navigationAction {
+    color: #fff;
+}
+
+#navigationInstruction.turn-now #navigationArrow {
+    transform: scale(1.08);
+}
+
+@keyframes turnPulse {
+    from {
+        box-shadow:
+            4px 4px 0 var(--hud-shadow),
+            0 0 5px rgba(176, 42, 120, 0.35);
+    }
+    to {
+        box-shadow:
+            4px 4px 0 var(--hud-shadow),
+            0 0 16px rgba(176, 42, 120, 0.9);
+    }
+}
+
+/* =========================================================
+   HIZ HUD
+   ========================================================= */
+
+#speedHud {
+    position: fixed;
+    left: 20px;
+    bottom: calc(var(--safe-bottom) + 20px);
+    z-index: 1600;
+
+    display: none;
+    width: 86px;
+    height: 70px;
+
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+body.navigation-active #speedHud {
+    display: flex;
+}
+
+#speedValue {
+    color: #fff;
+    font-size: 31px;
+    font-weight: 700;
+    line-height: 0.95;
+    text-shadow: 2px 2px 0 #000;
+}
+
+#speedUnit {
+    margin-top: 5px;
+
+    color: #aaa;
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+}
+
+/* =========================================================
+   GPS / KONUMUM
+   ========================================================= */
+
+#locationButton {
+    position: fixed;
+    right: calc(var(--safe-right) + 20px);
+    bottom: calc(var(--safe-bottom) + 20px);
+    z-index: 2000;
+
+    width: 136px;
+    min-width: 136px;
+    height: 46px;
+    padding: 0 10px 0 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #fff;
+    cursor: pointer;
+
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+    text-shadow: 2px 2px 0 #000;
+}
+
+#locationButton::before {
+    content: "";
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 9px;
+    height: 9px;
+
+    background: #777;
+    border-radius: 50%;
+    opacity: 0.65;
+}
+
+#locationButton.gps-active::before {
+    background: #9dcc20;
+    opacity: 1;
+    box-shadow: 0 0 6px rgba(157, 204, 32, 0.8);
+}
+
+#locationButton::after,
+#locationButton.gps-active::after,
+#locationButton .gps-dot,
+#locationButton .gps-led,
+#locationButton .status-dot {
+    display: none !important;
+    content: none !important;
+}
+
+/* =========================================================
+   OYUNCU MARKER
+   ========================================================= */
+
+#playerMarker {
+    width: 30px !important;
+    height: 34px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    overflow: visible !important;
+    pointer-events: none !important;
+
+    background: transparent !important;
+    border: 0 !important;
+    outline: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+
+    transform-origin: 50% 50% !important;
+}
+
+#playerMarker::before,
+#playerMarker::after {
+    display: none !important;
+    content: none !important;
+}
+
+.playerMarkerSvg {
+    display: block !important;
+    width: 30px !important;
+    height: 34px !important;
+
+    overflow: visible;
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    transform-origin: 50% 50% !important;
+    transform-box: fill-box;
+    transition: transform 0.15s linear;
+
+    filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.35));
+}
+
+/* =========================================================
+   HEDEF MARKER
+   ========================================================= */
+
+/* =========================================================
+   HEDEF WAYPOINT / BEACON
+   ========================================================= */
+
+#destinationMarker {
+
+    position: relative;
+
+    width: 64px;
+    height: 118px;
+
+    overflow: visible;
+
+    pointer-events: none;
+
+}
+
+
+/* Yukarı yükselen pembe ışık */
+
+.waypointBeam {
+
+    position: absolute;
+
+    left: 50%;
+    bottom: 14px;
+
+    width: 16px;
+    height: 92px;
+
+    transform:
+        translateX(-50%);
+
+    background:
+        linear-gradient(
+            to top,
+            rgba(176, 42, 120, 0.95),
+            rgba(208, 91, 156, 0.55) 48%,
+            rgba(208, 91, 156, 0)
+        );
+
+    filter:
+        blur(1px);
+
+    box-shadow:
+        0 0 10px
+        rgba(176, 42, 120, 0.8);
+
+}
+
+
+/* Beacon'ın zemindeki parlaması */
+
+.waypointGlow {
+
+    position: absolute;
+
+    left: 50%;
+    bottom: 2px;
+
+    width: 50px;
+    height: 20px;
+
+    transform:
+        translateX(-50%);
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(176, 42, 120, 0.28);
+
+    filter:
+        blur(5px);
+
+}
+
+
+/* Dış pulse halkası */
+
+.waypointRing {
+
+    position: absolute;
+
+    left: 50%;
+    bottom: 1px;
+
+    width: 38px;
+    height: 14px;
+
+    transform:
+        translateX(-50%);
+
+    border:
+        3px solid
+        #d05b9c;
+
+    border-radius:
+        50%;
+
+    box-shadow:
+        0 0 8px
+        rgba(208, 91, 156, 0.9);
+
+    animation:
+        waypointPulse
+        1.35s
+        ease-out
+        infinite;
+
+}
+
+
+/* Ortadaki sabit hedef noktası */
+
+.waypointCore {
+
+    position: absolute;
+
+    left: 50%;
+    bottom: 4px;
+
+    width: 13px;
+    height: 13px;
+
+    transform:
+        translateX(-50%);
+
+    background:
+        #d05b9c;
+
+    border:
+        2px solid
+        #111111;
+
+    border-radius:
+        50%;
+
+    box-shadow:
+        0 0 8px
+        #d05b9c;
+
+}
+
+
+@keyframes waypointPulse {
+
+    0% {
+
+        transform:
+            translateX(-50%)
+            scale(0.65);
+
+        opacity:
+            1;
+
+    }
+
+    100% {
+
+        transform:
+            translateX(-50%)
+            scale(1.65);
+
+        opacity:
+            0;
+
+    }
+
+}
+
+/* =========================================================
+   ALTERNATİF ROTALAR
+   ========================================================= */
+
+#routeChoices {
+    position: fixed;
+    top: calc(var(--safe-top) + 86px);
+    left: 50%;
+    z-index: 1900;
+
+    display: flex;
+    gap: 6px;
+    width: max-content;
+    max-width: calc(100vw - 24px);
+
+    flex-wrap: wrap;
+    justify-content: center;
+
+    transform: translateX(-50%);
+}
+
+#routeChoices:empty {
+    display: none;
+}
+
+#routeChoices button {
+    min-height: 40px;
+    padding: 7px 11px;
+
+    color: #eee8d7;
+    background: #20241e;
+    border: 1px solid #a99b74;
+    border-radius: 4px;
+
+    cursor: pointer;
+    font-family: "Teko", Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+#routeChoices button[aria-pressed="true"] {
+    color: #fff;
+    background: #432b3a;
+    border-color: #e085bf;
+}
+
+/* =========================================================
+   HARİTA ARAÇLARI / FAVORİLER / SES
+   ========================================================= */
+
+#mapTools {
+    position: fixed;
+    left: calc(var(--safe-left) + 12px);
+    bottom: calc(var(--safe-bottom) + 26px);
+    z-index: 2100;
+
+    font-family: "Teko", Arial, sans-serif;
+}
+
+body.navigation-active #mapTools {
+    bottom: calc(var(--safe-bottom) + 108px);
+}
+
+#connectionStatus {
+    width: max-content;
+    max-width: 220px;
+    margin-bottom: 5px;
+    padding: 5px 8px;
+
+    color: #eee8d7;
+    background: #181c18;
+    border: 1px solid #a99b74;
+    border-radius: 4px;
+
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    line-height: 1.25;
+    text-transform: none;
+}
+
+#connectionStatus[data-warning="true"] {
+    color: #ffe18e;
+}
+
+#mapTools button {
+    min-height: 42px;
+    padding: 8px 11px;
+
+    color: #eee8d7;
+    background: #20241e;
+    border: 1px solid #a99b74;
+    border-radius: 4px;
+
+    cursor: pointer;
+    font-family: "Teko", Arial, sans-serif;
+    font-size: 17px;
+    text-transform: uppercase;
+}
+
+#mapTools button:hover {
+    background: #353d2b;
+}
+
+#mapTools button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+#mapTools button[aria-pressed="true"] {
+    color: #fff;
+    background: #432b3a;
+    border-color: #e085bf;
+}
+
+#toolsPanel {
+    position: absolute;
+    left: 0;
+    bottom: 100%;
+
+    width: min(310px, calc(100vw - 24px));
+    max-height: calc(100dvh - 220px);
+    margin-bottom: 10px;
+    padding: 14px;
+
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+    color: #eee8d7;
+    background: rgba(23, 28, 23, 0.97);
+    border: 2px solid #a99b74;
+    border-radius: 8px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
+}
+
+body.navigation-active #toolsPanel {
+    max-height: calc(100dvh - 300px);
+}
+
+#toolsPanel > button {
+    display: block;
+    width: 100%;
+    margin: 5px 0;
+    text-align: left;
+}
+
+#toolsPanel h2 {
+    margin: 0 0 10px;
+    font-size: 25px;
+}
+
+#toolsPanel h3 {
+    margin: 16px 0 5px;
+    color: #e1cd8c;
+    font-size: 18px;
+}
+
+#toolsPanel p {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    text-transform: none;
+}
+
+.saved-place {
+    display: flex;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.saved-place button:first-child {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    text-align: left;
+}
+
+.saved-place button:last-child {
+    flex: 0 0 44px;
+}
+
+/* =========================================================
+   UYGULAMA BİLDİRİMİ
+   ========================================================= */
+
+#appNotice {
+    position: fixed;
+    left: 50%;
+    bottom: calc(var(--safe-bottom) + 110px);
+    z-index: 3000;
+
+    width: max-content;
+    max-width: min(480px, calc(100vw - 40px));
+    padding: 11px 15px;
+
+    color: #fff4d9;
+    background: rgba(23, 28, 23, 0.97);
+    border: 1px solid #cfbe8b;
+    border-radius: 6px;
+
+    transform: translateX(-50%);
+
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.45;
+    text-transform: none;
+
+    pointer-events: none;
+}
+
+body.navigation-active #appNotice {
+    bottom: calc(var(--safe-bottom) + 130px);
+}
+
+/* =========================================================
+   MAPLIBRE KAYNAK BİLGİSİ
+   ========================================================= */
+
+.maplibregl-ctrl-bottom-right {
+    right: calc(var(--safe-right) + 164px) !important;
+    bottom: calc(var(--safe-bottom) + 10px) !important;
+    max-width: calc(100vw - 190px);
+}
+
+.maplibregl-ctrl-attrib {
+    font: 9px/1.3 Arial, sans-serif !important;
+}
+
+/* =========================================================
+   MOBİL / iPHONE — NORMAL MOD
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    #searchBox {
+        top: calc(var(--safe-top) + 10px);
+        left: calc(var(--safe-left) + 10px);
+        right: calc(var(--safe-right) + 10px);
+
+        width: auto;
+        max-width: none;
+        padding: 5px;
+
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 58px 66px;
+        gap: 5px;
+    }
+
+    #searchInput {
+        width: 100%;
+        height: 42px;
+        padding: 0 10px;
+        font-size: 16px;
+    }
+
+    #searchButton {
+        width: 58px;
+        min-width: 58px;
+        height: 42px;
+        padding: 0;
+        font-size: 13px;
+    }
+
+    #routeButton {
+        width: 66px;
+        min-width: 66px;
+        height: 42px;
+        padding: 0;
+        font-size: 13px;
+    }
+
+    #searchResults {
+        top: calc(100% + 5px);
+        width: 100%;
+        max-height: min(44dvh, 320px);
+    }
+
+    .searchResultItem {
+        min-height: 64px;
+        padding: 11px 68px 11px 12px;
+    }
+
+    .searchResultName {
+        font-size: 15px;
+    }
+
+    .searchResultAddress {
+        font-size: 12px;
+    }
+
+    .searchResultDistance {
+        right: 10px;
+        font-size: 16px;
+    }
+
+    #routeChoices {
+        top: calc(var(--safe-top) + 68px);
+        width: calc(100vw - 20px);
+    }
+
+    #routeChoices button {
+        flex: 1 1 120px;
+        min-height: 38px;
+        padding: 6px 7px;
+        font-size: 14px;
+    }
+
+    #locationButton {
+        right: calc(var(--safe-right) + 12px);
+        bottom: calc(var(--safe-bottom) + 12px);
+
+        width: 118px;
+        min-width: 118px;
+        height: 42px;
+        padding: 0 8px 0 28px;
+
+        font-size: 16px;
+    }
+
+    #locationButton::before {
+        left: 11px;
+        width: 8px;
+        height: 8px;
+    }
+
+    #mapTools {
+        left: calc(var(--safe-left) + 8px);
+        bottom: calc(var(--safe-bottom) + 18px);
+    }
+
+    #connectionStatus {
+        max-width: 180px;
+        font-size: 9px;
+    }
+
+    #toolsPanel {
+        width: min(310px, calc(100vw - 16px));
+        max-height: calc(100dvh - 190px);
+    }
+
+    #appNotice {
+        bottom: calc(var(--safe-bottom) + 72px);
+        max-width: calc(100vw - 24px);
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    .maplibregl-ctrl-bottom-right {
+        right: calc(var(--safe-right) + 8px) !important;
+        bottom: calc(var(--safe-bottom) + 62px) !important;
+        max-width: calc(100vw - 16px);
+    }
+}
+
+/* =========================================================
+   MOBİL / iPHONE — NAVİGASYON MODU
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    body.navigation-active #navigationInstruction {
+        top: calc(var(--safe-top) + 8px);
+        left: calc(var(--safe-left) + 8px);
+        right: auto;
+
+        width: calc(100vw - 128px);
+        min-width: 0;
+        min-height: 78px;
+        padding: 8px 9px;
+        gap: 7px;
+    }
+
+    body.navigation-active #navigationArrow {
+        flex-basis: 46px;
+        width: 46px;
+        font-size: 32px;
+    }
+
+    body.navigation-active #navigationDistance {
+        font-size: 27px;
+    }
+
+    body.navigation-active #navigationAction {
+        margin-top: 3px;
+        font-size: 16px;
+    }
+
+    body.navigation-active #navigationRoad {
+        margin-top: 4px;
+        max-width: 100%;
+        font-size: 9px;
+    }
+
+    body.navigation-active #searchBox {
+        top: calc(var(--safe-top) + 8px);
+        right: calc(var(--safe-right) + 8px);
+        left: auto;
+
+        display: block;
+        width: 104px;
+        padding: 0;
+    }
+
+    body.navigation-active #routeButton {
+        width: 104px;
+        min-width: 104px;
+        height: 42px;
+        font-size: 14px;
+    }
+
+    body.navigation-active #routeInfo {
+        top: calc(var(--safe-top) + 57px);
+        right: calc(var(--safe-right) + 8px);
+        left: auto;
+
+        width: 104px;
+        min-width: 104px;
+        padding: 7px 4px;
+
+        font-size: 14px;
+        line-height: 1;
+    }
+
+    body.navigation-active #speedHud {
+        left: calc(var(--safe-left) + 12px);
+        bottom: calc(var(--safe-bottom) + 12px);
+
+        width: 72px;
+        height: 62px;
+    }
+
+    body.navigation-active #speedValue {
+        font-size: 27px;
+    }
+
+    body.navigation-active #speedUnit {
+        font-size: 9px;
+    }
+
+    body.navigation-active #mapTools {
+        left: calc(var(--safe-left) + 8px);
+        bottom: calc(var(--safe-bottom) + 86px);
+    }
+
+    body.navigation-active #toolsPanel {
+        max-height: calc(100dvh - 260px);
+    }
+
+    body.navigation-active #appNotice {
+        bottom: calc(var(--safe-bottom) + 86px);
+    }
+}
+
+/* =========================================================
+   DAHA DAR TELEFONLAR
+   ========================================================= */
+
+@media (max-width: 390px) {
+
+    #searchBox {
+        grid-template-columns: minmax(0, 1fr) 54px 62px;
+    }
+
+    #searchButton {
+        width: 54px;
+        min-width: 54px;
+        font-size: 12px;
+    }
+
+    #routeButton {
+        width: 62px;
+        min-width: 62px;
+        font-size: 12px;
+    }
+
+    body.navigation-active #navigationInstruction {
+        width: calc(100vw - 118px);
+    }
+
+    body.navigation-active #searchBox,
+    body.navigation-active #routeButton {
+        width: 94px;
+        min-width: 94px;
+    }
+
+    body.navigation-active #routeInfo {
+        width: 94px;
+        min-width: 94px;
+        font-size: 13px;
+    }
+
+    body.navigation-active #navigationDistance {
+        font-size: 25px;
+    }
+
+    body.navigation-active #navigationAction {
+        font-size: 15px;
+    }
+}
+/* =========================================
+   MANEVRA SVG İKONLARI
+   ========================================= */
+
+#navigationArrow {
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #ffffff;
+
+}
+
+
+.maneuverIcon {
+
+    width: 58px;
+    height: 58px;
+
+    display: block;
+
+    overflow: visible;
+
+    color: #ffffff;
+
+    filter:
+        drop-shadow(
+            2px 3px 0
+            rgba(0, 0, 0, 0.85)
+        );
+
+}
+
+
+#navigationInstruction.turn-now
+.maneuverIcon {
+
+    transform:
+        scale(1.08);
+
+}
+
+
+@media (max-width: 600px) {
+
+    .maneuverIcon {
+
+        width: 38px;
+        height: 38px;
+
+    }
+
+}

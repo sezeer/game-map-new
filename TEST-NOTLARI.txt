@@ -1,0 +1,38 @@
+GAME MAP — DOĞRULAMA NOTLARI
+
+17 işlev kontrolü geçti. Testler masaüstü Edge tarayıcısında,
+390×844 mobil görünüm ve 1440×900 masaüstü görünümle yapıldı.
+JavaScript çalışma zamanı hatası gözlenmedi.
+
+Kontrol edilenler:
+- GPS sonucu beklenirken tekrarlı tıklamalar tek takip oluşturuyor.
+- GPS hatasında eski takip temizleniyor; tekrar başlatılabiliyor.
+- Haritadan hedef seçiliyor, favori kaydediliyor.
+- Alternatif rota seçiliyor; önizlemede navigasyon başlamıyor.
+- Hedef değişikliği eski rotayı ve BAŞLAT durumunu temizliyor.
+- Eski rota cevabı hedef değişikliğinden sonra uygulanmıyor.
+- Arama silinince bekleyen sonuçlar geri gelmiyor.
+- Varış için iyi doğruluk ve art arda üç uygun GPS ölçümü gerekiyor.
+- Navigasyon başlatılıp iptal ediliyor.
+- Favoriler sayfa yeniden açıldığında korunuyor.
+- İnternet kesintisi durum göstergesine yansıyor.
+- Ses açılıyor; aynı manevra anonsu sürekli tekrarlanmıyor.
+- Ekran kilidi navigasyonda alınıp iptalde bırakılıyor.
+- Mobil menü, hız göstergesi ve kaynak bilgileri yerleşimi incelendi.
+- Uygulama dosyaları ve menü çevrimdışı yeniden açılıyor.
+- Diğer uygulamaların önbelleği silinmiyor.
+
+Canlı bağlantı denemesi:
+Photon ile “Anıtkabir Ankara” araması sonuç döndürdü.
+OSRM ile Ankara içindeki iki nokta arasında iki araç rotası alındı.
+Konum izni olmadan yapılan aramada da liste en fazla altı sonuç gösteriyor.
+
+Sınırlar:
+GPS hareketi, hata cevapları, ses ve ekran kilidi otomatik testlerde
+taklit edildi. Bunlar fiziksel telefon ve sürüş testi yerine geçmez.
+Gerçek telefonun konum doğruluğu, Türkçe ses çıktısı, ekran kilidi ve
+arkaplandan dönüş davranışı cihazda ayrıca denenmelidir.
+Çevrimdışı harita alanları ve çevrimdışı rota hesaplama eklenmedi.
+
+Paket: MapLibre GL JS 5.24.0 yerel olarak dahil edildi.
+Lisans metni vendor/LICENSE.txt içindedir.
