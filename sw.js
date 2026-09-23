@@ -1,5 +1,5 @@
-const CACHE_NAME = "gamemap-shell-v4";
-const SHELL = ["./", "./index.html", "./app.js", "./features.js", "./style.css", "./manifest.json", "./icon-192.png", "./icon-512.png", "./waypoint.gif", "./vendor/maplibre-gl.js", "./vendor/maplibre-gl.css"];
+const CACHE_NAME = "gamemap-shell-v5";
+const SHELL = ["./", "./index.html", "./app.js", "./features.js", "./style.css", "./manifest.json", "./icon-192.png", "./icon-512.png", "./waypoint.gif",] ;
 self.addEventListener("install", event => {
     event.waitUntil(caches.open(CACHE_NAME).then(async cache => {
         await cache.addAll(SHELL);
