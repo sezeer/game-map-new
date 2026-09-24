@@ -455,16 +455,139 @@ function renderConnectionStatus() {
     status.dataset.warning = String(!navigator.onLine || (lastGpsFixAt > 0 && !gpsIsFresh()) || !!gpsErrorText || lastGpsAccuracy > 65 && gpsIsFresh());
     status.title = gpsErrorText || "GPS doğruluğu metre cinsindendir.";
 }
-function hasArrived(position, destinationDistance) {
-    const coords = currentRouteCoordinates;
-    const end = coords[coords.length - 1];
-    const raw = {latitude: position.coords.latitude, longitude: position.coords.longitude};
-    const endDistance = end ? calculateDistance(raw, {longitude: end[0], latitude: end[1]}) : Infinity;
-    const nearEnd = navigationMode && gpsIsFresh() && position.coords.accuracy <= 25 &&
-        destinationDistance <= 40 && endDistance <= 25 &&
-        calculateRemainingRouteDistance(coords) <= 55 && currentStepIndex >= navigationSteps.length - 2;
-    arrivalFixCount = nearEnd ? arrivalFixCount + 1 : 0;
-    return arrivalFixCount >= 3;
+function hasArrived(
+    position,
+    destinationDistance
+) {
+
+    const coords =
+        currentRouteCoordinates;
+
+
+    const end =
+        coords[
+            coords.length - 1
+        ];
+
+
+    const raw = {
+
+        latitude:
+            position.coords.latitude,
+
+        longitude:
+            position.coords.longitude
+
+    };
+
+
+    const endDistance =
+        end
+            ? calculateDistance(
+                raw,
+                {
+                    longitude:
+                        end[0],
+
+                    latitude:
+                        end[1]
+                }
+            )
+            : Infinity;
+
+
+    let destinationThreshold =
+        40;
+
+    let endThreshold =
+        25;
+
+    let remainingThreshold =
+        55;
+
+    let requiredFixes =
+        3;
+
+
+    /* YÜRÜME */
+
+    if (
+        selectedRouteMode ===
+        "walk"
+    ) {
+
+        destinationThreshold =
+            20;
+
+        endThreshold =
+            15;
+
+        remainingThreshold =
+            30;
+
+        requiredFixes =
+            2;
+
+    }
+
+
+    /* BİSİKLET */
+
+    else if (
+        selectedRouteMode ===
+        "bike"
+    ) {
+
+        destinationThreshold =
+            30;
+
+        endThreshold =
+            20;
+
+        remainingThreshold =
+            40;
+
+        requiredFixes =
+            3;
+
+    }
+
+
+    const nearEnd =
+
+        navigationMode &&
+
+        gpsIsFresh() &&
+
+        position.coords
+            .accuracy <= 25 &&
+
+        destinationDistance <=
+            destinationThreshold &&
+
+        endDistance <=
+            endThreshold &&
+
+        calculateRemainingRouteDistance(
+            coords
+        ) <=
+            remainingThreshold &&
+
+        currentStepIndex >=
+            navigationSteps.length - 2;
+
+
+    arrivalFixCount =
+        nearEnd
+            ? arrivalFixCount + 1
+            : 0;
+
+
+    return (
+        arrivalFixCount >=
+        requiredFixes
+    );
+
 }
 function renderRouteChoices() {
 

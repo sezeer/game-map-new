@@ -104,6 +104,19 @@
 
 </div>
 
+<button
+    id="poiSearchAreaButton"
+    type="button"
+    hidden
+>
+    BU ALANDA ARA
+</button>
+<div
+    id="poiStatus"
+    hidden
+>
+    YERLER ARANIYOR...
+</div>
 <div id="routeInfo">
 
     <span id="routeTime">
@@ -159,6 +172,90 @@
             <button id="voiceToggle" aria-pressed="false">SES: KAPALI</button>
             <button id="wakeToggle" aria-pressed="false">EKRANI AÇIK TUT: KAPALI</button>
             <button id="cancelRoute">ROTAYI TEMİZLE</button>
+            <h3>YERLER</h3>
+
+<div id="poiCategoryControls">
+
+    <button
+        class="poiCategoryButton"
+        data-poi-category="market"
+        type="button"
+        aria-pressed="true"
+    >
+        ✓ MARKET
+    </button>
+
+
+    <button
+        class="poiCategoryButton"
+        data-poi-category="restaurant"
+        type="button"
+        aria-pressed="true"
+    >
+        ✓ YEMEK
+    </button>
+
+
+    <button
+        class="poiCategoryButton"
+        data-poi-category="cafe"
+        type="button"
+        aria-pressed="true"
+    >
+        ✓ KAFE
+    </button>
+
+
+    <button
+        class="poiCategoryButton"
+        data-poi-category="health"
+        type="button"
+        aria-pressed="true"
+    >
+        ✓ SAĞLIK
+    </button>
+
+
+    <button
+        class="poiCategoryButton"
+        data-poi-category="fuel"
+        type="button"
+        aria-pressed="true"
+    >
+        ✓ BENZİNLİK
+    </button>
+
+
+    <button
+        class="poiCategoryButton"
+        data-poi-category="hotel"
+        type="button"
+        aria-pressed="true"
+    >
+        ✓ OTEL
+    </button>
+
+
+    <button
+        class="poiCategoryButton"
+        data-poi-category="gym"
+        type="button"
+        aria-pressed="true"
+    >
+        ✓ GYM
+    </button>
+
+
+    <button
+        class="poiCategoryButton"
+        data-poi-category="clothing"
+        type="button"
+        aria-pressed="true"
+    >
+        ✓ GİYİM
+    </button>
+
+</div>
             <h3>FAVORİLER</h3><div id="favoritePlaces"></div>
             <h3>SON HEDEFLER</h3><div id="recentPlaces"></div>
         </section>
@@ -185,7 +282,7 @@
     <script src="services.js"></script>
 <script src="app.js"></script>
 <script src="features.js"></script>
-
+<script src="pois-native.js"></script>
 </body>
 
 </html>

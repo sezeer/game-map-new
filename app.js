@@ -848,12 +848,14 @@ let currentRoadName = "";
 let roadLookupRequestId = 0;
 let displayedLocation = null;
 let stableGpsLocation = null;
-
+let routeSnapActive = false;
+let routeSnapMissCount = 0;
 let lastStableGpsTime = null;
 
 let lastReliableSpeed = 0;
 let lastRawGpsLocation = null;
 let lastRawGpsTime = null;
+
 
 const locationButton =
     document.getElementById("locationButton");
@@ -874,20 +876,28 @@ function recenterToGps() {
         function (position) {
 
             const latitude =
-                position.coords.latitude;
+    position.coords.latitude;
 
-            const longitude =
-                position.coords.longitude;
+const longitude =
+    position.coords.longitude;
 
-            currentLocation = {
 
-                latitude:
-                    latitude,
+/* Bu GPS ölçümünü gerçekten güncel kabul et */
 
-                longitude:
-                    longitude
+updateGpsStatus(
+    position
+);
 
-            };
+
+currentLocation = {
+
+    latitude:
+        latitude,
+
+    longitude:
+        longitude
+
+};
 
             showPlayer(
                 longitude,
@@ -1004,8 +1014,13 @@ locationButton.addEventListener(
     watchId !== null
 ) {
 
-    if (currentLocation) goToMyLocation();
-    else centerOnNextGps = true;
+    /*
+    GPS takibi açık olsa bile
+    KONUMUM'a basıldığında
+    yeni bir ölçüm iste.
+    */
+
+    recenterToGps();
 
     return;
 
@@ -1076,6 +1091,7 @@ currentLocation = {
 
 // Navigasyondaysak ve rota varsa
 // görsel konumu yola oturt
+
 if (
     navigationMode &&
     currentRouteCoordinates.length > 1
@@ -1087,22 +1103,136 @@ if (
             currentRouteCoordinates
         );
 
-    // Yola 35 metreden yakınsak
-    // işareti yol üzerinde göster
+
+    let snapEnterDistance =
+        35;
+
+    let snapExitDistance =
+        55;
+
+
     if (
-        snappedPoint !== null &&
-        snappedPoint.distance <= 35
+        selectedRouteMode ===
+        "walk"
     ) {
 
-        displayedLocation = {
+        snapEnterDistance =
+            18;
 
-            latitude:
-                snappedPoint.latitude,
+        snapExitDistance =
+            30;
 
-            longitude:
-                snappedPoint.longitude
+    }
 
-        };
+
+    else if (
+        selectedRouteMode ===
+        "bike"
+    ) {
+
+        snapEnterDistance =
+            28;
+
+        snapExitDistance =
+            45;
+
+    }
+
+
+    /* =========================
+       ŞU AN YOLA YAPIŞIK DEĞİLSE
+       ========================= */
+
+    if (
+        !routeSnapActive
+    ) {
+
+        if (
+            snappedPoint !== null &&
+            snappedPoint.distance <=
+                snapEnterDistance
+        ) {
+
+            routeSnapActive =
+                true;
+
+            routeSnapMissCount =
+                0;
+
+        }
+
+    }
+
+
+    /* =========================
+       YOLA YAPIŞIKSA
+       ========================= */
+
+    if (
+        routeSnapActive
+    ) {
+
+        if (
+            snappedPoint !== null &&
+            snappedPoint.distance <=
+                snapExitDistance
+        ) {
+
+            routeSnapMissCount =
+                0;
+
+
+            displayedLocation = {
+
+                latitude:
+                    snappedPoint.latitude,
+
+                longitude:
+                    snappedPoint.longitude
+
+            };
+
+        }
+
+        else {
+
+            routeSnapMissCount++;
+
+
+            /*
+            Tek kötü GPS ölçümünde
+            yoldan çıkma.
+            */
+
+            if (
+                routeSnapMissCount >= 3
+            ) {
+
+                routeSnapActive =
+                    false;
+
+                routeSnapMissCount =
+                    0;
+
+            }
+
+            else if (
+                snappedPoint !== null
+            ) {
+
+                displayedLocation = {
+
+                    latitude:
+                        snappedPoint.latitude,
+
+                    longitude:
+                        snappedPoint.longitude
+
+                };
+
+            }
+
+        }
 
     }
 
@@ -1235,52 +1365,101 @@ if (
                         ) {
 
                             const offRouteDistance =
-                                distanceToRoute(
-                                    currentLocation,
-                                    currentRouteCoordinates
-                                );
+    distanceToRoute(
+        currentLocation,
+        currentRouteCoordinates
+    );
 
-                            if (
-                                offRouteDistance >
-                                40
-                            ) {
 
-                                offRouteCount++;
+let offRouteThreshold =
+    40;
 
-                            }
+let requiredOffRouteFixes =
+    2;
 
-                            else {
+let rerouteCooldown =
+    10000;
 
-                                offRouteCount = 0;
 
-                            }
+if (
+    selectedRouteMode ===
+    "walk"
+) {
 
-                            if (
-                                offRouteCount >= 2
-                            ) {
+    offRouteThreshold =
+        18;
 
-                                const now =
-                                    Date.now();
+    requiredOffRouteFixes =
+        3;
 
-                                if (
-                                    now -
-                                        lastRerouteAt >
-                                    10000
-                                ) {
+    rerouteCooldown =
+        6000;
 
-                                    lastRerouteAt =
-                                        now;
+}
 
-                                    offRouteCount =
-                                        0;
 
-                                    createRoute(
-                                        true
-                                    );
+else if (
+    selectedRouteMode ===
+    "bike"
+) {
 
-                                }
+    offRouteThreshold =
+        28;
 
-                            }
+    requiredOffRouteFixes =
+        2;
+
+    rerouteCooldown =
+        8000;
+
+}
+
+
+if (
+    offRouteDistance >
+    offRouteThreshold
+) {
+
+    offRouteCount++;
+
+}
+
+else {
+
+    offRouteCount =
+        0;
+
+}
+
+
+if (
+    offRouteCount >=
+    requiredOffRouteFixes
+) {
+
+    const now =
+        Date.now();
+
+
+    if (
+        now -
+            lastRerouteAt >
+        rerouteCooldown
+    ) {
+
+        lastRerouteAt =
+            now;
+
+        offRouteCount =
+            0;
+
+        createRoute(
+            true
+        );
+
+    }
+
+}
 
                         }
 
@@ -1343,7 +1522,29 @@ if (navigationMode) {
         lookAheadDistance = 30;
 
     }
+if (
+    selectedRouteMode ===
+    "walk"
+) {
 
+    lookAheadDistance =
+        18;
+
+}
+
+
+else if (
+    selectedRouteMode ===
+    "bike"
+) {
+
+    lookAheadDistance =
+        Math.min(
+            lookAheadDistance,
+            45
+        );
+
+}
 
     const lookAheadPoint =
         getCameraLookAheadPoint(
@@ -1529,17 +1730,53 @@ if (navigationMode) {
     }
 
 
-    const cameraPitch =
-        cameraSpeed > 7
-            ? 62
-            : 58;
+    let cameraPitch =
+    cameraSpeed > 7
+        ? 62
+        : 58;
 
 
-    const cameraOffset =
+let cameraOffset =
+    cameraSpeed > 7
+        ? window.innerHeight * 0.22
+        : window.innerHeight * 0.18;
 
-        cameraSpeed > 7
-            ? window.innerHeight * 0.22
-            : window.innerHeight * 0.18;
+
+if (
+    selectedRouteMode ===
+    "walk"
+) {
+
+    cameraZoom =
+        17.8;
+
+    cameraPitch =
+        32;
+
+    cameraOffset =
+        window.innerHeight * 0.08;
+
+}
+
+
+else if (
+    selectedRouteMode ===
+    "bike"
+) {
+
+    cameraZoom =
+        Math.max(
+            cameraZoom,
+            16.8
+        );
+
+    cameraPitch =
+        50;
+
+    cameraOffset =
+        window.innerHeight * 0.14;
+
+}
 
 
     /* =========================
@@ -3485,8 +3722,27 @@ for (
 }
 
 function updateRouteProgress() {
-    if (!gpsIsFresh() || lastGpsAccuracy > 35 || !currentLocation ||
-        distanceToRoute(currentLocation, currentRouteCoordinates) > 30) return;
+    const progressTolerance =
+    selectedRouteMode === "walk"
+        ? 20
+        : selectedRouteMode === "bike"
+            ? 25
+            : 30;
+
+
+if (
+    !gpsIsFresh() ||
+    lastGpsAccuracy > 35 ||
+    !currentLocation ||
+    distanceToRoute(
+        currentLocation,
+        currentRouteCoordinates
+    ) > progressTolerance
+) {
+
+    return;
+
+}
 
     if (
         !navigationMode ||
@@ -6338,6 +6594,11 @@ function applyRoute(
     roadLookupRequestId++;
     arrivalFixCount = 0;
     offRouteCount = 0;
+    routeSnapActive =
+    false;
+
+routeSnapMissCount =
+    0;
     spokenManeuvers.clear();
     document.getElementById("routeDistance").textContent = (routeData.distance / 1000).toFixed(1) + " km";
     document.getElementById("routeTime").textContent = Math.max(1, Math.ceil(routeData.duration / 60)) + " dk";
@@ -6421,12 +6682,56 @@ const speedHud =
 if (speedHud) {
 
     speedHud.style.display =
-        "flex";
+        selectedRouteMode === "walk"
+            ? "none"
+            : "flex";
 
 }
 
     // Navigasyon kamerasını
     // bizim konumumuza getir
+    let startZoom =
+    17.3;
+
+let startPitch =
+    60;
+
+let startOffset =
+    window.innerHeight * 0.18;
+
+
+if (
+    selectedRouteMode ===
+    "walk"
+) {
+
+    startZoom =
+        17.8;
+
+    startPitch =
+        32;
+
+    startOffset =
+        window.innerHeight * 0.08;
+
+}
+
+
+else if (
+    selectedRouteMode ===
+    "bike"
+) {
+
+    startZoom =
+        17.0;
+
+    startPitch =
+        50;
+
+    startOffset =
+        window.innerHeight * 0.14;
+
+}
     map.easeTo({
 
         center: [
@@ -6434,17 +6739,19 @@ if (speedHud) {
             currentLocation.latitude
         ],
 
-        zoom: 17.3,
+        zoom:
+    startZoom,
 
-        pitch: 60,
+pitch:
+    startPitch,
 
         bearing:
             lastNavigationBearing,
 
         offset: [
-            0,
-            window.innerHeight * 0.18
-        ],
+    0,
+    startOffset
+],
 
         duration: 1200,
 

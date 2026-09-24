@@ -1953,3 +1953,449 @@ body.navigation-active #routeInfo {
     }
 
 }
+/* =========================================
+   GAME MAP POI İKONLARI
+   ========================================= */
+
+.gamePoiMarker {
+
+    width:
+        30px;
+
+    height:
+        30px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    cursor:
+        pointer;
+
+    z-index:
+        20;
+
+}
+
+
+.gamePoiMarker img {
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    object-fit:
+        contain;
+
+    image-rendering:
+        pixelated;
+
+    image-rendering:
+        crisp-edges;
+
+    filter:
+        drop-shadow(
+            1px
+            2px
+            1px
+            rgba(0,0,0,0.75)
+        );
+
+}
+
+
+/* Üzerine gelince hafif büyüt */
+
+.gamePoiMarker:hover {
+
+    transform:
+        scale(1.18);
+
+}
+
+
+/* =========================================
+   POI POPUP
+   ========================================= */
+
+.maplibregl-popup-content {
+
+    background:
+        rgba(8,8,8,0.96);
+
+    color:
+        white;
+
+    border:
+        2px solid #111;
+
+    outline:
+        1px solid #aaa;
+
+    border-radius:
+        0;
+
+    box-shadow:
+        4px 4px 0
+        rgba(0,0,0,.5);
+
+}
+
+
+.maplibregl-popup-tip {
+
+    border-top-color:
+        #111 !important;
+
+}
+
+
+.gamePoiPopup {
+
+    min-width:
+        120px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        3px;
+
+    font-family:
+        "Teko",
+        Impact,
+        sans-serif;
+
+}
+
+
+.gamePoiPopup strong {
+
+    font-size:
+        20px;
+
+    line-height:
+        1;
+
+}
+
+
+.gamePoiPopup span {
+
+    font-size:
+        14px;
+
+    color:
+        #9fbd32;
+
+}
+/* =========================================
+   POI ROTA BUTONU
+   ========================================= */
+
+.gamePoiRouteButton {
+
+    margin-top:
+        8px;
+
+    width:
+        100%;
+
+    height:
+        34px;
+
+    padding:
+        0 12px;
+
+    background:
+        #9fbd32;
+
+    color:
+        #111;
+
+    border:
+        2px solid #111;
+
+    font-family:
+        "Teko",
+        Impact,
+        sans-serif;
+
+    font-size:
+        17px;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+}
+
+
+.gamePoiRouteButton:hover {
+
+    background:
+        #b6d43e;
+
+}
+/* =========================================
+   POI YÜKLENİYOR
+   ========================================= */
+
+#poiLoading {
+
+    position:
+        fixed;
+
+    left:
+        50%;
+
+    bottom:
+        54px;
+
+    transform:
+        translateX(-50%);
+
+    z-index:
+        150;
+
+    padding:
+        5px 12px;
+
+    background:
+        rgba(10,10,10,.94);
+
+    color:
+        #9fbd32;
+
+    border:
+        2px solid #111;
+
+    outline:
+        1px solid #777;
+
+    font-family:
+        "Teko",
+        Impact,
+        sans-serif;
+
+    font-size:
+        16px;
+
+    font-weight:
+        700;
+
+    pointer-events:
+        none;
+
+}
+
+
+#poiLoading[hidden] {
+
+    display:
+        none !important;
+
+}
+#poiSearchAreaButton {
+
+    position:
+        fixed;
+
+    top:
+        92px;
+
+    left:
+        50%;
+
+    transform:
+        translateX(-50%);
+
+    z-index:
+        160;
+
+    padding:
+        7px 16px;
+
+    background:
+        rgba(12, 12, 12, .96);
+
+    color:
+        white;
+
+    border:
+        2px solid #111;
+
+    outline:
+        1px solid #aaa;
+
+    font-family:
+        "Teko",
+        Impact,
+        sans-serif;
+
+    font-size:
+        17px;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        3px 3px 0
+        rgba(0,0,0,.45);
+
+}
+
+
+#poiSearchAreaButton:hover {
+
+    background:
+        #9fbd32;
+
+    color:
+        #111;
+
+}
+
+
+#poiSearchAreaButton[hidden] {
+
+    display:
+        none !important;
+
+}
+#poiStatus {
+
+    position: fixed;
+
+    left: 50%;
+
+    bottom: 20px;
+
+    transform: translateX(-50%);
+
+    z-index: 160;
+
+    padding: 5px 12px;
+
+    background: rgba(10,10,10,.92);
+
+    color: white;
+
+    border: 2px solid #111;
+
+    outline: 1px solid #777;
+
+    font-family: "Teko", Impact, sans-serif;
+
+    font-size: 15px;
+
+    pointer-events: none;
+}
+
+#poiStatus[hidden] {
+    display: none !important;
+}
+/* =========================================
+   POI KATEGORİ MENÜSÜ
+   ========================================= */
+
+#poiCategoryControls {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:
+        6px;
+
+    margin-top:
+        6px;
+
+}
+
+
+#poiCategoryControls
+.poiCategoryButton {
+
+    width:
+        100%;
+
+    min-height:
+        38px;
+
+    padding:
+        6px 8px;
+
+    margin:
+        0;
+
+    text-align:
+        left;
+
+    font-size:
+        15px;
+
+    background:
+        #20241e;
+
+    color:
+        #eee8d7;
+
+    border:
+        1px solid #a99b74;
+
+}
+
+
+/* AÇIK */
+
+#poiCategoryControls
+.poiCategoryButton[aria-pressed="true"] {
+
+    background:
+        #34451f;
+
+    color:
+        #d9f07f;
+
+    border-color:
+        #9fbd32;
+
+}
+
+
+/* KAPALI */
+
+#poiCategoryControls
+.poiCategoryButton[aria-pressed="false"] {
+
+    background:
+        #171717;
+
+    color:
+        #777;
+
+    border-color:
+        #444;
+
+    opacity:
+        .75;
+
+}

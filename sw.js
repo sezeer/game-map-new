@@ -1,5 +1,5 @@
 const APP_VERSION =
-    "0.2.2";
+    "0.4.5";
 
 
 const CACHE_NAME =
@@ -25,7 +25,20 @@ const SHELL = [
 
     "./icon-192.png",
 
-    "./icon-512.png"
+    "./icon-512.png" ,
+
+    "./pois-native.js" ,
+    
+    "./poi-icons/market.png",
+    
+    "./poi-icons/gym.png",  
+    "./poi-icons/restoran.png",
+"./poi-icons/benzinlik.png",
+"./poi-icons/eczane.png",
+"./poi-icons/giyim.png",
+"./poi-icons/hastane.png",
+"./poi-icons/kafe.png",
+"./poi-icons/otel.png",
 
 ];
 
