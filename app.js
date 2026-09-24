@@ -805,6 +805,9 @@ else {
 
 }); // layers.forEach kapanıyor
 setupGame3DBuildings();
+
+setupSearchResultLayers();
+
 }); // map.on("load") kapanıyor
 
 // =========================
@@ -3203,34 +3206,35 @@ async function findRoadNameFromLocation(
 
     try {
 
-        const url =
-            "https://photon.komoot.io/reverse" +
-            "?lon=" +
-            longitude +
-            "&lat=" +
-            latitude;
+        const result =
+            await GameServices
+                .reverseGeocode(
+                    longitude,
+                    latitude
+                );
 
-        const response =
-            await fetch(url);
 
-        const data =
-            await response.json();
+        if (!result) {
 
-        if (
-            !data.features ||
-            data.features.length === 0
-        ) {
             return "";
+
         }
 
+
         const properties =
-            data.features[0].properties || {};
+            result.properties || {};
+
 
         return (
+
             properties.street ||
+
             properties.name ||
+
             properties.locality ||
+
             ""
+
         );
 
     }
@@ -3241,6 +3245,7 @@ async function findRoadNameFromLocation(
             "Yol adı bulunamadı:",
             error
         );
+
 
         return "";
 
@@ -3838,11 +3843,32 @@ function getDirectionText(maneuver) {
     }
 
     if (
-        type === "roundabout" ||
-        type === "rotary"
+    [
+        "roundabout",
+        "rotary",
+        "roundabout turn",
+        "exit roundabout",
+        "exit rotary"
+    ].includes(type)
+) {
+
+    if (
+        Number.isFinite(
+            maneuver.exit
+        )
     ) {
-        return "Döner kavşağa gir";
+
+        return (
+            "Döner kavşakta " +
+            maneuver.exit +
+            ". çıkışı kullan"
+        );
+
     }
+
+    return "Döner kavşağa gir";
+
+}
 
     if (modifier === "right") {
         return "Sağa dön";
@@ -3882,7 +3908,56 @@ function getDirectionIcon(maneuver) {
     const type =
         maneuver?.type || "";
 
+const roundaboutTypes = [
+    "roundabout",
+    "rotary",
+    "roundabout turn",
+    "exit roundabout",
+    "exit rotary"
+];
 
+
+if (
+    modifier === "straight" ||
+    type === "continue" ||
+    type === "new name"
+) {
+
+    return `
+        <svg
+            class="maneuverIcon"
+            viewBox="0 0 64 64"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+
+            <path
+                d="
+                    M32 55
+                    V13
+                "
+                fill="none"
+                stroke="currentColor"
+                stroke-width="8"
+                stroke-linecap="round"
+            />
+
+            <path
+                d="
+                    M19 27
+                    L32 13
+                    L45 27
+                "
+                fill="none"
+                stroke="currentColor"
+                stroke-width="8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            />
+
+        </svg>
+    `;
+
+}
     const svgStart = `
         <svg
             class="maneuverIcon"
@@ -3934,32 +4009,32 @@ function getDirectionIcon(maneuver) {
     // =========================
 
     if (
-        type === "roundabout" ||
-        type === "rotary" ||
-        type === "roundabout turn"
-    ) {
+    roundaboutTypes.includes(
+        type
+    )
+) {
 
-        return `
-            ${svgStart}
+    return `
+        <svg
+            class="maneuverIcon"
+            viewBox="0 0 64 64"
+            xmlns="http://www.w3.org/2000/svg"
+        >
 
-            <path
-                d="
-                    M19 39
-                    A18 18
-                    0 1 1
-                    44 43
-                "
+            <circle
+                cx="32"
+                cy="32"
+                r="15"
                 fill="none"
                 stroke="currentColor"
                 stroke-width="7"
-                stroke-linecap="round"
             />
 
             <path
                 d="
-                    M33 43
-                    L45 44
-                    L42 32
+                    M32 7
+                    L42 17
+                    L32 27
                 "
                 fill="none"
                 stroke="currentColor"
@@ -3968,10 +4043,21 @@ function getDirectionIcon(maneuver) {
                 stroke-linejoin="round"
             />
 
-            ${svgEnd}
-        `;
+            <path
+                d="
+                    M32 8
+                    V17
+                "
+                fill="none"
+                stroke="currentColor"
+                stroke-width="7"
+                stroke-linecap="round"
+            />
 
-    }
+        </svg>
+    `;
+
+}
 
 
     // =========================
@@ -4520,6 +4606,382 @@ const searchButton =
 
 let destinationMarker = null;
 let destinationLocation = null;
+let searchMapResults = [];
+
+
+function clearSearchMapMarkers() {
+
+    searchMapResults = [];
+
+
+    const source =
+        map.getSource(
+            "search-results"
+        );
+
+
+    if (source) {
+
+        source.setData({
+
+            type:
+                "FeatureCollection",
+
+            features:
+                []
+
+        });
+
+    }
+
+}
+
+
+function setupSearchResultLayers() {
+
+    if (
+        !map ||
+        !map.isStyleLoaded()
+    ) {
+        return;
+    }
+
+
+    if (
+        !map.getSource(
+            "search-results"
+        )
+    ) {
+
+        map.addSource(
+            "search-results",
+            {
+
+                type:
+                    "geojson",
+
+                data: {
+
+                    type:
+                        "FeatureCollection",
+
+                    features:
+                        []
+
+                }
+
+            }
+        );
+
+    }
+
+
+    if (
+        !map.getLayer(
+            "search-results-points"
+        )
+    ) {
+
+        map.addLayer({
+
+            id:
+                "search-results-points",
+
+            type:
+                "circle",
+
+            source:
+                "search-results",
+
+            paint: {
+
+                "circle-radius":
+                    9,
+
+                "circle-color":
+                    "#b02a78",
+
+                "circle-stroke-width":
+                    3,
+
+                "circle-stroke-color":
+                    "#111111"
+
+            }
+
+        });
+
+    }
+
+
+    if (
+        !map.getLayer(
+            "search-results-hitbox"
+        )
+    ) {
+
+        map.addLayer({
+
+            id:
+                "search-results-hitbox",
+
+            type:
+                "circle",
+
+            source:
+                "search-results",
+
+            paint: {
+
+                "circle-radius":
+                    18,
+
+                "circle-opacity":
+                    0
+
+            }
+
+        });
+
+    }
+
+
+    map.on(
+        "click",
+        "search-results-hitbox",
+        function (event) {
+
+            const feature =
+                event.features?.[0];
+
+
+            if (!feature) {
+                return;
+            }
+
+
+            const resultIndex =
+                Number(
+                    feature.properties
+                        ?.resultIndex
+                );
+
+
+            const result =
+                searchMapResults[
+                    resultIndex
+                ];
+
+
+            if (!result) {
+                return;
+            }
+
+
+            selectPhotonResult(
+                result
+            );
+
+        }
+    );
+
+
+    map.on(
+        "mouseenter",
+        "search-results-hitbox",
+        function () {
+
+            map.getCanvas()
+                .style.cursor =
+                "pointer";
+
+        }
+    );
+
+
+    map.on(
+        "mouseleave",
+        "search-results-hitbox",
+        function () {
+
+            map.getCanvas()
+                .style.cursor =
+                "";
+
+        }
+    );
+
+}
+
+
+function showSearchResultsOnMap(
+    results
+) {
+
+    if (
+        !results ||
+        results.length === 0
+    ) {
+
+        clearSearchMapMarkers();
+
+        return;
+
+    }
+
+
+    setupSearchResultLayers();
+
+
+    const source =
+        map.getSource(
+            "search-results"
+        );
+
+
+    if (!source) {
+
+        console.error(
+            "Arama sonucu source oluşturulamadı."
+        );
+
+        return;
+
+    }
+
+
+    searchMapResults =
+        results.slice(
+            0,
+            6
+        );
+
+
+    const features =
+        searchMapResults.map(
+            function (
+                result,
+                index
+            ) {
+
+                return {
+
+                    type:
+                        "Feature",
+
+                    properties: {
+
+                        resultIndex:
+                            index
+
+                    },
+
+                    geometry: {
+
+                        type:
+                            "Point",
+
+                        coordinates: [
+
+                            result.geometry
+                                .coordinates[0],
+
+                            result.geometry
+                                .coordinates[1]
+
+                        ]
+
+                    }
+
+                };
+
+            }
+        );
+
+
+    source.setData({
+
+        type:
+            "FeatureCollection",
+
+        features:
+            features
+
+    });
+
+
+    const bounds =
+        new maplibregl
+            .LngLatBounds();
+
+
+    features.forEach(
+        function (feature) {
+
+            bounds.extend(
+                feature.geometry
+                    .coordinates
+            );
+
+        }
+    );
+
+
+    if (
+        features.length === 1
+    ) {
+
+        map.easeTo({
+
+            center:
+                features[0]
+                    .geometry
+                    .coordinates,
+
+            zoom:
+                16,
+
+            duration:
+                700
+
+        });
+
+    }
+
+    else {
+
+        map.fitBounds(
+            bounds,
+            {
+
+                padding: {
+
+                    top:
+                        140,
+
+                    bottom:
+                        100,
+
+                    left:
+                        70,
+
+                    right:
+                        70
+
+                },
+
+                maxZoom:
+                    15,
+
+                duration:
+                    800
+
+            }
+        );
+
+    }
+
+}
 
 // =========================================
 // CANLI YER ARAMA
@@ -4528,39 +4990,57 @@ let destinationLocation = null;
 let searchTimer = null;
 let searchController = null;
 
-// Yazdıkça ara
+
+// =========================================
+// YAZDIKÇA ARA
+// =========================================
+
 searchInput.addEventListener(
     "input",
     function () {
 
-        clearTimeout(searchTimer);
+        clearTimeout(
+            searchTimer
+        );
+
         cancelSearchRequest();
+
 
         const query =
             searchInput.value.trim();
+
 
         const searchResults =
             document.getElementById(
                 "searchResults"
             );
 
-        // 2 harften azsa listeyi kapat
-        if (query.length < 2) {
 
-            searchResults.innerHTML = "";
+        if (
+            query.length < 2
+        ) {
+
+            searchResults.innerHTML =
+                "";
 
             searchResults.style.display =
                 "none";
 
+            clearSearchMapMarkers();
+
             return;
+
         }
+
 
         searchTimer =
             setTimeout(
                 function () {
 
-                    clearTimeout(searchTimer);
-            searchPlacesLive(query);
+                    searchPlacesLive(
+                        query,
+                        false
+                    );
 
                 },
                 400
@@ -4569,47 +5049,88 @@ searchInput.addEventListener(
     }
 );
 
-// ARA butonu da çalışsın
-searchButton.addEventListener(
-    "click",
-    function () {
 
-        const query =
-            searchInput.value.trim();
+// =========================================
+// ARA BUTONU / ENTER
+// =========================================
 
-        if (query.length >= 2) {
+function searchAndShowOnMap(
+    event = null
+) {
 
-            clearTimeout(searchTimer);
-            searchPlacesLive(query);
+    if (
+        event &&
+        typeof event.preventDefault ===
+            "function"
+    ) {
 
-        }
+        event.preventDefault();
 
     }
+
+
+    const query =
+        searchInput.value.trim();
+
+
+    console.log(
+        "ARA TIKLANDI:",
+        query
+    );
+
+
+    if (
+        query.length < 2
+    ) {
+
+        showNotice(
+            "En az 2 harf yaz."
+        );
+
+        return;
+
+    }
+
+
+    clearTimeout(
+        searchTimer
+    );
+
+
+    searchPlacesLive(
+        query,
+        true
+    );
+
+}
+
+
+searchButton.addEventListener(
+    "click",
+    searchAndShowOnMap
 );
 
-// Enter da çalışsın
+
 searchInput.addEventListener(
     "keydown",
     function (event) {
 
-        if (event.key === "Enter") {
+        if (
+            event.key === "Enter"
+        ) {
 
-            const query =
-                searchInput.value.trim();
-
-            if (query.length >= 2) {
-
-                clearTimeout(searchTimer);
-            searchPlacesLive(query);
-
-            }
+            searchAndShowOnMap(
+                event
+            );
 
         }
 
     }
 );
-
-async function searchPlacesLive(query) {
+async function searchPlacesLive(
+    query,
+    showOnMap = false
+) {
 
     const searchResults =
         document.getElementById(
@@ -4631,45 +5152,20 @@ async function searchPlacesLive(query) {
 
     try {
 
-        let url =
-            "https://photon.komoot.io/api/" +
-            "?limit=20" +
-            "&q=" +
-            encodeURIComponent(query);
-
-        // GPS açıksa yakındaki sonuçları öne çıkar
-        if (currentLocation !== null) {
-
-            url +=
-                "&lat=" +
-                currentLocation.latitude +
-                "&lon=" +
-                currentLocation.longitude;
-
-        }
-
-        const response =
-            await fetch(
-                url,
-                {
-                    signal:
-                        controller.signal
-                }
-            );
-
-        if (!response.ok) {
-
-            throw new Error(
-                "Arama servisi cevap vermedi"
-            );
-
-        }
-
-        const data =
-            await response.json();
-
         let results =
-    data.features || [];
+    await GameServices.searchPlaces(
+        query,
+        currentLocation,
+        {
+
+            signal:
+                controller.signal,
+
+            limit:
+                20
+
+        }
+    );
 
 // SONUÇLARI KONUMA GÖRE SIRALA
 // =========================
@@ -4829,6 +5325,31 @@ results =
         0,
         6
     );
+    console.log(
+    "Arama sonucu:",
+    results.length,
+    "Haritada göster:",
+    showOnMap
+);
+
+
+if (
+    showOnMap &&
+    results.length > 0
+) {
+
+    showSearchResultsOnMap(
+        results
+    );
+
+}
+    if (showOnMap) {
+
+    showSearchResultsOnMap(
+        results
+    );
+
+}
 
         if (requestId !== searchRequestId || controller.signal.aborted) return;
         searchResults.innerHTML = "";
@@ -5053,41 +5574,104 @@ if (
 
     catch (error) {
 
-        if (requestId !== searchRequestId) return;
-        // Kullanıcı yeni harf yazdığı için
-        // eski istek iptal edildiyse hata sayma
-        if (
-            error.name === "AbortError" && requestId !== searchRequestId
-        ) {
-            return;
-        }
+    if (
+        requestId !==
+        searchRequestId
+    ) {
+        return;
+    }
 
-        console.error(
-            "Arama hatası:",
-            error
+
+    if (
+        error.name ===
+        "AbortError"
+    ) {
+
+        showNotice(
+            "Arama zaman aşımına uğradı.",
+            {
+
+                type:
+                    "warning",
+
+                retry:
+                    function () {
+
+                        searchPlacesLive(
+                            query,
+                            true
+                        );
+
+                    }
+
+            }
         );
 
-        searchResults.innerHTML = "";
-
-        const errorItem =
-            document.createElement(
-                "div"
-            );
-
-        errorItem.className =
-            "searchResultItem";
-
-        errorItem.textContent =
-            "Arama yapılamadı";
-
-        searchResults.appendChild(
-            errorItem
-        );
-
-        searchResults.style.display =
-            "block";
+        return;
 
     }
+
+
+    console.error(
+        "Arama hatası:",
+        error
+    );
+
+
+    searchResults.innerHTML =
+        "";
+
+    searchResults.style.display =
+        "none";
+
+
+    if (!navigator.onLine) {
+
+        showNotice(
+            "İnternet bağlantısı yok. Yer aramak için internete bağlan.",
+            {
+
+                type:
+                    "error",
+
+                duration:
+                    0,
+
+                dismissible:
+                    true
+
+            }
+        );
+
+        return;
+
+    }
+
+
+    showNotice(
+        "Yer arama servisine ulaşılamadı.",
+        {
+
+            type:
+                "error",
+
+            retry:
+                function () {
+
+                    searchPlacesLive(
+                        query,
+                        true
+                    );
+
+                },
+
+            retryText:
+                "YENİDEN ARA"
+
+        }
+    );
+
+}
 
     finally {
         clearTimeout(timeoutId);
@@ -5095,6 +5679,7 @@ if (
     }
 }
 function selectPhotonResult(result) {
+    clearSearchMapMarkers();
     cancelSearchRequest();
     cancelNavigation();
     rememberPlace(result);
@@ -5176,7 +5761,12 @@ destinationElement.innerHTML = `
         ])
 
         .addTo(map);
+if (routeModeBar) {
 
+    routeModeBar.hidden =
+        false;
+
+}
     map.easeTo({
 
         center: [
@@ -5189,21 +5779,307 @@ destinationElement.innerHTML = `
         duration: 800
 
     });
+if (
+    currentLocation &&
+    gpsIsFresh()
+) {
 
+    setTimeout(
+        function () {
+
+            createRoute(
+                false
+            );
+
+        },
+        250
+    );
+
+}
 }
 
 // =========================
 // ROTA
 // =========================
 
-const ROUTER_BASE_URL =
-    "https://router.project-osrm.org";
+
 const routeButton =
     document.getElementById("routeButton");
+    let selectedRouteMode =
+    "car";
+    const routeModeBar =
+    document.getElementById(
+        "routeModeBar"
+    );
+
+
+const routeModeButtons =
+    document.querySelectorAll(
+        "[data-route-mode]"
+    );
+
+
+function updateRouteModeButtons() {
+
+    routeModeButtons.forEach(
+        function (button) {
+
+            const isActive =
+                button.dataset
+                    .routeMode ===
+                selectedRouteMode;
+
+
+            button.classList.toggle(
+                "active",
+                isActive
+            );
+
+
+            button.setAttribute(
+                "aria-pressed",
+                String(
+                    isActive
+                )
+            );
+
+        }
+    );
+
+}
+
+
+function selectRouteMode(
+    newMode
+) {
+
+    if (
+        ![
+            "car",
+            "walk",
+            "bike"
+        ].includes(newMode)
+    ) {
+
+        return;
+
+    }
+
+
+    if (navigationMode) {
+
+        showNotice(
+            "Rota türünü değiştirmek için önce navigasyonu iptal et.",
+            {
+                type:
+                    "warning"
+            }
+        );
+
+        return;
+
+    }
+
+
+    /* =========================
+       SEÇİMİ HEMEN GÖSTER
+       ========================= */
+
+    selectedRouteMode =
+        newMode;
+
+
+    updateRouteModeButtons();
+
+
+    console.log(
+        "Rota türü:",
+        selectedRouteMode
+    );
+
+
+    /* Hedef yoksa sadece
+       seçim değişsin */
+
+    if (!destinationLocation) {
+
+        return;
+
+    }
+
+
+    /* GPS yoksa rota çıkaramayız */
+
+    if (
+        !currentLocation ||
+        !gpsIsFresh()
+    ) {
+
+        showNotice(
+            "Rota oluşturmak için önce güncel konumunu al.",
+            {
+                type:
+                    "warning"
+            }
+        );
+
+        return;
+
+    }
+
+
+    /* =========================
+       ESKİ ROTA İSTEĞİNİ DURDUR
+       ========================= */
+
+    invalidateRouteRequest();
+
+
+    routePreviewReady =
+        false;
+
+
+    routeAlternatives =
+        [];
+
+
+    selectedRouteIndex =
+        0;
+
+
+    document
+        .getElementById(
+            "routeChoices"
+        )
+        .replaceChildren();
+
+
+    /* Alternatif rota çizgileri */
+
+    if (
+        typeof clearAlternativeRouteLayers ===
+        "function"
+    ) {
+
+        clearAlternativeRouteLayers();
+
+    }
+
+
+    /* Ana rota */
+
+    if (
+        map.getLayer(
+            "route-line"
+        )
+    ) {
+
+        map.removeLayer(
+            "route-line"
+        );
+
+    }
+
+
+    if (
+        map.getLayer(
+            "route-outline"
+        )
+    ) {
+
+        map.removeLayer(
+            "route-outline"
+        );
+
+    }
+
+
+    if (
+        map.getSource(
+            "route"
+        )
+    ) {
+
+        map.removeSource(
+            "route"
+        );
+
+    }
+
+
+    const routeInfo =
+        document.getElementById(
+            "routeInfo"
+        );
+
+
+    if (routeInfo) {
+
+        routeInfo.style.display =
+            "none";
+
+    }
+
+
+    /* =========================
+       YENİ ROTAYI HEMEN HESAPLA
+       ========================= */
+
+    routeButton.textContent =
+        "…";
+
+
+    createRoute(
+        false
+    );
+
+}
+
+
+
+routeModeButtons.forEach(
+    function (button) {
+
+        button.addEventListener(
+            "click",
+            function () {
+
+                selectRouteMode(
+                    button.dataset
+                        .routeMode
+                );
+
+            }
+        );
+
+    }
+);
+
+
+updateRouteModeButtons();
 
 async function createRoute(isAutomatic = false) {
     if (routeUpdateInProgress) return;
     if (!currentLocation || !gpsIsFresh()) {
+        if (
+    lastGpsAccuracy > 80
+) {
+
+    showNotice(
+        "GPS doğruluğu düşük (±" +
+        Math.round(
+            lastGpsAccuracy
+        ) +
+        " m). Açık bir alanda birkaç saniye bekle.",
+        {
+
+            type:
+                "warning"
+
+        }
+    );
+
+}
         if (!isAutomatic) showNotice("Önce KONUMUM ile güncel konumunu al.");
         return;
     }
@@ -5217,55 +6093,233 @@ async function createRoute(isAutomatic = false) {
     routeUpdateInProgress = true;
     routeButton.textContent = isAutomatic ? "İPTAL" : "…";
     try {
-        const start = `${currentLocation.longitude},${currentLocation.latitude}`;
-        const end = `${destinationLocation.longitude},${destinationLocation.latitude}`;
-        const alternativeCount =
-    isAutomatic
-        ? 0
-        : 3;
 
-const response = await fetch(
-    `${ROUTER_BASE_URL}/route/v1/driving/${start};${end}` +
-    `?overview=full` +
-    `&geometries=geojson` +
-    `&steps=true` +
-    `&alternatives=${alternativeCount}`,
+    const alternativeCount =
+        isAutomatic
+            ? 0
+            : 3;
+
+
+    const routes =
+    await GameServices
+        .getRoutes(
+
+            currentLocation,
+
+            destinationLocation,
+
+            selectedRouteMode,
+
+            {
+
+                signal:
+                    controller.signal,
+
+                alternatives:
+                    alternativeCount
+
+            }
+
+        );
+
+
+    if (
+        requestId !== routeRequestId ||
+        controller.signal.aborted
+    ) {
+
+        return;
+
+    }
+
+
+    console.log(
+        "Rota sayısı:",
+        routes.length
+    );
+
+
+    routeAlternatives =
+        routes.filter(
+            function (route) {
+
+                return (
+
+                    route.geometry &&
+                    route.geometry.coordinates &&
+                    route.geometry.coordinates.length >= 2 &&
+
+                    route.legs &&
+                    route.legs[0] &&
+                    route.legs[0].steps &&
+                    route.legs[0].steps.length > 0
+
+                );
+
+            }
+        );
+
+
+    if (
+        routeAlternatives.length === 0
+    ) {
+
+        throw new Error(
+            "Rota verisi eksik geldi."
+        );
+
+    }
+
+
+    selectedRouteIndex = 0;
+
+
+    applyRoute(
+        routeAlternatives[0],
+        isAutomatic,
+        0
+    );
+
+
+    if (!isAutomatic) {
+
+        renderRouteChoices();
+
+    }
+
+    else {
+
+        showNotice(
+            "Rota güncellendi."
+        );
+
+    }
+    }
+
+   catch (error) {
+
+    if (
+        requestId !==
+        routeRequestId
+    ) {
+        return;
+    }
+
+
+    console.error(
+        "Rota hatası:",
+        error
+    );
+
+
+    if (!navigator.onLine) {
+
+        showNotice(
+            "İnternet bağlantısı yok. Yeni rota oluşturulamıyor.",
+            {
+
+                type:
+                    "error",
+
+                duration:
+                    0,
+
+                dismissible:
+                    true
+
+            }
+        );
+
+        return;
+
+    }
+
+
+    if (
+        error.name ===
+        "AbortError"
+    ) {
+
+        showNotice(
+            "Rota servisi zamanında cevap vermedi.",
+            {
+
+                type:
+                    "warning",
+
+                retry:
+                    function () {
+
+                        createRoute(
+                            isAutomatic
+                        );
+
+                    }
+
+            }
+        );
+
+        return;
+
+    }
+
+
+    showNotice(
+    error.message ||
+    "Rota oluşturulamadı.",
     {
-        signal:
-            controller.signal
-    }
-);
-        if (!response.ok) throw new Error("Rota servisine ulaşılamadı.");
-        const data = await response.json();
-        console.log(
-    "OSRM rota sayısı:",
-    data.routes?.length,
-    data.routes
-);
-        if (requestId !== routeRequestId || controller.signal.aborted) return;
-        if (data.code !== "Ok" || !data.routes?.length) throw new Error("Bu hedefe araç rotası bulunamadı.");
-        routeAlternatives = data.routes.filter(route => route.geometry?.coordinates?.length >= 2 && route.legs?.[0]?.steps?.length);
-        if (!routeAlternatives.length) throw new Error("Rota verisi eksik geldi.");
-        selectedRouteIndex = 0;
+        type:
+            "error",
 
-applyRoute(
-    routeAlternatives[0],
-    isAutomatic,
-    0
-);
-        if (!isAutomatic) renderRouteChoices();
-        else showNotice("Rota güncellendi.");
-    } catch (error) {
-        if (requestId !== routeRequestId) return;
-        showNotice(error.name === "AbortError" ? "Rota isteği zaman aşımına uğradı. Tekrar dene." : error.message);
-    } finally {
-        clearTimeout(timeoutId);
-        if (requestId === routeRequestId) {
-            routeUpdateInProgress = false;
-            routeController = null;
-            routeButton.textContent = navigationMode ? "İPTAL" : routePreviewReady ? "BAŞLAT" : "ROTA";
-        }
+        retry:
+            function () {
+
+                createRoute(
+                    isAutomatic
+                );
+
+            },
+
+        retryText:
+            "ROTAYI TEKRAR DENE"
+
     }
+);
+
+}
+
+finally {
+
+    clearTimeout(
+        timeoutId
+    );
+
+
+    if (
+        requestId ===
+        routeRequestId
+    ) {
+
+        routeUpdateInProgress =
+            false;
+
+        routeController =
+            null;
+
+
+        routeButton.textContent =
+
+            navigationMode
+                ? "İPTAL"
+
+                : routePreviewReady
+                    ? "BAŞLAT"
+
+                    : "ROTA";
+
+    }
+
+}
 }
 
 function applyRoute(
@@ -5409,11 +6463,31 @@ if (speedHud) {
     }
 
 }
-routeButton.addEventListener(
-    "click",
+routeButton.onclick =
     function () {
 
-        // Şu anda navigasyondaysak:
+        console.log(
+            "ROTA TIKLANDI",
+            {
+                navigationMode:
+                    navigationMode,
+
+                routePreviewReady:
+                    routePreviewReady,
+
+                routeUpdateInProgress:
+                    routeUpdateInProgress,
+
+                currentLocation:
+                    currentLocation,
+
+                destinationLocation:
+                    destinationLocation
+            }
+        );
+
+
+        // Navigasyon zaten açıksa:
         // İPTAL
         if (navigationMode) {
 
@@ -5423,7 +6497,8 @@ routeButton.addEventListener(
 
         }
 
-        // Kuşbakışı rota hazırsa:
+
+        // Rota önizlemesi hazırsa:
         // BAŞLAT
         if (routePreviewReady) {
 
@@ -5433,9 +6508,9 @@ routeButton.addEventListener(
 
         }
 
+
         // Henüz rota yoksa:
-        // ROTA oluştur
+        // ROTA OLUŞTUR
         createRoute(false);
 
-    }
-);
+    };

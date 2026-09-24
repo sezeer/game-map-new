@@ -1325,3 +1325,631 @@ body.navigation-active #appNotice {
     }
 
 }
+/* =========================================
+   HARİTA ARAMA SONUÇ PINLERİ
+   ========================================= */
+
+
+
+
+
+
+.searchMapMarkerNumber::before {
+
+    content:
+        attr(data-number);
+
+}
+
+
+/* ARA / ROTA BUTONLARI HER ZAMAN TIKLANABİLSİN */
+
+#searchBox {
+    pointer-events: auto !important;
+}
+
+#searchInput {
+    pointer-events: auto !important;
+}
+
+#searchButton,
+#routeButton {
+    position: relative !important;
+
+    z-index: 50 !important;
+
+    pointer-events: auto !important;
+
+    cursor: pointer !important;
+}
+
+#searchResults {
+    z-index: 40 !important;
+}
+/* =========================================
+   UYGULAMA MESAJLARI / HATA PANELİ
+   ========================================= */
+
+#appNotice {
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    pointer-events: auto !important;
+
+}
+
+
+#appNotice[hidden] {
+
+    display: none !important;
+
+}
+
+
+.appNoticeText {
+
+    flex: 1;
+
+}
+
+
+/* NORMAL */
+
+#appNotice[data-type="info"] {
+
+    border-color:
+        #cfbe8b;
+
+}
+
+
+/* BAŞARILI */
+
+#appNotice[data-type="success"] {
+
+    border-color:
+        #9fbd32;
+
+}
+
+
+/* UYARI */
+
+#appNotice[data-type="warning"] {
+
+    border-color:
+        #e0b94f;
+
+}
+
+
+/* HATA */
+
+#appNotice[data-type="error"] {
+
+    border-color:
+        #d05b9c;
+
+    box-shadow:
+        0 0 12px
+        rgba(176, 42, 120, .35);
+
+}
+
+
+.appNoticeRetry {
+
+    flex: 0 0 auto;
+
+    min-height: 34px;
+
+    padding:
+        5px 10px;
+
+    color:
+        #111;
+
+    background:
+        #9fbd32;
+
+    border:
+        2px solid #111;
+
+    cursor:
+        pointer;
+
+    font-family:
+        "Teko",
+        Arial,
+        sans-serif;
+
+    font-size:
+        15px;
+
+    font-weight:
+        700;
+
+}
+
+
+.appNoticeClose {
+
+    flex: 0 0 auto;
+
+    width: 30px;
+    height: 30px;
+
+    padding: 0;
+
+    color:
+        white;
+
+    background:
+        transparent;
+
+    border:
+        0;
+
+    cursor:
+        pointer;
+
+    font-size:
+        24px;
+
+    line-height:
+        1;
+
+}
+/* =========================================
+   ROTA TÜRÜ
+   ========================================= */
+
+
+
+
+.routeModeButton {
+
+    flex: 1;
+
+    min-height: 36px;
+
+    padding:
+        5px 8px;
+
+    background:
+        #181818;
+
+    color:
+        #ffffff;
+
+    border:
+        1px solid #777;
+
+    cursor:
+        pointer;
+
+    font-family:
+        "Teko",
+        Impact,
+        sans-serif;
+
+    font-size:
+        16px;
+
+    font-weight:
+        700;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+.routeModeButton.active {
+
+    background:
+        #9fbd32;
+
+    color:
+        #111111;
+
+    border-color:
+        #111111;
+
+    outline:
+        2px solid #dce98a;
+
+}
+
+
+.routeModeButton:active {
+
+    transform:
+        translateY(1px);
+
+}
+#routeModeBar {
+
+    position: fixed;
+
+    top:
+        calc(
+            env(safe-area-inset-top) +
+            78px
+        );
+
+    right: 18px;
+
+    z-index: 45;
+
+    display: flex;
+
+    gap: 4px;
+
+    padding: 4px;
+
+    background:
+        rgba(15,15,15,.94);
+
+    border:
+        2px solid #777;
+
+    box-shadow:
+        3px 4px 0
+        rgba(0,0,0,.45);
+
+}
+
+
+#routeModeBar[hidden] {
+
+    display: none !important;
+
+}
+
+
+.routeModeButton {
+
+    min-width: 86px;
+    height: 34px;
+
+    padding:
+        3px 10px;
+
+    background:
+        #161616;
+
+    color:
+        white;
+
+    border:
+        1px solid #666;
+
+    font-family:
+        "Teko",
+        Impact,
+        sans-serif;
+
+    font-size:
+        16px;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+}
+
+
+.routeModeButton.active {
+
+    background:
+        #9fbd32;
+
+    color:
+        #111;
+
+    border-color:
+        #111;
+
+}
+
+
+@media (max-width: 600px) {
+
+    #routeModeBar {
+
+        top:
+            calc(
+                env(safe-area-inset-top) +
+                72px
+            );
+
+        left: 12px;
+        right: 12px;
+
+        justify-content:
+            center;
+
+    }
+
+
+    .routeModeButton {
+
+        flex: 1;
+
+        min-width: 0;
+
+    }
+
+}
+/* SEÇİLİ ROTA TÜRÜ */
+
+.routeModeButton.active,
+.routeModeButton[aria-pressed="true"] {
+
+    background:
+        #9fbd32 !important;
+
+    color:
+        #111111 !important;
+
+    border-color:
+        #dce98a !important;
+
+    box-shadow:
+        inset 0 0 0 2px #111,
+        0 0 8px rgba(159,189,50,.55) !important;
+
+}
+/* =========================================
+   ROTA TÜRÜ + SÜRE ÇAKIŞMA DÜZELTMESİ
+   ========================================= */
+
+#routeModeBar {
+
+    top:
+        calc(
+            env(safe-area-inset-top) +
+            78px
+        ) !important;
+
+    right:
+        22px !important;
+
+    left:
+        auto !important;
+
+}
+
+
+/* Süre / mesafeyi rota türlerinin altına indir */
+
+#routeInfo {
+
+    top:
+        calc(
+            env(safe-area-inset-top) +
+            125px
+        ) !important;
+
+    right:
+        22px !important;
+
+}
+
+
+/* Navigasyon başlayınca rota türü seçimini gizle */
+
+body.navigation-active #routeModeBar {
+
+    display:
+        none !important;
+
+}
+
+
+/* Navigasyonda süre tekrar yukarı gelsin */
+
+body.navigation-active #routeInfo {
+
+    top:
+        calc(
+            env(safe-area-inset-top) +
+            74px
+        ) !important;
+
+}
+
+
+@media (max-width: 600px) {
+
+    #routeModeBar {
+
+        top:
+            calc(
+                env(safe-area-inset-top) +
+                70px
+            ) !important;
+
+        left:
+            12px !important;
+
+        right:
+            12px !important;
+
+    }
+
+
+    #routeInfo {
+
+        top:
+            calc(
+                env(safe-area-inset-top) +
+                116px
+            ) !important;
+
+        right:
+            12px !important;
+
+    }
+
+
+    body.navigation-active #routeInfo {
+
+        top:
+            calc(
+                env(safe-area-inset-top) +
+                66px
+            ) !important;
+
+    }
+
+}
+/* =========================================
+   PWA GÜNCELLEME BİLDİRİMİ
+   ========================================= */
+
+#updateNotice {
+
+    position: fixed;
+
+    left: 50%;
+
+    bottom:
+        calc(
+            env(safe-area-inset-bottom) +
+            22px
+        );
+
+    transform:
+        translateX(-50%);
+
+    z-index: 5000;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding:
+        8px 8px
+        8px 16px;
+
+    background:
+        rgba(8, 8, 8, 0.97);
+
+    color:
+        #ffffff;
+
+    border:
+        2px solid #111;
+
+    outline:
+        1px solid #cccccc;
+
+    box-shadow:
+        4px 4px 0
+        rgba(0, 0, 0, 0.55);
+
+    font-family:
+        "Teko",
+        Impact,
+        sans-serif;
+
+    font-size:
+        18px;
+
+    font-weight:
+        700;
+
+    white-space:
+        nowrap;
+
+}
+
+
+#updateNotice[hidden] {
+
+    display:
+        none !important;
+
+}
+
+
+#updateButton {
+
+    height: 36px;
+
+    padding:
+        0 18px;
+
+    background:
+        #9fbd32;
+
+    color:
+        #111111;
+
+    border:
+        2px solid #111;
+
+    font-family:
+        "Teko",
+        Impact,
+        sans-serif;
+
+    font-size:
+        17px;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+}
+
+
+#updateButton:disabled {
+
+    opacity:
+        0.65;
+
+    cursor:
+        wait;
+
+}
+
+
+@media (max-width: 600px) {
+
+    #updateNotice {
+
+        left:
+            12px;
+
+        right:
+            12px;
+
+        bottom:
+            calc(
+                env(safe-area-inset-bottom) +
+                12px
+            );
+
+        transform:
+            none;
+
+        justify-content:
+            space-between;
+
+        box-sizing:
+            border-box;
+
+    }
+
+}

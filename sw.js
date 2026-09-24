@@ -1,27 +1,282 @@
-const CACHE_NAME = "gamemap-shell-v5";
-const SHELL = ["./", "./index.html", "./app.js", "./features.js", "./style.css", "./manifest.json", "./icon-192.png", "./icon-512.png", "./waypoint.gif",] ;
-self.addEventListener("install", event => {
-    event.waitUntil(caches.open(CACHE_NAME).then(async cache => {
-        await cache.addAll(SHELL);
-    }));
-});
-self.addEventListener("activate", event => {
-    event.waitUntil(caches.keys().then(keys => Promise.all(
-        keys.filter(key => key.startsWith("gamemap-shell-") && key !== CACHE_NAME).map(key => caches.delete(key))
-    )).then(() => self.clients.claim()));
-});
-self.addEventListener("fetch", event => {
-    if (event.request.method !== "GET") return;
-    const url = new URL(event.request.url);
-    const isShell = url.origin === self.location.origin && SHELL.some(path => new URL(path, self.registration.scope).pathname === url.pathname);
-    // Search, routes and map tiles stay online. Only the application shell is cached.
-    if (!isShell) return;
-    event.respondWith((async () => {
-        const cache = await caches.open(CACHE_NAME);
-        const cached = await cache.match(event.request);
-        if (cached) return cached;
-        const response = await fetch(event.request);
-        if (response.ok || response.type === "opaque") await cache.put(event.request, response.clone());
-        return response;
-    })());
-});
+const APP_VERSION =
+    "0.2.2";
+
+
+const CACHE_NAME =
+    "gamemap-shell-" +
+    APP_VERSION;
+
+
+const SHELL = [
+
+    "./",
+
+    "./index.html",
+
+    "./style.css",
+
+    "./services.js",
+
+    "./app.js",
+
+    "./features.js",
+
+    "./manifest.json",
+
+    "./icon-192.png",
+
+    "./icon-512.png"
+
+];
+
+
+/* =========================================
+   INSTALL
+   ========================================= */
+
+self.addEventListener(
+    "install",
+    function (event) {
+
+        event.waitUntil(
+
+            caches
+                .open(
+                    CACHE_NAME
+                )
+                .then(
+                    function (cache) {
+
+                        return cache.addAll(
+                            SHELL
+                        );
+
+                    }
+                )
+
+        );
+
+    }
+);
+
+
+/* =========================================
+   ACTIVATE
+   Eski cache'leri temizle
+   ========================================= */
+
+self.addEventListener(
+    "activate",
+    function (event) {
+
+        event.waitUntil(
+
+            caches
+                .keys()
+                .then(
+                    function (keys) {
+
+                        return Promise.all(
+
+                            keys
+                                .filter(
+                                    function (key) {
+
+                                        return (
+                                            key.startsWith(
+                                                "gamemap-shell-"
+                                            ) &&
+                                            key !==
+                                                CACHE_NAME
+                                        );
+
+                                    }
+                                )
+                                .map(
+                                    function (key) {
+
+                                        return caches.delete(
+                                            key
+                                        );
+
+                                    }
+                                )
+
+                        );
+
+                    }
+                )
+                .then(
+                    function () {
+
+                        return self.clients
+                            .claim();
+
+                    }
+                )
+
+        );
+
+    }
+);
+
+
+/* =========================================
+   YENİ SÜRÜMÜ AKTİF ET
+   ========================================= */
+
+self.addEventListener(
+    "message",
+    function (event) {
+
+        if (
+            event.data &&
+            event.data.type ===
+                "SKIP_WAITING"
+        ) {
+
+            self.skipWaiting();
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   FETCH
+
+   İnternet varsa:
+   DAİMA en güncel dosyayı al.
+
+   İnternet yoksa:
+   cache'den aç.
+   ========================================= */
+
+self.addEventListener(
+    "fetch",
+    function (event) {
+
+        if (
+            event.request.method !==
+            "GET"
+        ) {
+
+            return;
+
+        }
+
+
+        const url =
+            new URL(
+                event.request.url
+            );
+
+
+        /* Sadece kendi uygulama
+           dosyalarımızı yönet */
+
+        if (
+            url.origin !==
+            self.location.origin
+        ) {
+
+            return;
+
+        }
+
+
+        const isShell =
+            SHELL.some(
+                function (path) {
+
+                    const shellUrl =
+                        new URL(
+                            path,
+                            self.registration.scope
+                        );
+
+
+                    return (
+                        shellUrl.pathname ===
+                        url.pathname
+                    );
+
+                }
+            );
+
+
+        if (!isShell) {
+
+            return;
+
+        }
+
+
+        event.respondWith(
+
+            (async function () {
+
+                const cache =
+                    await caches.open(
+                        CACHE_NAME
+                    );
+
+
+                try {
+
+                    /* Önce internet */
+
+                    const response =
+                        await fetch(
+                            event.request,
+                            {
+                                cache:
+                                    "no-store"
+                            }
+                        );
+
+
+                    if (
+                        response.ok
+                    ) {
+
+                        await cache.put(
+                            event.request,
+                            response.clone()
+                        );
+
+                    }
+
+
+                    return response;
+
+                }
+
+                catch (error) {
+
+                    /* İnternet yoksa cache */
+
+                    const cached =
+                        await cache.match(
+                            event.request
+                        );
+
+
+                    if (cached) {
+
+                        return cached;
+
+                    }
+
+
+                    throw error;
+
+                }
+
+            })()
+
+        );
+
+    }
+);

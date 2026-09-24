@@ -13,6 +13,10 @@
 <meta name="theme-color" content="#9e9482">
 
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta
+    name="mobile-web-app-capable"
+    content="yes"
+>
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="icon" href="icon-192.png">
 
@@ -72,7 +76,33 @@
     <div id="searchResults"></div>
 
 </div>
+<div id="routeModeBar" hidden>
 
+    <button
+        type="button"
+        class="routeModeButton active"
+        data-route-mode="car"
+    >
+        ARAÇ
+    </button>
+
+    <button
+        type="button"
+        class="routeModeButton"
+        data-route-mode="walk"
+    >
+        YÜRÜME
+    </button>
+
+    <button
+        type="button"
+        class="routeModeButton"
+        data-route-mode="bike"
+    >
+        BİSİKLET
+    </button>
+
+</div>
 
 <div id="routeInfo">
 
@@ -123,6 +153,7 @@
         <button id="toolsToggle" aria-expanded="false" aria-controls="toolsPanel">MENÜ</button>
         <section id="toolsPanel" hidden aria-label="Harita menüsü">
             <h2>YOL ARKADAŞIN</h2>
+            
             <button id="pickDestination">HARİTADAN HEDEF SEÇ</button>
             <button id="saveFavorite">HEDEFİ FAVORİYE EKLE</button>
             <button id="voiceToggle" aria-pressed="false">SES: KAPALI</button>
@@ -134,8 +165,26 @@
     </aside>
     <div id="routeChoices" aria-label="Alternatif araç rotaları"></div>
     <div id="appNotice" role="status" hidden></div>
-    <script src="app.js"></script>
-    <script src="features.js"></script>
+    <div
+    id="updateNotice"
+    hidden
+>
+
+    <span>
+        YENİ SÜRÜM HAZIR
+    </span>
+
+    <button
+        id="updateButton"
+        type="button"
+    >
+        YENİLE
+    </button>
+
+</div>
+    <script src="services.js"></script>
+<script src="app.js"></script>
+<script src="features.js"></script>
 
 </body>
 

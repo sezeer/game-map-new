@@ -257,12 +257,162 @@ function persistPreferences() {
     try { localStorage.setItem(storageKey, JSON.stringify(preferences)); }
     catch (_) { showNotice("Bu tarayıcı kayıtları saklayamıyor; seçimler bu oturumda kullanılabilir."); }
 }
-function showNotice(message) {
-    const notice = document.getElementById("appNotice");
-    notice.textContent = message;
-    notice.hidden = false;
-    clearTimeout(noticeTimer);
-    noticeTimer = setTimeout(() => { notice.hidden = true; }, 5500);
+function showNotice(
+    message,
+    options = {}
+) {
+
+    const notice =
+        document.getElementById(
+            "appNotice"
+        );
+
+
+    const type =
+        options.type ||
+        "info";
+
+
+    const duration =
+        Number.isFinite(
+            options.duration
+        )
+            ? options.duration
+            : 5500;
+
+
+    notice.replaceChildren();
+
+
+    notice.dataset.type =
+        type;
+
+
+    /* MESAJ */
+
+    const text =
+        document.createElement(
+            "span"
+        );
+
+    text.className =
+        "appNoticeText";
+
+    text.textContent =
+        message;
+
+    notice.appendChild(
+        text
+    );
+
+
+    /* TEKRAR DENE BUTONU */
+
+    if (
+        typeof options.retry ===
+            "function"
+    ) {
+
+        const retryButton =
+            document.createElement(
+                "button"
+            );
+
+
+        retryButton.type =
+            "button";
+
+        retryButton.className =
+            "appNoticeRetry";
+
+        retryButton.textContent =
+            options.retryText ||
+            "TEKRAR DENE";
+
+
+        retryButton.addEventListener(
+            "click",
+            function () {
+
+                notice.hidden =
+                    true;
+
+                options.retry();
+
+            }
+        );
+
+
+        notice.appendChild(
+            retryButton
+        );
+
+    }
+
+
+    /* KAPAT */
+
+    if (
+        options.dismissible === true
+    ) {
+
+        const closeButton =
+            document.createElement(
+                "button"
+            );
+
+        closeButton.type =
+            "button";
+
+        closeButton.className =
+            "appNoticeClose";
+
+        closeButton.textContent =
+            "×";
+
+
+        closeButton.addEventListener(
+            "click",
+            function () {
+
+                notice.hidden =
+                    true;
+
+            }
+        );
+
+
+        notice.appendChild(
+            closeButton
+        );
+
+    }
+
+
+    notice.hidden =
+        false;
+
+
+    clearTimeout(
+        noticeTimer
+    );
+
+
+    if (duration > 0) {
+
+        noticeTimer =
+            setTimeout(
+                function () {
+
+                    notice.hidden =
+                        true;
+
+                },
+                duration
+            );
+
+    }
+
 }
 function invalidateRouteRequest() {
     routeRequestId++;
@@ -590,18 +740,268 @@ const isDevelopment =
 
 if (
     "serviceWorker" in navigator &&
-    window.isSecureContext &&
-    !isDevelopment
+    window.isSecureContext
 ) {
 
+    let pageRefreshing =
+        false;
+
+
     navigator.serviceWorker
-        .register("./sw.js")
-        .catch(() => {
+        .addEventListener(
+            "controllerchange",
+            function () {
 
-            showNotice(
-                "Çevrimdışı açılış hazırlanamadı; uygulama internetle çalışmaya devam eder."
-            );
+                if (
+                    pageRefreshing
+                ) {
 
-        });
+                    return;
+
+                }
+
+
+                pageRefreshing =
+                    true;
+
+
+                window.location
+                    .reload();
+
+            }
+        );
+
+
+    window.addEventListener(
+        "load",
+        async function () {
+
+            try {
+
+                const registration =
+                    await navigator
+                        .serviceWorker
+                        .register(
+                            "./sw.js",
+                            {
+                                updateViaCache:
+                                    "none"
+                            }
+                        );
+
+
+                console.log(
+                    "PWA hazır."
+                );
+
+
+                const updateNotice =
+                    document.getElementById(
+                        "updateNotice"
+                    );
+
+
+                const updateButton =
+                    document.getElementById(
+                        "updateButton"
+                    );
+
+
+                let waitingWorker =
+                    null;
+
+
+                function showUpdateNotice(
+                    worker
+                ) {
+
+                    if (!worker) {
+
+                        return;
+
+                    }
+
+
+                    waitingWorker =
+                        worker;
+
+
+                    updateNotice.hidden =
+                        false;
+
+
+                    updateButton.disabled =
+                        false;
+
+
+                    updateButton.textContent =
+                        "YENİLE";
+
+                }
+
+
+                /* Sayfa açıldığında zaten
+                   bekleyen sürüm varsa */
+
+                if (
+                    registration.waiting
+                ) {
+
+                    showUpdateNotice(
+                        registration.waiting
+                    );
+
+                }
+
+
+                /* Yeni SW bulundu */
+
+                registration
+                    .addEventListener(
+                        "updatefound",
+                        function () {
+
+                            const newWorker =
+                                registration
+                                    .installing;
+
+
+                            if (!newWorker) {
+
+                                return;
+
+                            }
+
+
+                            newWorker
+                                .addEventListener(
+                                    "statechange",
+                                    function () {
+
+                                        if (
+                                            newWorker.state ===
+                                                "installed" &&
+
+                                            navigator
+                                                .serviceWorker
+                                                .controller
+                                        ) {
+
+                                            showUpdateNotice(
+                                                newWorker
+                                            );
+
+                                        }
+
+                                    }
+                                );
+
+                        }
+                    );
+
+
+                /* YENİLE butonu */
+
+                updateButton
+                    .addEventListener(
+                        "click",
+                        function () {
+
+                            if (
+                                !waitingWorker
+                            ) {
+
+                                return;
+
+                            }
+
+
+                            updateButton.disabled =
+                                true;
+
+
+                            updateButton.textContent =
+                                "YÜKLENİYOR...";
+
+
+                            waitingWorker.postMessage({
+                                type:
+                                    "SKIP_WAITING"
+                            });
+
+                        }
+                    );
+
+
+                /* Uygulama açılır açılmaz
+                   güncelleme kontrolü */
+
+                registration
+                    .update()
+                    .catch(
+                        function () {}
+                    );
+
+
+                /* Uygulama uzun süre
+                   açık kalırsa 30 dakikada
+                   bir kontrol et */
+
+                setInterval(
+                    function () {
+
+                        registration
+                            .update()
+                            .catch(
+                                function () {}
+                            );
+
+                    },
+                    30 * 60 * 1000
+                );
+
+
+                /* Kullanıcı uygulamaya geri
+                   döndüğünde tekrar kontrol */
+
+                document.addEventListener(
+                    "visibilitychange",
+                    function () {
+
+                        if (
+                            document
+                                .visibilityState ===
+                            "visible"
+                        ) {
+
+                            registration
+                                .update()
+                                .catch(
+                                    function () {}
+                                );
+
+                        }
+
+                    }
+                );
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Service Worker hatası:",
+                    error
+                );
+
+
+                showNotice(
+                    "Çevrimdışı açılış hazırlanamadı; uygulama internetle çalışmaya devam eder."
+                );
+
+            }
+
+        }
+    );
 
 }
