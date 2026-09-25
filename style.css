@@ -41,7 +41,7 @@ body {
 }
 @font-face {
     font-family: "Pricedown";
-    src: url("./vendor/fonts/pricedown.otf") format("opentype");
+    src: url("./assets/fonts/pricedown.otf") format("opentype");
     font-weight: normal;
     font-style: normal;
     font-display: swap;
