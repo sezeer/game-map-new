@@ -795,6 +795,596 @@ map.setPaintProperty(
     );
 
 }
+/* =========================================
+   OYUN TEMASINA GÖRE HARİTA STİLİ
+   ========================================= */
+
+function applyGameBaseMapTheme() {
+
+    if (
+        !map ||
+        !map.isStyleLoaded()
+    ) {
+        return;
+    }
+
+
+    const isGtaV =
+        (
+            window.GameTheme?.getCurrent?.() ||
+            document.documentElement.dataset.theme
+        ) === "gtav";
+
+
+    const colors =
+        isGtaV
+
+        ? {
+    background:
+        "#242424",
+
+    water:
+        "#657783",
+
+    park:
+        "#262a27",
+
+    public:
+        "#2b2b2b",
+
+    urban:
+        "#292929",
+
+    farmland:
+        "#272927",
+
+    sand:
+        "#303030",
+
+    airport:
+        "#303030",
+
+    building:
+        "#323232",
+
+    building3d:
+        "#383838",
+
+    roadMajor:
+        "#dedede",
+
+    roadMedium:
+        "#b8b8b8",
+
+    roadMinor:
+        "#777777",
+
+    roadCasing:
+        "#161616",
+
+    rail:
+        "#666666",
+
+    waterway:
+        "#657783",
+
+    placeText:
+        "#eeeeee",
+
+    roadText:
+        "#c8c8c8",
+
+    textHalo:
+        "#242424"
+}
+
+        : {
+            background:
+                "#9e9482",
+
+            water:
+                "#7f94b3",
+
+            park:
+                "#456b2f",
+
+            public:
+                "#b6b1a5",
+
+            urban:
+                "#b0aea6",
+
+            farmland:
+                "#788953",
+
+            sand:
+                "#e3cf75",
+
+            airport:
+                "#9b9b96",
+
+            building:
+                "#d9d7cf",
+
+            building3d:
+                "#c7c3b8",
+
+            road:
+                "#111111",
+
+            rail:
+                "#6b241c",
+
+            waterway:
+                "#7f94b3",
+
+            placeText:
+                "#211f1a",
+
+            roadText:
+                "#28251e",
+
+            textHalo:
+                "#c7c0ae"
+        };
+
+
+    const layers =
+        map.getStyle()?.layers ||
+        [];
+
+
+    layers.forEach(
+        function (layer) {
+
+            const id =
+                (
+                    layer.id ||
+                    ""
+                ).toLowerCase();
+
+
+            const sourceLayer =
+                (
+                    layer[
+                        "source-layer"
+                    ] ||
+                    ""
+                ).toLowerCase();
+
+
+            const filterText =
+                JSON.stringify(
+                    layer.filter ||
+                    ""
+                ).toLowerCase();
+
+
+            const name =
+                id +
+                " " +
+                sourceLayer +
+                " " +
+                filterText;
+
+
+            try {
+
+                /* =====================
+                   ARKA PLAN
+                   ===================== */
+
+                if (
+                    layer.type ===
+                    "background"
+                ) {
+
+                    map.setPaintProperty(
+                        layer.id,
+                        "background-color",
+                        colors.background
+                    );
+
+                    return;
+
+                }
+
+
+                /* =====================
+                   ALANLAR
+                   ===================== */
+
+                if (
+                    layer.type ===
+                    "fill"
+                ) {
+
+                    let fillColor =
+                        null;
+
+
+                    if (
+                        name.includes(
+                            "water"
+                        )
+                    ) {
+
+                        fillColor =
+                            colors.water;
+
+                    }
+
+
+                    else if (
+                        name.includes("park") ||
+                        name.includes("forest") ||
+                        name.includes("wood") ||
+                        name.includes("grass")
+                    ) {
+
+                        fillColor =
+                            colors.park;
+
+                    }
+
+
+                    else if (
+                        name.includes("hospital") ||
+                        name.includes("clinic") ||
+                        name.includes("school") ||
+                        name.includes("university") ||
+                        name.includes("college") ||
+                        name.includes("kindergarten")
+                    ) {
+
+                        fillColor =
+                            colors.public;
+
+                    }
+
+
+                    else if (
+                        name.includes("residential") ||
+                        name.includes("commercial") ||
+                        name.includes("industrial") ||
+                        name.includes("urban")
+                    ) {
+
+                        fillColor =
+                            colors.urban;
+
+                    }
+
+
+                    else if (
+                        name.includes("farmland") ||
+                        name.includes("meadow") ||
+                        name.includes("orchard")
+                    ) {
+
+                        fillColor =
+                            colors.farmland;
+
+                    }
+
+
+                    else if (
+                        name.includes("sand") ||
+                        name.includes("beach")
+                    ) {
+
+                        fillColor =
+                            colors.sand;
+
+                    }
+
+
+                    else if (
+                        name.includes("aeroway") ||
+                        name.includes("airport")
+                    ) {
+
+                        fillColor =
+                            colors.airport;
+
+                    }
+
+
+                    else if (
+                        name.includes(
+                            "building"
+                        )
+                    ) {
+
+                        fillColor =
+                            colors.building;
+
+                    }
+
+
+                    if (
+                        fillColor
+                    ) {
+
+                        map.setPaintProperty(
+                            layer.id,
+                            "fill-color",
+                            fillColor
+                        );
+
+                    }
+
+                }
+
+
+                /* =====================
+                   3D BİNALAR
+                   ===================== */
+
+                if (
+                    layer.type ===
+                    "fill-extrusion" &&
+                    name.includes(
+                        "building"
+                    )
+                ) {
+
+                    map.setPaintProperty(
+                        layer.id,
+                        "fill-extrusion-color",
+                        colors.building3d
+                    );
+
+                }
+
+
+                /* =====================
+                   ÇİZGİLER
+                   ===================== */
+
+                if (
+                    layer.type ===
+                    "line"
+                ) {
+
+                    if (
+                        name.includes("waterway") ||
+                        name.includes("river") ||
+                        name.includes("stream")
+                    ) {
+
+                        map.setPaintProperty(
+                            layer.id,
+                            "line-color",
+                            colors.waterway
+                        );
+
+                    }
+
+
+                    else if (
+                        name.includes("rail") ||
+                        name.includes("railway")
+                    ) {
+
+                        map.setPaintProperty(
+                            layer.id,
+                            "line-color",
+                            colors.rail
+                        );
+
+                    }
+
+
+                    else if (
+    name.includes("road") ||
+    name.includes("highway") ||
+    name.includes("transportation")
+) {
+
+    let roadColor;
+
+    if (!isGtaV) {
+
+        roadColor =
+            "#111111";
+
+    }
+
+    else if (
+        name.includes("casing") ||
+        name.includes("outline")
+    ) {
+
+        roadColor =
+            colors.roadCasing;
+
+    }
+
+    else if (
+        name.includes("motorway") ||
+        name.includes("trunk") ||
+        name.includes("primary")
+    ) {
+
+        roadColor =
+            colors.roadMajor;
+
+    }
+
+    else if (
+        name.includes("secondary") ||
+        name.includes("tertiary")
+    ) {
+
+        roadColor =
+            colors.roadMedium;
+
+    }
+
+    else {
+
+        roadColor =
+            colors.roadMinor;
+
+    }
+
+
+    map.setPaintProperty(
+        layer.id,
+        "line-color",
+        roadColor
+    );
+
+
+    if (isGtaV) {
+
+        map.setPaintProperty(
+            layer.id,
+            "line-opacity",
+            0.95
+        );
+
+    }
+
+}
+
+                }
+
+
+                /* =====================
+                   HARİTA YAZILARI
+                   ===================== */
+
+                if (
+                    layer.type ===
+                    "symbol"
+                ) {
+
+                    const textField =
+                        map.getLayoutProperty(
+                            layer.id,
+                            "text-field"
+                        );
+
+
+                    if (
+                        textField ===
+                            undefined ||
+                        textField ===
+                            null
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    const isRoadLabel =
+                        sourceLayer.includes(
+                            "transportation_name"
+                        ) ||
+
+                        name.includes(
+                            "road"
+                        ) ||
+
+                        name.includes(
+                            "street"
+                        );
+
+
+                    map.setPaintProperty(
+
+                        layer.id,
+
+                        "text-color",
+
+                        isRoadLabel
+                            ? colors.roadText
+                            : colors.placeText
+
+                    );
+
+
+                    map.setPaintProperty(
+
+                        layer.id,
+
+                        "text-halo-color",
+
+                        colors.textHalo
+
+                    );
+
+
+                    map.setPaintProperty(
+
+                        layer.id,
+
+                        "text-halo-width",
+
+isGtaV
+    ? 2
+    : 1.5
+    
+
+                    );
+                    if (isGtaV) {
+
+    map.setPaintProperty(
+        layer.id,
+        "text-halo-blur",
+        0.8
+    );
+
+}
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.debug(
+                    "Tema harita katmanı atlandı:",
+                    layer.id
+                );
+
+            }
+
+        }
+    );
+
+
+    /* Özel 3D bina katmanımız */
+
+    if (
+        map.getLayer(
+            "game-buildings-3d"
+        )
+    ) {
+
+        map.setPaintProperty(
+
+            "game-buildings-3d",
+
+            "fill-extrusion-color",
+
+            colors.building3d
+
+        );
+        map.setPaintProperty(
+    "game-buildings-3d",
+    "fill-extrusion-opacity",
+    isGtaV
+        ? 0.68
+        : 0.88
+);  
+
+    }
+
+}
 map.on("load", function () {
 
     const layers = map.getStyle().layers;
@@ -1353,6 +1943,21 @@ setupGame3DBuildings();
 setupSearchResultLayers();
 
 setupGameLabelHierarchy();
+
+/* Kayıtlı temayı haritaya uygula */
+map.once("idle", function () {
+
+    applyGameBaseMapTheme();
+
+    requestAnimationFrame(function () {
+
+        document.documentElement.classList.add(
+            "map-theme-ready"
+        );
+
+    });
+
+});
 
 }); // map.on("load") kapanıyor
 
@@ -2441,6 +3046,203 @@ lastReliableSpeed = 0;
 
     }
 );
+/* =========================================
+   GPS'İ OTOMATİK BAŞLAT
+   ========================================= */
+
+function startGpsAutomatically() {
+
+    if (
+        !navigator.geolocation ||
+        watchId !== null
+    ) {
+        return;
+    }
+
+    /*
+    Mevcut KONUMUM kodunu kullanıyoruz.
+    Programatik click olduğu için
+    pusula izni istemeyecek.
+    */
+
+    locationButton.click();
+
+}
+
+
+/* Harita hazır olunca GPS'i otomatik aç */
+
+if (map.loaded()) {
+
+    startGpsAutomatically();
+
+}
+else {
+
+    map.once(
+        "load",
+        startGpsAutomatically
+    );
+
+}
+/* =========================================
+   GAME THEME — HARİTA GÖRSELLERİ
+   ========================================= */
+
+function getCurrentGameThemeName() {
+
+    return (
+        window.GameTheme?.getCurrent?.() ||
+        document.documentElement.dataset.theme ||
+        "classic"
+    );
+
+}
+
+
+function getGameThemeRouteColor() {
+
+    const cssColor =
+        getComputedStyle(
+            document.documentElement
+        )
+        .getPropertyValue(
+            "--theme-route"
+        )
+        .trim();
+
+
+    if (cssColor) {
+        return cssColor;
+    }
+
+
+    return (
+        getCurrentGameThemeName() ===
+        "gtav"
+
+            ? "#55aaff"
+
+            : "#b02a78"
+    );
+
+}
+
+
+function getPlayerMarkerMarkup() {
+
+    if (
+        getCurrentGameThemeName() ===
+        "gtav"
+    ) {
+
+        return `
+
+            <svg
+                class="playerMarkerVisual playerMarkergtav"
+                viewBox="0 0 64 64"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+            >
+
+                <path
+                    d="M32 5 L54 54 L32 44 L10 54 Z"
+                    fill="#ffffff"
+                    stroke="#0b1015"
+                    stroke-width="6"
+                    stroke-linejoin="round"
+                />
+
+                <path
+                    d="M32 13 L43 43 L32 37 L21 43 Z"
+                    fill="currentColor"
+                />
+
+            </svg>
+
+        `;
+
+    }
+
+
+    return `
+
+    <img
+        class="playerMarkerVisual playerMarkerImage"
+        src="assets/themes/sanandreas/markers/player.png"
+        alt=""
+    >
+
+`;
+
+}
+
+
+function getDestinationMarkerMarkup() {
+
+    if (
+        getCurrentGameThemeName() ===
+        "gtav"
+    ) {
+
+        return `
+
+            <svg
+                class="destinationMarkerVisual destinationMarkergtav"
+                viewBox="0 0 64 64"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+            >
+
+                <circle
+                    cx="32"
+                    cy="32"
+                    r="25"
+                    fill="rgba(8,12,16,0.88)"
+                    stroke="#0b1015"
+                    stroke-width="5"
+                />
+
+                <circle
+                    cx="32"
+                    cy="32"
+                    r="18"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="5"
+                />
+
+                <circle
+                    cx="32"
+                    cy="32"
+                    r="5"
+                    fill="#ffffff"
+                />
+
+                <path
+                    d="M32 3 V13 M32 51 V61 M3 32 H13 M51 32 H61"
+                    stroke="currentColor"
+                    stroke-width="4"
+                />
+
+            </svg>
+
+        `;
+
+    }
+
+
+    return `
+
+    <img
+        class="destinationMarkerVisual destinationMarkerImage"
+        src="assets/themes/sanandreas/markers/target.png"
+        alt=""
+    >
+
+`;
+
+}
 // =========================
 // OYUNCU MARKERI
 // =========================
@@ -2465,15 +3267,8 @@ function showPlayer(
         markerElement.id =
             "playerMarker";
 
-        markerElement.innerHTML = `
-
-    <img
-        class="playerMarkerImage"
-        src="poi-icons/player-marker.png"
-        alt=""
-    >
-
-`;
+        markerElement.innerHTML =
+    getPlayerMarkerMarkup();
 
         playerMarker =
             new maplibregl.Marker({
@@ -3433,7 +4228,7 @@ function updatePlayerDirection() {
 
     const markerImage =
         markerElement.querySelector(
-            ".playerMarkerImage"
+            ".playerMarkerVisual"
         );
 
 
@@ -6509,15 +7304,8 @@ function selectPhotonResult(result) {
 destinationElement.id =
     "destinationMarker";
 
-destinationElement.innerHTML = `
-
-    <img
-        class="destinationMarkerImage"
-        src="poi-icons/destination-marker.png"
-        alt=""
-    >
-
-`;
+destinationElement.innerHTML =
+    getDestinationMarkerMarkup();
 
     destinationMarker =
         new maplibregl.Marker({
@@ -7123,12 +7911,126 @@ routeSnapMissCount =
     document.getElementById("routeTime").textContent = Math.max(1, Math.ceil(routeData.duration / 60)) + " dk";
     document.getElementById("routeInfo").style.display = "block";
     const feature = {type: "Feature", properties: {}, geometry: route};
-    if (map.getSource("route")) map.getSource("route").setData(feature);
-    else {
-        map.addSource("route", {type: "geojson", data: feature});
-        map.addLayer({id: "route-outline", type: "line", source: "route", layout: {"line-join": "round", "line-cap": "round"}, paint: {"line-color": "#111111", "line-width": 8, "line-opacity": .9}});
-        map.addLayer({id: "route-line", type: "line", source: "route", layout: {"line-join": "round", "line-cap": "round"}, paint: {"line-color": "#b02a78", "line-width": 5, "line-opacity": .95}});
+    const themeRouteColor =
+    getGameThemeRouteColor();
+    if (
+    map.getSource(
+        "route"
+    )
+) {
+
+    map.getSource(
+        "route"
+    )
+    .setData(
+        feature
+    );
+
+
+    if (
+        map.getLayer(
+            "route-line"
+        )
+    ) {
+
+        map.setPaintProperty(
+            "route-line",
+            "line-color",
+            themeRouteColor
+        );
+
     }
+
+}
+
+else {
+
+    map.addSource(
+        "route",
+        {
+            type:
+                "geojson",
+
+            data:
+                feature
+        }
+    );
+
+
+    map.addLayer({
+
+        id:
+            "route-outline",
+
+        type:
+            "line",
+
+        source:
+            "route",
+
+        layout: {
+
+            "line-join":
+                "round",
+
+            "line-cap":
+                "round"
+
+        },
+
+        paint: {
+
+            "line-color":
+                "#111111",
+
+            "line-width":
+                8,
+
+            "line-opacity":
+                0.9
+
+        }
+
+    });
+
+
+    map.addLayer({
+
+        id:
+            "route-line",
+
+        type:
+            "line",
+
+        source:
+            "route",
+
+        layout: {
+
+            "line-join":
+                "round",
+
+            "line-cap":
+                "round"
+
+        },
+
+        paint: {
+
+            "line-color":
+                themeRouteColor,
+
+            "line-width":
+                5,
+
+            "line-opacity":
+                0.95
+
+        }
+
+    });
+
+}
     if (!isAutomatic) {
 
     selectedRouteIndex =
@@ -7340,3 +8242,76 @@ routeButton.onclick =
         createRoute(false);
 
     };
+/* =========================================
+   CANLI TEMA DEĞİŞİMİ
+   ========================================= */
+
+function applyThemeToMapObjects() {
+
+    /* PLAYER */
+
+    if (
+        playerMarker
+    ) {
+
+        const playerElement =
+            playerMarker.getElement();
+
+
+        playerElement.innerHTML =
+            getPlayerMarkerMarkup();
+
+
+        updatePlayerDirection();
+
+    }
+
+
+    /* HEDEF */
+
+    if (
+        destinationMarker
+    ) {
+
+        const destinationElement =
+            destinationMarker.getElement();
+
+
+        destinationElement.innerHTML =
+            getDestinationMarkerMarkup();
+
+    }
+
+
+    /* ROTA */
+
+    if (
+        map.getLayer(
+            "route-line"
+        )
+    ) {
+
+        map.setPaintProperty(
+            "route-line",
+            "line-color",
+            getGameThemeRouteColor()
+        );
+
+    }
+
+}
+
+
+window.addEventListener(
+    "gamemap:themechange",
+    function () {
+
+        /* Player / hedef / rota */
+        applyThemeToMapObjects();
+
+
+        /* Harita renkleri */
+        applyGameBaseMapTheme();
+
+    }
+);

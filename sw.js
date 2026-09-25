@@ -1,45 +1,25 @@
-const APP_VERSION =
-    "0.5.3";
-
-
-const CACHE_NAME =
-    "gamemap-shell-" +
-    APP_VERSION;
-
+const CACHE_NAME = "gamemap-shell-v3";
 
 const SHELL = [
-
     "./",
-
     "./index.html",
-
     "./style.css",
 
+    "./themes.js",
     "./services.js",
-
     "./app.js",
-
     "./features.js",
+    "./pois-native.js",
 
     "./manifest.json",
 
     "./icon-192.png",
+    "./icon-512.png",
 
-    "./icon-512.png" ,
+    "./Pricedown.otf",
 
-    "./pois-native.js" ,
-    
-    "./poi-icons/market.png",
-    
-    "./poi-icons/gym.png",  
-    "./poi-icons/restoran.png",
-"./poi-icons/benzinlik.png",
-"./poi-icons/eczane.png",
-"./poi-icons/giyim.png",
-"./poi-icons/hastane.png",
-"./poi-icons/kafe.png",
-"./poi-icons/otel.png",
-
+    "./vendor/maplibre-gl.js",
+    "./vendor/maplibre-gl.css"
 ];
 
 
@@ -52,21 +32,52 @@ self.addEventListener(
     function (event) {
 
         event.waitUntil(
+            (async function () {
 
-            caches
-                .open(
-                    CACHE_NAME
-                )
-                .then(
-                    function (cache) {
+                const cache =
+                    await caches.open(
+                        CACHE_NAME
+                    );
 
-                        return cache.addAll(
-                            SHELL
-                        );
 
-                    }
-                )
+                /*
+                Dosyaları tek tek ekliyoruz.
 
+                Bir dosya bulunamazsa
+                bütün Service Worker çökmesin.
+                */
+
+                await Promise.all(
+
+                    SHELL.map(
+                        async function (path) {
+
+                            try {
+
+                                await cache.add(
+                                    path
+                                );
+
+                            }
+
+                            catch (error) {
+
+                                console.warn(
+                                    "Cache'e eklenemedi:",
+                                    path
+                                );
+
+                            }
+
+                        }
+                    )
+
+                );
+
+
+                await self.skipWaiting();
+
+            })()
         );
 
     }
@@ -75,7 +86,6 @@ self.addEventListener(
 
 /* =========================================
    ACTIVATE
-   Eski cache'leri temizle
    ========================================= */
 
 self.addEventListener(
@@ -83,51 +93,43 @@ self.addEventListener(
     function (event) {
 
         event.waitUntil(
+            (async function () {
 
-            caches
-                .keys()
-                .then(
-                    function (keys) {
+                const keys =
+                    await caches.keys();
 
-                        return Promise.all(
 
-                            keys
-                                .filter(
-                                    function (key) {
+                await Promise.all(
 
-                                        return (
-                                            key.startsWith(
-                                                "gamemap-shell-"
-                                            ) &&
-                                            key !==
-                                                CACHE_NAME
-                                        );
+                    keys
+                        .filter(
+                            function (key) {
 
-                                    }
-                                )
-                                .map(
-                                    function (key) {
+                                return (
+                                    key.startsWith(
+                                        "gamemap-shell-"
+                                    ) &&
+                                    key !== CACHE_NAME
+                                );
 
-                                        return caches.delete(
-                                            key
-                                        );
+                            }
+                        )
+                        .map(
+                            function (key) {
 
-                                    }
-                                )
+                                return caches.delete(
+                                    key
+                                );
 
-                        );
+                            }
+                        )
 
-                    }
-                )
-                .then(
-                    function () {
+                );
 
-                        return self.clients
-                            .claim();
 
-                    }
-                )
+                await self.clients.claim();
 
+            })()
         );
 
     }
@@ -135,35 +137,7 @@ self.addEventListener(
 
 
 /* =========================================
-   YENİ SÜRÜMÜ AKTİF ET
-   ========================================= */
-
-self.addEventListener(
-    "message",
-    function (event) {
-
-        if (
-            event.data &&
-            event.data.type ===
-                "SKIP_WAITING"
-        ) {
-
-            self.skipWaiting();
-
-        }
-
-    }
-);
-
-
-/* =========================================
    FETCH
-
-   İnternet varsa:
-   DAİMA en güncel dosyayı al.
-
-   İnternet yoksa:
-   cache'den aç.
    ========================================= */
 
 self.addEventListener(
@@ -186,32 +160,18 @@ self.addEventListener(
             );
 
 
-        /* Sadece kendi uygulama
-           dosyalarımızı yönet */
-
-        if (
-            url.origin !==
-            self.location.origin
-        ) {
-
-            return;
-
-        }
-
-
         const isShell =
+            url.origin ===
+                self.location.origin &&
+
             SHELL.some(
                 function (path) {
 
-                    const shellUrl =
+                    return (
                         new URL(
                             path,
                             self.registration.scope
-                        );
-
-
-                    return (
-                        shellUrl.pathname ===
+                        ).pathname ===
                         url.pathname
                     );
 
@@ -219,15 +179,19 @@ self.addEventListener(
             );
 
 
+        /*
+        Harita tile,
+        arama,
+        rota vb.
+        cache'e girmez.
+        */
+
         if (!isShell) {
-
             return;
-
         }
 
 
         event.respondWith(
-
             (async function () {
 
                 const cache =
@@ -236,22 +200,26 @@ self.addEventListener(
                     );
 
 
-                try {
+                /*
+                Önce internetten güncel dosyayı al.
 
-                    /* Önce internet */
+                Böylece geliştirme sırasında
+                eski app.js / style.css
+                sorunu yaşamayız.
+                */
+
+                try {
 
                     const response =
                         await fetch(
-                            event.request,
-                            {
-                                cache:
-                                    "no-store"
-                            }
+                            event.request
                         );
 
 
                     if (
-                        response.ok
+                        response.ok ||
+                        response.type ===
+                            "opaque"
                     ) {
 
                         await cache.put(
@@ -268,7 +236,10 @@ self.addEventListener(
 
                 catch (error) {
 
-                    /* İnternet yoksa cache */
+                    /*
+                    İnternet yoksa
+                    cache'deki dosyaya dön.
+                    */
 
                     const cached =
                         await cache.match(
@@ -277,9 +248,7 @@ self.addEventListener(
 
 
                     if (cached) {
-
                         return cached;
-
                     }
 
 
@@ -288,7 +257,6 @@ self.addEventListener(
                 }
 
             })()
-
         );
 
     }

@@ -46,6 +46,23 @@ body {
     font-style: normal;
     font-display: swap;
 }
+@font-face {
+    font-family: "Chalet London";
+    src: url("./assets/themes/gtav/fonts/Chalet-LondonNineteenSixty.ttf")
+         format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Chalet Comprime";
+    src: url("./assets/themes/gtav/fonts/Chalet-ComprimeCologneSixty.ttf")
+         format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
 body {
     font-family: Arial, sans-serif;
 }
@@ -4012,4 +4029,2586 @@ body.navigation-active
 
     font-weight:
         400 !important;
+}
+/* =========================================================
+   GAME MAP — TEMA SİSTEMİ
+   BU BLOK EN ALTTA KALSIN
+   ========================================================= */
+
+
+/* =========================================
+   CLASSIC / SAN ANDREAS
+   ========================================= */
+
+:root,
+html[data-theme="classic"] {
+
+    --game-font:
+        "Pricedown",
+        Impact,
+        sans-serif;
+
+    --theme-accent:
+        #9fbd32;
+
+    --theme-accent-light:
+        #c7e64b;
+
+    --theme-secondary:
+        #b02a78;
+
+    --theme-secondary-light:
+        #d05b9c;
+
+    --theme-hud-bg:
+        rgba(8,8,8,0.94);
+
+    --theme-hud-soft:
+        rgba(18,18,18,0.94);
+
+    --theme-text:
+        #ffffff;
+
+    --theme-muted:
+        #aaa69b;
+
+    --theme-border:
+        #b9b9b9;
+
+    --theme-outline:
+        #111111;
+
+    --theme-shadow:
+        rgba(0,0,0,0.55);
+
+    --theme-route:
+        #b02a78;
+
+}
+
+
+/* =========================================
+   MODERN
+   ========================================= */
+
+html[data-theme="gtav"] {
+
+    --game-font:
+    "Chalet London",
+    Arial,
+    sans-serif;
+
+--game-font-condensed:
+    "Chalet Comprime",
+    "Arial Narrow",
+    Arial,
+    sans-serif;
+
+    --theme-accent:
+        #ffffff;
+
+    --theme-accent-light:
+        #ffffff;
+
+    --theme-secondary:
+        #b846c4;
+
+    --theme-secondary-light:
+        #d77bdf;
+
+    --theme-hud-bg:
+        rgba(12, 12, 14, 0.82);
+
+    --theme-hud-soft:
+        rgba(20, 20, 23, 0.78);
+
+    --theme-text:
+        #ffffff;
+
+    --theme-muted:
+        #b6b6b6;
+
+    --theme-border:
+        rgba(255,255,255,0.28);
+
+    --theme-outline:
+        rgba(0,0,0,0.9);
+
+    --theme-shadow:
+        rgba(0,0,0,0.35);
+
+    --theme-route:
+        #b846c4;
+
+}
+
+
+/* =========================================
+   ESKİ CSS DEĞİŞKENLERİNE BAĞLA
+   ========================================= */
+
+html[data-theme] {
+
+    --hud-bg:
+        var(--theme-hud-bg);
+
+    --hud-bg-soft:
+        var(--theme-hud-soft);
+
+    --hud-text:
+        var(--theme-text);
+
+    --hud-muted:
+        var(--theme-muted);
+
+    --hud-border:
+        var(--theme-border);
+
+    --hud-outline:
+        var(--theme-outline);
+
+    --hud-shadow:
+        var(--theme-shadow);
+
+    --accent-green:
+        var(--theme-accent);
+
+    --accent-green-light:
+        var(--theme-accent-light);
+
+    --accent-pink:
+        var(--theme-secondary);
+
+    --accent-pink-light:
+        var(--theme-secondary-light);
+
+}
+
+
+/* =========================================
+   TÜM OYUN HUD FONTU
+   ========================================= */
+
+html[data-theme]
+#searchBox,
+
+html[data-theme]
+#searchBox *,
+
+html[data-theme]
+#routeModeBar,
+
+html[data-theme]
+#routeModeBar *,
+
+html[data-theme]
+#routeChoices,
+
+html[data-theme]
+#routeChoices *,
+
+html[data-theme]
+#routeInfo,
+
+html[data-theme]
+#routeInfo *,
+
+html[data-theme]
+#navigationInstruction,
+
+html[data-theme]
+#navigationWords,
+
+html[data-theme]
+#navigationDistance,
+
+html[data-theme]
+#navigationAction,
+
+html[data-theme]
+#navigationRoad,
+
+html[data-theme]
+#speedHud,
+
+html[data-theme]
+#speedValue,
+
+html[data-theme]
+#speedUnit,
+
+html[data-theme]
+#locationButton,
+
+html[data-theme]
+#mapTools button,
+
+html[data-theme]
+#toolsPanel h2,
+
+html[data-theme]
+#toolsPanel h3,
+
+html[data-theme]
+.poiCategoryButton,
+
+html[data-theme]
+.gamePoiPopup,
+
+html[data-theme]
+.gamePoiPopup * {
+
+    font-family:
+        var(--game-font)
+        !important;
+
+}
+
+
+/* SVG yön oku font değildir */
+
+html[data-theme]
+#navigationArrow {
+
+    font-family:
+        Arial,
+        sans-serif !important;
+
+}
+
+
+/* =========================================
+   ANA VURGU RENKLERİ
+   ========================================= */
+
+html[data-theme]
+#routeButton {
+
+    background:
+        var(--theme-accent)
+        !important;
+
+}
+
+
+html[data-theme]
+.routeModeButton.active,
+
+html[data-theme]
+.routeModeButton[aria-pressed="true"] {
+
+    background:
+        var(--theme-accent)
+        !important;
+
+    border-color:
+        var(--theme-accent-light)
+        !important;
+
+}
+
+
+html[data-theme]
+body.navigation-active
+#navigationInstruction::before {
+
+    background:
+        var(--theme-accent)
+        !important;
+
+}
+
+
+html[data-theme]
+body.navigation-active
+#navigationDistance {
+
+    color:
+        var(--theme-accent-light)
+        !important;
+
+}
+
+
+html[data-theme]
+body.navigation-active
+#speedUnit {
+
+    color:
+        var(--theme-accent)
+        !important;
+
+}
+
+
+html[data-theme]
+.gamePoiCategory {
+
+    color:
+        var(--theme-accent)
+        !important;
+
+}
+
+
+/* =========================================
+   TEMA SEÇİM BUTONLARI
+   ========================================= */
+
+#themeControls {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:
+        6px;
+
+    margin-top:
+        6px;
+
+}
+
+
+.themeButton {
+
+    min-height:
+        40px;
+
+    padding:
+        6px 8px;
+
+    color:
+        var(--theme-text);
+
+    background:
+        #171717;
+
+    border:
+        1px solid #666;
+
+    font-family:
+        var(--game-font)
+        !important;
+
+    font-size:
+        16px;
+
+    cursor:
+        pointer;
+
+}
+
+
+.themeButton[aria-pressed="true"] {
+
+    color:
+        #111111;
+
+    background:
+        var(--theme-accent);
+
+    border-color:
+        var(--theme-accent-light);
+
+    box-shadow:
+        inset 0 0 0 2px #111;
+
+}
+/* =========================================================
+   TEMA MARKERLARI
+   ========================================================= */
+
+.playerMarkerVisual {
+
+    display:
+        block !important;
+
+    width:
+        100% !important;
+
+    height:
+        100% !important;
+
+    object-fit:
+        contain;
+
+    transform-origin:
+        center center;
+
+    transition:
+        transform 0.15s linear;
+
+    pointer-events:
+        none;
+
+}
+
+
+.destinationMarkerVisual {
+
+    display:
+        block !important;
+
+    width:
+        100% !important;
+
+    height:
+        100% !important;
+
+    object-fit:
+        contain;
+
+    pointer-events:
+        none;
+
+}
+
+
+/* MODERN PLAYER */
+
+html[data-theme="gtav"]
+.playerMarkerModern {
+
+    color:
+        var(--theme-accent);
+
+    filter:
+        drop-shadow(
+            0 2px 2px
+            rgba(0,0,0,.75)
+        );
+
+}
+
+
+/* MODERN HEDEF */
+
+html[data-theme="gtav"]
+.destinationMarkerModern {
+
+    color:
+        var(--theme-accent);
+
+    filter:
+        drop-shadow(
+            0 0 5px
+            rgba(85,170,255,.8)
+        );
+
+}
+/* =========================================================
+   CLASSIC / SAN ANDREAS — PRICEDOWN'U KESİN ZORLA
+   BU KOD STYLE.CSS'İN EN ALTINDA KALSIN
+   ========================================================= */
+
+html[data-theme="classic"] #searchBox,
+html[data-theme="classic"] #searchBox *,
+
+html[data-theme="classic"] #routeModeBar,
+html[data-theme="classic"] #routeModeBar *,
+
+html[data-theme="classic"] #routeChoices,
+html[data-theme="classic"] #routeChoices *,
+
+html[data-theme="classic"] #routeInfo,
+html[data-theme="classic"] #routeInfo *,
+
+html[data-theme="classic"] #navigationInstruction,
+html[data-theme="classic"] #navigationInstruction *,
+
+html[data-theme="classic"] #speedHud,
+html[data-theme="classic"] #speedHud *,
+
+html[data-theme="classic"] #locationButton,
+
+html[data-theme="classic"] #mapTools,
+html[data-theme="classic"] #mapTools *,
+
+html[data-theme="classic"] #toolsPanel,
+html[data-theme="classic"] #toolsPanel *,
+
+html[data-theme="classic"] #searchResults,
+html[data-theme="classic"] #searchResults *,
+
+html[data-theme="classic"] .gamePoiPopup,
+html[data-theme="classic"] .gamePoiPopup *,
+
+html[data-theme="classic"] .themeButton,
+
+html[data-theme="classic"] .poiCategoryButton {
+
+    font-family:
+        "Pricedown",
+        Impact,
+        sans-serif
+        !important;
+
+    font-weight:
+        400 !important;
+}
+/* =========================================================
+   MODERN / GTA V INSPIRED
+   ========================================================= */
+
+html[data-theme="gtav"] #searchBox,
+html[data-theme="gtav"] #routeInfo,
+html[data-theme="gtav"] #navigationInstruction,
+html[data-theme="gtav"] #speedHud,
+html[data-theme="gtav"] #locationButton {
+
+    background:
+        rgba(12,12,14,.82)
+        !important;
+
+    border:
+        1px solid
+        rgba(255,255,255,.22)
+        !important;
+
+    outline:
+        none !important;
+
+    box-shadow:
+        0 3px 10px
+        rgba(0,0,0,.35)
+        !important;
+
+    border-radius:
+        2px !important;
+}
+
+
+/* ARAMA PANELİ */
+
+html[data-theme="gtav"]
+#searchBox input {
+
+    background:
+        rgba(0,0,0,.35)
+        !important;
+
+    color:
+        #fff !important;
+
+    border:
+        0 !important;
+
+    outline:
+        0 !important;
+
+    font-weight:
+        600 !important;
+
+    letter-spacing:
+        .3px;
+}
+
+
+/* NORMAL BUTON */
+
+html[data-theme="gtav"]
+#searchBox button,
+
+html[data-theme="gtav"]
+#mapTools button,
+
+html[data-theme="gtav"]
+#toolsPanel button {
+
+    background:
+        rgba(25,25,28,.95)
+        !important;
+
+    color:
+        #fff !important;
+
+    border:
+        1px solid
+        rgba(255,255,255,.22)
+        !important;
+
+    outline:
+        none !important;
+
+    box-shadow:
+        none !important;
+
+    text-shadow:
+        none !important;
+
+}
+
+
+/* SEÇİLİ / AKTİF */
+
+html[data-theme="gtav"]
+.routeModeButton.active,
+
+html[data-theme="gtav"]
+.routeModeButton[aria-pressed="true"],
+
+html[data-theme="gtav"]
+.themeButton[aria-pressed="true"] {
+
+    background:
+        #e8e8e8
+        !important;
+
+    color:
+        #111
+        !important;
+
+    border-color:
+        #ffffff
+        !important;
+
+}
+
+
+/* BAŞLAT / ROTA */
+
+html[data-theme="gtav"]
+#routeButton {
+
+    background:
+        #ffffff
+        !important;
+
+    color:
+        #111111
+        !important;
+
+    border:
+        1px solid #ffffff
+        !important;
+
+}
+
+
+/* NAVİGASYON ÜST ÇİZGİSİ */
+
+html[data-theme="gtav"]
+body.navigation-active
+#navigationInstruction::before {
+
+    height:
+        3px !important;
+
+    background:
+        #b846c4
+        !important;
+
+    box-shadow:
+        none !important;
+
+}
+
+
+/* NAV MESAFE */
+
+html[data-theme="gtav"]
+body.navigation-active
+#navigationDistance {
+
+    color:
+        #ffffff
+        !important;
+
+    text-shadow:
+        1px 1px 2px #000
+        !important;
+
+}
+
+
+/* YOL ADI */
+
+html[data-theme="gtav"]
+body.navigation-active
+#navigationRoad {
+
+    color:
+        #bdbdbd
+        !important;
+
+}
+
+
+/* SPEED HUD */
+
+html[data-theme="gtav"]
+#speedValue {
+
+    font-weight:
+        700 !important;
+
+    text-shadow:
+        none !important;
+
+}
+
+
+html[data-theme="gtav"]
+#speedUnit {
+
+    color:
+        #bdbdbd
+        !important;
+
+}
+
+
+/* POI POPUP */
+
+html[data-theme="gtav"]
+.gamePoiPopup {
+
+    font-family:
+        var(--game-font)
+        !important;
+
+}
+
+
+html[data-theme="gtav"]
+.gamePoiCategory {
+
+    color:
+        #b846c4
+        !important;
+
+}
+/* Harita tema uygulanmadan görünmesin */
+#map {
+    opacity: 0;
+}
+
+html.map-theme-ready #map {
+    opacity: 1;
+    transition: opacity 0.12s linear;
+}
+/* =========================================================
+   GTA V THEME — SEARCH / MAIN HUD
+   ========================================================= */
+
+html[data-theme="gtav"] #searchBox {
+    top: 22px !important;
+    right: 22px !important;
+
+    height: 54px;
+
+    padding: 5px !important;
+
+    background:
+        rgba(8, 8, 9, 0.88)
+        !important;
+
+    border:
+        1px solid rgba(255,255,255,0.15)
+        !important;
+
+    outline:
+        1px solid rgba(0,0,0,0.8)
+        !important;
+
+    box-shadow:
+        0 3px 12px rgba(0,0,0,0.55)
+        !important;
+
+    border-radius:
+        0 !important;
+
+    backdrop-filter:
+        blur(3px);
+}
+
+
+/* ARAMA INPUT */
+
+html[data-theme="gtav"] #searchInput {
+
+    width:
+        290px;
+
+    min-width:
+        0;
+
+    height:
+        42px;
+
+    padding:
+        0 14px !important;
+
+    background:
+        rgba(0,0,0,0.35)
+        !important;
+
+    color:
+        #ffffff !important;
+
+    border:
+        none !important;
+
+    outline:
+        none !important;
+
+    box-shadow:
+        none !important;
+
+    font-family:
+        Arial,
+        sans-serif
+        !important;
+
+    font-size:
+        16px !important;
+
+    font-weight:
+        600 !important;
+
+    text-transform:
+        none !important;
+
+    letter-spacing:
+        0 !important;
+
+}
+
+
+/* PLACEHOLDER */
+
+html[data-theme="gtav"]
+#searchInput::placeholder {
+
+    color:
+        #aaaaaa;
+
+    opacity:
+        1;
+
+}
+
+
+/* ARA + ROTA */
+
+html[data-theme="gtav"]
+#searchButton,
+
+html[data-theme="gtav"]
+#routeButton {
+
+    min-width:
+        82px;
+
+    height:
+        42px;
+
+    padding:
+        0 15px !important;
+
+    background:
+        rgba(23,23,25,.96)
+        !important;
+
+    color:
+        #ffffff !important;
+
+    border:
+        1px solid rgba(255,255,255,.18)
+        !important;
+
+    outline:
+        none !important;
+
+    box-shadow:
+        none !important;
+
+    font-family:
+        Arial,
+        sans-serif
+        !important;
+
+    font-size:
+        15px !important;
+
+    font-weight:
+        700 !important;
+
+    text-shadow:
+        none !important;
+
+}
+
+
+/* BUTON HOVER */
+
+html[data-theme="gtav"]
+#searchButton:hover,
+
+html[data-theme="gtav"]
+#routeButton:hover {
+
+    background:
+        #343438
+        !important;
+
+}
+
+
+/* ROTA BUTONU */
+
+html[data-theme="gtav"]
+#routeButton {
+
+    border-left:
+        2px solid rgba(255,255,255,.28)
+        !important;
+
+}
+
+
+/* =========================================================
+   GTA V — MENU / LOCATION
+   ========================================================= */
+
+html[data-theme="gtav"]
+#toolsToggle,
+
+html[data-theme="gtav"]
+#locationButton {
+
+    background:
+        rgba(10,10,11,.9)
+        !important;
+
+    color:
+        #ffffff
+        !important;
+
+    border:
+        1px solid rgba(255,255,255,.2)
+        !important;
+
+    outline:
+        1px solid rgba(0,0,0,.8)
+        !important;
+
+    border-radius:
+        1px
+        !important;
+
+    box-shadow:
+        0 3px 8px rgba(0,0,0,.45)
+        !important;
+
+    font-family:
+        Arial,
+        sans-serif
+        !important;
+
+    font-weight:
+        700 !important;
+
+    text-shadow:
+        none !important;
+
+}
+
+
+/* KONUMUM YEŞİL NOKTA */
+
+html[data-theme="gtav"]
+#locationButton::before {
+
+    box-shadow:
+        0 0 7px currentColor;
+
+}
+@media (max-width: 600px) {
+
+    html[data-theme="gtav"]
+    #searchBox {
+
+        top:
+            calc(var(--safe-top) + 8px)
+            !important;
+
+        left:
+            8px !important;
+
+        right:
+            8px !important;
+
+        width:
+            auto !important;
+
+        height:
+            48px;
+
+        padding:
+            4px !important;
+
+    }
+
+
+    html[data-theme="gtav"]
+    #searchInput {
+
+        width:
+            auto !important;
+
+        flex:
+            1 1 auto;
+
+        height:
+            38px;
+
+        font-size:
+            14px !important;
+
+    }
+
+
+    html[data-theme="gtav"]
+    #searchButton,
+
+    html[data-theme="gtav"]
+    #routeButton {
+
+        min-width:
+            60px;
+
+        height:
+            38px;
+
+        padding:
+            0 8px !important;
+
+        font-size:
+            13px !important;
+
+    }
+
+}
+/* =========================================================
+   GTA V THEME — ROUTE MODE BAR
+   ========================================================= */
+
+html[data-theme="gtav"] #routeModeBar {
+
+    top:
+        calc(var(--safe-top) + 94px)
+        !important;
+
+    right:
+        22px !important;
+
+    left:
+        auto !important;
+
+    gap:
+        3px !important;
+
+    padding:
+        4px !important;
+
+    background:
+        rgba(8,8,9,.88)
+        !important;
+
+    border:
+        1px solid rgba(255,255,255,.16)
+        !important;
+
+    outline:
+        1px solid rgba(0,0,0,.75)
+        !important;
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,.45)
+        !important;
+
+}
+
+
+/* NORMAL ROTA TÜRÜ */
+
+html[data-theme="gtav"]
+.routeModeButton {
+
+    min-width:
+        100px !important;
+
+    height:
+        40px !important;
+
+    padding:
+        0 14px !important;
+
+    background:
+        rgba(22,22,24,.96)
+        !important;
+
+    color:
+        #eeeeee !important;
+
+    border:
+        1px solid rgba(255,255,255,.18)
+        !important;
+
+    outline:
+        none !important;
+
+    box-shadow:
+        none !important;
+
+    font-family:
+        Arial,
+        sans-serif
+        !important;
+
+    font-size:
+        15px !important;
+
+    font-weight:
+        600 !important;
+
+    letter-spacing:
+        .2px;
+
+    text-shadow:
+        none !important;
+
+}
+
+
+/* SEÇİLİ ROTA TÜRÜ */
+
+html[data-theme="gtav"]
+.routeModeButton.active,
+
+html[data-theme="gtav"]
+.routeModeButton[aria-pressed="true"] {
+
+    background:
+        #eeeeee
+        !important;
+
+    color:
+        #111111
+        !important;
+
+    border:
+        1px solid #ffffff
+        !important;
+
+    outline:
+        none !important;
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(0,0,0,.28)
+        !important;
+
+}
+
+
+/* HOVER */
+
+html[data-theme="gtav"]
+.routeModeButton:not(.active):hover {
+
+    background:
+        #343438
+        !important;
+
+    color:
+        #ffffff
+        !important;
+
+}
+@media (max-width: 600px) {
+
+    html[data-theme="gtav"]
+    #routeModeBar {
+
+        top:
+            calc(var(--safe-top) + 64px)
+            !important;
+
+        left:
+            8px !important;
+
+        right:
+            8px !important;
+
+        width:
+            auto !important;
+
+    }
+
+
+    html[data-theme="gtav"]
+    .routeModeButton {
+
+        min-width:
+            0 !important;
+
+        height:
+            38px !important;
+
+        padding:
+            0 6px !important;
+
+        font-size:
+            13px !important;
+
+    }
+
+}
+/* =========================================================
+   GTA V THEME — ROUTE INFO + ALTERNATIVES
+   ========================================================= */
+
+
+/* SEÇİLİ ROTANIN SÜRE / MESAFE KUTUSU */
+
+html[data-theme="gtav"] #routeInfo {
+
+    top:
+        calc(var(--safe-top) + 148px)
+        !important;
+
+    right:
+        22px !important;
+
+    left:
+        auto !important;
+
+    min-width:
+        175px !important;
+
+    padding:
+        9px 13px !important;
+
+    background:
+        rgba(8, 8, 9, .90)
+        !important;
+
+    color:
+        #ffffff !important;
+
+    border:
+        1px solid rgba(255,255,255,.18)
+        !important;
+
+    outline:
+        1px solid rgba(0,0,0,.75)
+        !important;
+
+    border-radius:
+        0 !important;
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,.45)
+        !important;
+
+    font-family:
+        Arial,
+        sans-serif
+        !important;
+
+    font-size:
+        15px !important;
+
+    font-weight:
+        600 !important;
+
+    letter-spacing:
+        .2px;
+
+    text-shadow:
+        none !important;
+
+}
+
+
+/* SÜREYİ BİRAZ DAHA BELİRGİN YAP */
+
+html[data-theme="gtav"] #routeTime {
+
+    color:
+        #ffffff !important;
+
+    font-weight:
+        700 !important;
+
+}
+
+
+/* MESAFE */
+
+html[data-theme="gtav"] #routeDistance {
+
+    color:
+        #bfc3c6 !important;
+
+    font-weight:
+        500 !important;
+
+}
+
+
+/* =========================================================
+   ALTERNATİF ROTALAR
+   ========================================================= */
+
+html[data-theme="gtav"] #routeChoices {
+
+    top:
+        calc(var(--safe-top) + 194px)
+        !important;
+
+    right:
+        22px !important;
+
+    left:
+        auto !important;
+
+    width:
+        330px !important;
+
+    max-width:
+        calc(100vw - 44px)
+        !important;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        3px !important;
+
+    transform:
+        none !important;
+
+}
+
+
+/* NORMAL ALTERNATİF ROTA */
+
+html[data-theme="gtav"]
+#routeChoices button {
+
+    width:
+        100% !important;
+
+    min-height:
+        42px !important;
+
+    padding:
+        8px 13px !important;
+
+    text-align:
+        left;
+
+    background:
+        rgba(15,15,17,.92)
+        !important;
+
+    color:
+        #bfc3c6 !important;
+
+    border:
+        1px solid rgba(255,255,255,.14)
+        !important;
+
+    border-left:
+        3px solid transparent
+        !important;
+
+    border-radius:
+        0 !important;
+
+    outline:
+        none !important;
+
+    box-shadow:
+        none !important;
+
+    font-family:
+        Arial,
+        sans-serif
+        !important;
+
+    font-size:
+        14px !important;
+
+    font-weight:
+        600 !important;
+
+    letter-spacing:
+        .2px;
+
+    text-shadow:
+        none !important;
+
+}
+
+
+/* SEÇİLİ ALTERNATİF */
+
+html[data-theme="gtav"]
+#routeChoices button[aria-pressed="true"] {
+
+    background:
+        rgba(238,238,238,.96)
+        !important;
+
+    color:
+        #111111 !important;
+
+    border-color:
+        #ffffff
+        !important;
+
+    border-left:
+        4px solid #ffffff
+        !important;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,.35)
+        !important;
+
+}
+
+
+/* HOVER */
+
+html[data-theme="gtav"]
+#routeChoices button:not([aria-pressed="true"]):hover {
+
+    background:
+        rgba(48,48,52,.96)
+        !important;
+
+    color:
+        #ffffff !important;
+
+}
+html[data-theme="gtav"]
+body.navigation-active
+#routeChoices {
+
+    display:
+        none !important;
+
+}
+html[data-theme="gtav"]
+body.navigation-active
+#routeInfo {
+
+    top:
+        calc(var(--safe-top) + 22px)
+        !important;
+
+    right:
+        22px !important;
+
+}
+@media (max-width: 600px) {
+
+    html[data-theme="gtav"]
+    #routeInfo {
+
+        top:
+            calc(var(--safe-top) + 110px)
+            !important;
+
+        right:
+            8px !important;
+
+        min-width:
+            145px !important;
+
+        padding:
+            7px 10px !important;
+
+        font-size:
+            13px !important;
+
+    }
+
+
+    html[data-theme="gtav"]
+    #routeChoices {
+
+        top:
+            calc(var(--safe-top) + 154px)
+            !important;
+
+        left:
+            8px !important;
+
+        right:
+            8px !important;
+
+        width:
+            auto !important;
+
+        max-width:
+            none !important;
+
+    }
+
+
+    html[data-theme="gtav"]
+    #routeChoices button {
+
+        min-height:
+            38px !important;
+
+        padding:
+            7px 10px !important;
+
+        font-size:
+            12px !important;
+
+    }
+
+
+    html[data-theme="gtav"]
+    body.navigation-active
+    #routeInfo {
+
+        top:
+            calc(var(--safe-top) + 62px)
+            !important;
+
+        right:
+            8px !important;
+
+    }
+
+}
+/* =========================================================
+   GTA V — CHALET FONT SYSTEM
+   ========================================================= */
+
+/* NORMAL GTA V UI */
+
+html[data-theme="gtav"] #searchBox,
+html[data-theme="gtav"] #searchBox *,
+html[data-theme="gtav"] #toolsPanel,
+html[data-theme="gtav"] #toolsPanel *,
+html[data-theme="gtav"] #toolsToggle,
+html[data-theme="gtav"] #locationButton,
+html[data-theme="gtav"] #searchResults,
+html[data-theme="gtav"] #searchResults *,
+html[data-theme="gtav"] .gamePoiPopup,
+html[data-theme="gtav"] .gamePoiPopup * {
+
+    font-family:
+        var(--game-font)
+        !important;
+
+    font-weight:
+        400 !important;
+
+}
+
+
+/* HUD / DAR GTA V FONTU */
+
+html[data-theme="gtav"] #routeModeBar,
+html[data-theme="gtav"] #routeModeBar *,
+html[data-theme="gtav"] #routeChoices,
+html[data-theme="gtav"] #routeChoices *,
+html[data-theme="gtav"] #routeInfo,
+html[data-theme="gtav"] #routeInfo *,
+html[data-theme="gtav"] #navigationInstruction,
+html[data-theme="gtav"] #navigationInstruction *,
+html[data-theme="gtav"] #speedHud,
+html[data-theme="gtav"] #speedHud * {
+
+    font-family:
+        var(--game-font-condensed)
+        !important;
+
+    font-weight:
+        400 !important;
+
+}
+
+
+/* NAVİGASYON OKU FONT DEĞİL */
+
+html[data-theme="gtav"] #navigationArrow {
+
+    font-family:
+        Arial,
+        sans-serif
+        !important;
+
+}
+/* =========================================================
+   GTA V — ACTIVE NAVIGATION HUD
+   ========================================================= */
+
+
+/* SOL ÜST DÖNÜŞ PANELİ */
+
+html[data-theme="gtav"]
+body.navigation-active
+#navigationInstruction {
+
+    top:
+        calc(var(--safe-top) + 18px)
+        !important;
+
+    left:
+        calc(var(--safe-left) + 18px)
+        !important;
+
+    width:
+        310px !important;
+
+    min-height:
+        92px !important;
+
+    padding:
+        8px 10px !important;
+
+    gap:
+        10px !important;
+
+    background:
+        rgba(8,8,10,.88)
+        !important;
+
+    border:
+        1px solid rgba(255,255,255,.18)
+        !important;
+
+    outline:
+        1px solid rgba(0,0,0,.85)
+        !important;
+
+    border-radius:
+        0 !important;
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,.48)
+        !important;
+
+    color:
+        #ffffff !important;
+
+}
+
+
+/* SA'DAKİ YEŞİL ÜST ÇİZGİYİ KALDIR */
+
+html[data-theme="gtav"]
+body.navigation-active
+#navigationInstruction::before {
+
+    height:
+        2px !important;
+
+    background:
+        rgba(255,255,255,.35)
+        !important;
+
+    box-shadow:
+        none !important;
+
+}
+
+
+/* =========================================================
+   DÖNÜŞ OKU
+   ========================================================= */
+
+html[data-theme="gtav"]
+body.navigation-active
+#navigationArrow {
+
+    flex:
+        0 0 66px !important;
+
+    width:
+        66px !important;
+
+    height:
+        66px !important;
+
+    background:
+        rgba(0,0,0,.40)
+        !important;
+
+    border:
+        none !important;
+
+    outline:
+        none !important;
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(255,255,255,.10)
+        !important;
+
+    color:
+        #ffffff !important;
+
+}
+
+
+/* SVG OK */
+
+html[data-theme="gtav"]
+body.navigation-active
+#navigationArrow
+.maneuverIcon {
+
+    width:
+        46px !important;
+
+    height:
+        46px !important;
+
+    color:
+        #ffffff !important;
+
+    filter:
+        drop-shadow(
+            1px 2px 1px
+            rgba(0,0,0,.8)
+        )
+        !important;
+
+}
+
+
+/* =========================================================
+   NAVİGASYON YAZILARI
+   ========================================================= */
+
+
+/* 300 M */
+
+html[data-theme="gtav"]
+body.navigation-active
+#navigationDistance {
+
+    margin:
+        0 !important;
+
+    color:
+        #ffffff !important;
+
+    font-family:
+        var(--game-font-condensed)
+        !important;
+
+    font-size:
+        31px !important;
+
+    font-weight:
+        400 !important;
+
+    line-height:
+        .9 !important;
+
+    letter-spacing:
+        .3px !important;
+
+    text-shadow:
+        1px 2px 2px #000
+        !important;
+
+}
+
+
+/* SAĞA DÖN */
+
+html[data-theme="gtav"]
+body.navigation-active
+#navigationAction {
+
+    margin-top:
+        5px !important;
+
+    color:
+        #e8e8e8 !important;
+
+    font-family:
+        var(--game-font-condensed)
+        !important;
+
+    font-size:
+        19px !important;
+
+    font-weight:
+        400 !important;
+
+    line-height:
+        1 !important;
+
+    letter-spacing:
+        .25px !important;
+
+    text-shadow:
+        1px 1px 2px #000
+        !important;
+
+}
+
+
+/* YOL ADI */
+
+html[data-theme="gtav"]
+body.navigation-active
+#navigationRoad {
+
+    display:
+        block !important;
+
+    margin-top:
+        4px !important;
+
+    max-width:
+        205px !important;
+
+    color:
+        #a9adb0 !important;
+
+    font-family:
+        var(--game-font)
+        !important;
+
+    font-size:
+        11px !important;
+
+    font-weight:
+        400 !important;
+
+    line-height:
+        1 !important;
+
+    text-shadow:
+        none !important;
+
+}
+
+
+/* =========================================================
+   DÖNÜŞ YAKLAŞINCA
+   ========================================================= */
+
+html[data-theme="gtav"]
+body.navigation-active
+#navigationInstruction.turn-now {
+
+    border-color:
+        rgba(190,70,196,.8)
+        !important;
+
+    outline:
+        1px solid rgba(0,0,0,.85)
+        !important;
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,.5),
+        0 0 10px rgba(184,70,196,.30)
+        !important;
+
+    animation:
+        none !important;
+
+}
+
+
+html[data-theme="gtav"]
+body.navigation-active
+#navigationInstruction.turn-now::before {
+
+    height:
+        3px !important;
+
+    background:
+        #b846c4
+        !important;
+
+}
+
+
+html[data-theme="gtav"]
+body.navigation-active
+#navigationInstruction.turn-now
+#navigationDistance {
+
+    color:
+        #ffffff !important;
+
+}
+
+
+html[data-theme="gtav"]
+body.navigation-active
+#navigationInstruction.turn-now
+#navigationArrow {
+
+    outline:
+        none !important;
+
+}
+
+
+/* =========================================================
+   GTA V SPEED HUD
+   ========================================================= */
+
+html[data-theme="gtav"]
+body.navigation-active
+#speedHud {
+
+    left:
+        calc(var(--safe-left) + 18px)
+        !important;
+
+    bottom:
+        calc(var(--safe-bottom) + 18px)
+        !important;
+
+    width:
+        78px !important;
+
+    height:
+        62px !important;
+
+    background:
+        rgba(7,7,9,.82)
+        !important;
+
+    border:
+        1px solid rgba(255,255,255,.16)
+        !important;
+
+    outline:
+        1px solid rgba(0,0,0,.75)
+        !important;
+
+    border-radius:
+        0 !important;
+
+    box-shadow:
+        0 3px 9px rgba(0,0,0,.45)
+        !important;
+
+}
+
+
+/* HIZ SAYISI */
+
+html[data-theme="gtav"]
+body.navigation-active
+#speedValue {
+
+    color:
+        #ffffff !important;
+
+    font-family:
+        var(--game-font-condensed)
+        !important;
+
+    font-size:
+        32px !important;
+
+    font-weight:
+        400 !important;
+
+    line-height:
+        .8 !important;
+
+    text-shadow:
+        none !important;
+
+}
+
+
+/* KM/H */
+
+html[data-theme="gtav"]
+body.navigation-active
+#speedUnit {
+
+    margin-top:
+        7px !important;
+
+    color:
+        #9da2a6 !important;
+
+    font-family:
+        var(--game-font)
+        !important;
+
+    font-size:
+        9px !important;
+
+    font-weight:
+        400 !important;
+
+    letter-spacing:
+        1px !important;
+
+    text-shadow:
+        none !important;
+
+}
+@media (max-width: 600px) and (orientation: portrait) {
+
+    html[data-theme="gtav"]
+    body.navigation-active
+    #navigationInstruction {
+
+        top:
+            calc(var(--safe-top) + 8px)
+            !important;
+
+        left:
+            calc(var(--safe-left) + 8px)
+            !important;
+
+        width:
+            calc(100vw - 132px)
+            !important;
+
+        max-width:
+            none !important;
+
+        min-height:
+            72px !important;
+
+        padding:
+            6px 7px !important;
+
+        gap:
+            7px !important;
+
+    }
+
+
+    html[data-theme="gtav"]
+    body.navigation-active
+    #navigationArrow {
+
+        flex:
+            0 0 48px !important;
+
+        width:
+            48px !important;
+
+        height:
+            48px !important;
+
+    }
+
+
+    html[data-theme="gtav"]
+    body.navigation-active
+    #navigationArrow
+    .maneuverIcon {
+
+        width:
+            34px !important;
+
+        height:
+            34px !important;
+
+    }
+
+
+    html[data-theme="gtav"]
+    body.navigation-active
+    #navigationDistance {
+
+        font-size:
+            25px !important;
+
+    }
+
+
+    html[data-theme="gtav"]
+    body.navigation-active
+    #navigationAction {
+
+        margin-top:
+            3px !important;
+
+        font-size:
+            15px !important;
+
+    }
+
+
+    html[data-theme="gtav"]
+    body.navigation-active
+    #navigationRoad {
+
+        margin-top:
+            3px !important;
+
+        max-width:
+            150px !important;
+
+        font-size:
+            9px !important;
+
+    }
+
+
+    html[data-theme="gtav"]
+    body.navigation-active
+    #speedHud {
+
+        left:
+            calc(var(--safe-left) + 8px)
+            !important;
+
+        bottom:
+            calc(var(--safe-bottom) + 8px)
+            !important;
+
+        width:
+            62px !important;
+
+        height:
+            54px !important;
+
+    }
+
+
+    html[data-theme="gtav"]
+    body.navigation-active
+    #speedValue {
+
+        font-size:
+            25px !important;
+
+    }
+
+
+    html[data-theme="gtav"]
+    body.navigation-active
+    #speedUnit {
+
+        margin-top:
+            5px !important;
+
+        font-size:
+            8px !important;
+
+    }
+
+}
+/* GTA V — NAVİGASYONDA ETA KUTUSU */
+
+html[data-theme="gtav"]
+body.navigation-active
+#routeInfo {
+
+    top:
+        calc(var(--safe-top) + 96px)
+        !important;
+
+    right:
+        22px !important;
+
+    left:
+        auto !important;
+
+    min-width:
+        135px !important;
+
+    width:
+        auto !important;
+
+    padding:
+        8px 12px !important;
+
+    background:
+        rgba(8,8,10,.88)
+        !important;
+
+    border:
+        1px solid rgba(255,255,255,.17)
+        !important;
+
+    outline:
+        1px solid rgba(0,0,0,.8)
+        !important;
+
+    box-shadow:
+        0 3px 9px rgba(0,0,0,.4)
+        !important;
+
+    white-space:
+        nowrap !important;
+
+    text-align:
+        center !important;
+
+}
+/* =========================================================
+   GTA V — BOTTOM HUD CONTROLS
+   ========================================================= */
+
+
+/* SOL ALT MENÜ GRUBU */
+
+html[data-theme="gtav"] #mapTools {
+
+    left:
+        calc(var(--safe-left) + 18px)
+        !important;
+
+    bottom:
+        calc(var(--safe-bottom) + 18px)
+        !important;
+
+    font-family:
+        var(--game-font)
+        !important;
+
+}
+
+
+/* GPS DURUMU */
+
+html[data-theme="gtav"] #connectionStatus {
+
+    max-width:
+        190px !important;
+
+    margin-bottom:
+        5px !important;
+
+    padding:
+        4px 7px !important;
+
+    background:
+        rgba(7,7,9,.78)
+        !important;
+
+    color:
+        #bfc3c6 !important;
+
+    border:
+        1px solid rgba(255,255,255,.15)
+        !important;
+
+    border-radius:
+        0 !important;
+
+    box-shadow:
+        0 2px 6px rgba(0,0,0,.38)
+        !important;
+
+    font-family:
+        var(--game-font)
+        !important;
+
+    font-size:
+        10px !important;
+
+    font-weight:
+        400 !important;
+
+    line-height:
+        1 !important;
+
+    letter-spacing:
+        .2px !important;
+
+    text-shadow:
+        none !important;
+
+}
+
+
+/* GPS UYARISI VARSA */
+
+html[data-theme="gtav"]
+#connectionStatus[data-warning="true"] {
+
+    color:
+        #e6c875 !important;
+
+    border-color:
+        rgba(230,200,117,.45)
+        !important;
+
+}
+
+
+/* MENÜ */
+
+html[data-theme="gtav"] #toolsToggle {
+
+    min-width:
+        78px !important;
+
+    height:
+        40px !important;
+
+    padding:
+        0 13px !important;
+
+    background:
+        rgba(9,9,11,.88)
+        !important;
+
+    color:
+        #ffffff !important;
+
+    border:
+        1px solid rgba(255,255,255,.18)
+        !important;
+
+    outline:
+        1px solid rgba(0,0,0,.8)
+        !important;
+
+    border-radius:
+        0 !important;
+
+    box-shadow:
+        0 3px 8px rgba(0,0,0,.4)
+        !important;
+
+    font-family:
+        var(--game-font)
+        !important;
+
+    font-size:
+        16px !important;
+
+    font-weight:
+        400 !important;
+
+    text-shadow:
+        none !important;
+
+}
+
+
+html[data-theme="gtav"] #toolsToggle:hover {
+
+    background:
+        rgba(42,42,46,.95)
+        !important;
+
+}
+
+
+/* =========================================================
+   SAĞ ALT KONUMUM
+   ========================================================= */
+
+html[data-theme="gtav"] #locationButton,
+html[data-theme="gtav"] #locationButton.gps-active {
+
+    right:
+        calc(var(--safe-right) + 18px)
+        !important;
+
+    bottom:
+        calc(var(--safe-bottom) + 18px)
+        !important;
+
+    width:
+        108px !important;
+
+    min-width:
+        108px !important;
+
+    height:
+        40px !important;
+
+    padding:
+        0 11px 0 27px !important;
+
+    background:
+        rgba(9,9,11,.88)
+        !important;
+
+    color:
+        #ffffff !important;
+
+    border:
+        1px solid rgba(255,255,255,.18)
+        !important;
+
+    outline:
+        1px solid rgba(0,0,0,.8)
+        !important;
+
+    border-radius:
+        0 !important;
+
+    box-shadow:
+        0 3px 8px rgba(0,0,0,.42)
+        !important;
+
+    font-family:
+        var(--game-font)
+        !important;
+
+    font-size:
+        14px !important;
+
+    font-weight:
+        400 !important;
+
+    letter-spacing:
+        .2px !important;
+
+    text-shadow:
+        none !important;
+
+}
+
+
+/* KONUM NOKTASI */
+
+html[data-theme="gtav"]
+#locationButton::before,
+html[data-theme="gtav"]
+#locationButton.gps-active::before {
+
+    left:
+        11px !important;
+
+    width:
+        7px !important;
+
+    height:
+        7px !important;
+
+    background:
+        #ffffff !important;
+
+    box-shadow:
+        0 0 5px rgba(255,255,255,.65)
+        !important;
+
+}
+
+
+/* HOVER */
+
+html[data-theme="gtav"] #locationButton:hover {
+
+    background:
+        rgba(42,42,46,.95)
+        !important;
+
+}
+@media (max-width: 600px) {
+
+    html[data-theme="gtav"] #mapTools {
+
+        left:
+            calc(var(--safe-left) + 8px)
+            !important;
+
+        bottom:
+            calc(var(--safe-bottom) + 8px)
+            !important;
+
+    }
+
+
+    html[data-theme="gtav"] #connectionStatus {
+
+        max-width:
+            155px !important;
+
+        padding:
+            3px 6px !important;
+
+        font-size:
+            8px !important;
+
+    }
+
+
+    html[data-theme="gtav"] #toolsToggle {
+
+        min-width:
+            68px !important;
+
+        height:
+            36px !important;
+
+        padding:
+            0 10px !important;
+
+        font-size:
+            14px !important;
+
+    }
+
+
+    html[data-theme="gtav"] #locationButton,
+    html[data-theme="gtav"] #locationButton.gps-active {
+
+        right:
+            calc(var(--safe-right) + 8px)
+            !important;
+
+        bottom:
+            calc(var(--safe-bottom) + 8px)
+            !important;
+
+        width:
+            94px !important;
+
+        min-width:
+            94px !important;
+
+        height:
+            36px !important;
+
+        padding:
+            0 8px 0 24px !important;
+
+        font-size:
+            12px !important;
+
+    }
+
+
+    html[data-theme="gtav"]
+    #locationButton::before,
+    html[data-theme="gtav"]
+    #locationButton.gps-active::before {
+
+        left:
+            10px !important;
+
+        width:
+            6px !important;
+
+        height:
+            6px !important;
+
+    }
+
 }

@@ -132,7 +132,7 @@ const NATIVE_POI_CATEGORIES = [
             "MARKET",
 
         icon:
-            "poi-icons/market.png",
+            "market.png",
 
         values: [
             "grocery",
@@ -153,7 +153,7 @@ const NATIVE_POI_CATEGORIES = [
             "GYM",
 
         icon:
-            "poi-icons/gym.png",
+            "gym.png",
 
         values: [
             "fitness_centre",
@@ -174,7 +174,7 @@ const NATIVE_POI_CATEGORIES = [
             "YEMEK",
 
         icon:
-            "poi-icons/restoran.png",
+            "restoran.png",
 
         values: [
             "restaurant",
@@ -192,7 +192,7 @@ const NATIVE_POI_CATEGORIES = [
             "KAFE",
 
         icon:
-            "poi-icons/kafe.png",
+            "kafe.png",
 
         values: [
             "cafe"
@@ -208,7 +208,7 @@ const NATIVE_POI_CATEGORIES = [
             "BENZİNLİK",
 
         icon:
-            "poi-icons/benzinlik.png",
+            "benzinlik.png",
 
         values: [
             "fuel"
@@ -224,7 +224,7 @@ const NATIVE_POI_CATEGORIES = [
             "SAĞLIK",
 
         icon:
-            "poi-icons/hastane.png",
+            "hastane.png",
 
         values: [
             "hospital",
@@ -241,7 +241,7 @@ const NATIVE_POI_CATEGORIES = [
             "ECZANE",
 
         icon:
-            "poi-icons/eczane.png",
+            "eczane.png",
 
         values: [
             "pharmacy"
@@ -257,7 +257,7 @@ const NATIVE_POI_CATEGORIES = [
             "OTEL",
 
         icon:
-            "poi-icons/otel.png",
+            "otel.png",
 
         values: [
             "lodging",
@@ -278,7 +278,7 @@ const NATIVE_POI_CATEGORIES = [
             "GİYİM",
 
         icon:
-            "poi-icons/giyim.png",
+            "giyim.png",
 
         values: [
             "clothing_store",
@@ -893,7 +893,40 @@ function showNativePoiPopup(
 
 }
 
+/* =========================================
+   TEMA POI YARDIMCILARI
+   ========================================= */
 
+function getNativePoiThemeName() {
+
+    const currentTheme =
+        window.GameTheme?.getCurrent?.() ||
+        document.documentElement
+            .dataset.theme ||
+        "classic";
+
+
+    return (
+        currentTheme === "gtav"
+            ? "gtav"
+            : "sanandreas"
+    );
+
+}
+
+
+function getNativePoiIconPath(
+    category
+) {
+
+    return (
+        "assets/themes/" +
+        getNativePoiThemeName() +
+        "/icons/" +
+        category.icon
+    );
+
+}
 
 /* =========================================
    İKONU MAPLIBRE'A YÜKLE
@@ -903,8 +936,14 @@ async function loadNativePoiImage(
     category
 ) {
 
+    const themeName =
+        getNativePoiThemeName();
+
+
     const imageId =
         "game-poi-" +
+        themeName +
+        "-" +
         category.id;
 
 
@@ -919,18 +958,17 @@ async function loadNativePoiImage(
     }
 
 
-    const response =
-        await map.loadImage(
-            category.icon
+    const iconPath =
+        getNativePoiIconPath(
+            category
         );
 
 
-    /*
-    PNG'lerimiz büyük çözünürlükte.
+    const response =
+        await map.loadImage(
+            iconPath
+        );
 
-    MapLibre'ın onları doğal olarak
-    yaklaşık 64px kabul etmesini sağlıyoruz.
-    */
 
     const imageWidth =
         response.data.width ||
@@ -961,7 +999,70 @@ async function loadNativePoiImage(
     return imageId;
 
 }
+/* =========================================
+   TEMA DEĞİŞİNCE POI İKONLARINI DEĞİŞTİR
+   ========================================= */
 
+async function applyNativePoiTheme() {
+
+    for (
+        const category of
+        NATIVE_POI_CATEGORIES
+    ) {
+
+        const layerId =
+            "game-poi-" +
+            category.id;
+
+
+        if (
+            !map.getLayer(
+                layerId
+            )
+        ) {
+
+            continue;
+
+        }
+
+
+        try {
+
+            const imageId =
+                await loadNativePoiImage(
+                    category
+                );
+
+
+            map.setLayoutProperty(
+
+                layerId,
+
+                "icon-image",
+
+                imageId
+
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(
+
+                "Tema POI ikonu değiştirilemedi:",
+
+                category.id,
+
+                error
+
+            );
+
+        }
+
+    }
+
+}
 /* =========================================
    POI KATEGORİ GÖRÜNÜRLÜĞÜ
    ========================================= */
@@ -1496,3 +1597,11 @@ else {
 
 }
 setupPoiCategoryControls();
+window.addEventListener(
+    "gamemap:themechange",
+    function () {
+
+        applyNativePoiTheme();
+
+    }
+);

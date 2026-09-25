@@ -970,12 +970,22 @@ window.addEventListener(
 );
 
 
-window.addEventListener(
-    "pageshow",
-    function () {
+window.addEventListener("pageshow", () => {
 
-        renderConnectionStatus();
-        syncWakeLock();
+    renderConnectionStatus();
+
+    syncWakeLock();
+
+    if (
+        typeof startGpsAutomatically ===
+        "function"
+    ) {
+
+        startGpsAutomatically();
+
+    }
+
+
 
 
         setTimeout(
