@@ -1,4 +1,4 @@
-const CACHE_NAME = "gamemap-shell-v3";
+const CACHE_NAME = "gamemap-shell-v4";
 
 const SHELL = [
     "./",
@@ -18,8 +18,7 @@ const SHELL = [
 
     "./Pricedown.otf",
 
-    "./vendor/maplibre-gl.js",
-    "./vendor/maplibre-gl.css"
+
 ];
 
 
