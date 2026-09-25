@@ -41,7 +41,7 @@ body {
 }
 @font-face {
     font-family: "Pricedown";
-    src: url("./assets/fonts/pricedown.otf") format("opentype");
+    src: url("./pricedown.otf") format("opentype");
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -3623,4 +3623,284 @@ body.navigation-active
         max-width: calc(100vw - 12px) !important;
         transform: none !important;
     }
+}
+/* =========================================================
+   TELEFON DİKEY — ROTA ÖNİZLEME
+   ========================================================= */
+
+@media (max-width: 600px) and (orientation: portrait) {
+
+    /* Üst arama kutusu */
+    #searchBox {
+        top:
+            calc(var(--safe-top) + 8px)
+            !important;
+
+        left:
+            10px !important;
+
+        right:
+            10px !important;
+
+        width:
+            auto !important;
+
+        max-width:
+            none !important;
+    }
+
+
+    /* Alternatif rotalar arama kutusunun ALTINA */
+    body:not(.navigation-active)
+    #routeChoices {
+
+        top:
+            calc(var(--safe-top) + 70px)
+            !important;
+
+        left:
+            10px !important;
+
+        right:
+            10px !important;
+
+        width:
+            auto !important;
+
+        max-width:
+            none !important;
+
+        transform:
+            none !important;
+
+        display:
+            flex;
+
+        flex-wrap:
+            wrap;
+
+        gap:
+            5px;
+    }
+
+
+    body:not(.navigation-active)
+    #routeChoices button {
+
+        flex:
+            1 1 110px;
+
+        min-width:
+            0;
+
+        min-height:
+            38px;
+
+        font-size:
+            15px !important;
+    }
+
+
+    /* Süre / mesafe daha aşağı sağa */
+    body:not(.navigation-active)
+    #routeInfo {
+
+        top:
+            calc(var(--safe-top) + 128px)
+            !important;
+
+        right:
+            10px !important;
+
+        left:
+            auto !important;
+
+        width:
+            auto !important;
+
+        min-width:
+            142px !important;
+
+        padding:
+            8px 10px !important;
+
+        font-size:
+            18px !important;
+    }
+
+}
+/* =========================================================
+   TELEFON DİKEY — AKTİF NAVİGASYON
+   ========================================================= */
+
+@media (max-width: 600px) and (orientation: portrait) {
+
+    body.navigation-active
+    #navigationInstruction {
+
+        top:
+            calc(var(--safe-top) + 8px)
+            !important;
+
+        left:
+            8px !important;
+
+        right:
+            auto !important;
+
+        width:
+            calc(100vw - 126px)
+            !important;
+
+        min-height:
+            82px !important;
+
+        padding:
+            7px !important;
+
+        gap:
+            7px !important;
+    }
+
+
+    body.navigation-active
+    #navigationArrow {
+
+        flex:
+            0 0 56px !important;
+
+        width:
+            56px !important;
+
+        height:
+            56px !important;
+    }
+
+
+    body.navigation-active
+    #navigationArrow
+    .maneuverIcon {
+
+        width:
+            40px !important;
+
+        height:
+            40px !important;
+    }
+
+
+    body.navigation-active
+    #navigationDistance {
+
+        font-size:
+            27px !important;
+
+        line-height:
+            0.9 !important;
+    }
+
+
+    body.navigation-active
+    #navigationAction {
+
+        margin-top:
+            3px !important;
+
+        font-size:
+            17px !important;
+    }
+
+
+    body.navigation-active
+    #navigationRoad {
+
+        margin-top:
+            3px !important;
+
+        font-size:
+            10px !important;
+
+        max-width:
+            100% !important;
+    }
+
+
+    /* Sağ üst yalnızca İPTAL */
+    body.navigation-active
+    #searchBox {
+
+        top:
+            calc(var(--safe-top) + 8px)
+            !important;
+
+        right:
+            8px !important;
+
+        left:
+            auto !important;
+
+        width:
+            104px !important;
+
+        padding:
+            0 !important;
+
+        background:
+            transparent !important;
+
+        border:
+            0 !important;
+
+        outline:
+            0 !important;
+
+        box-shadow:
+            none !important;
+    }
+
+
+    body.navigation-active
+    #routeButton {
+
+        width:
+            104px !important;
+
+        min-width:
+            104px !important;
+
+        height:
+            44px !important;
+
+        font-size:
+            16px !important;
+    }
+
+
+    /* İPTAL'in altında süre */
+    body.navigation-active
+    #routeInfo {
+
+        top:
+            calc(var(--safe-top) + 60px)
+            !important;
+
+        right:
+            8px !important;
+
+        left:
+            auto !important;
+
+        width:
+            104px !important;
+
+        min-width:
+            104px !important;
+
+        padding:
+            7px 3px !important;
+
+        font-size:
+            14px !important;
+    }
+
 }
