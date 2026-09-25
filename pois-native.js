@@ -448,6 +448,14 @@ function showNativePoiPopup(
             .slice();
 
 
+    const longitude =
+        coordinates[0];
+
+
+    const latitude =
+        coordinates[1];
+
+
     const placeName =
         getNativePoiName(
 
@@ -457,6 +465,73 @@ function showNativePoiPopup(
 
         );
 
+
+    /* =====================================
+       MESAFE
+       ===================================== */
+
+    let distanceText =
+        "KONUM ALINMADI";
+
+
+    if (
+        currentLocation &&
+        Number.isFinite(
+            currentLocation.latitude
+        ) &&
+        Number.isFinite(
+            currentLocation.longitude
+        )
+    ) {
+
+        const distance =
+            calculateDistance(
+
+                currentLocation,
+
+                {
+                    latitude:
+                        latitude,
+
+                    longitude:
+                        longitude
+                }
+
+            );
+
+
+        if (
+            distance < 1000
+        ) {
+
+            distanceText =
+                Math.max(
+                    10,
+                    Math.round(
+                        distance / 10
+                    ) * 10
+                ) +
+                " M UZAKTA";
+
+        }
+
+        else {
+
+            distanceText =
+                (
+                    distance /
+                    1000
+                ).toFixed(1) +
+                " KM UZAKTA";
+
+        }
+
+    }
+
+
+    /* =====================================
+       POPUP
+       ===================================== */
 
     const popupContent =
         document.createElement(
@@ -484,9 +559,31 @@ function showNativePoiPopup(
         );
 
 
+    categoryText.className =
+        "gamePoiCategory";
+
+
     categoryText.textContent =
         category.label;
 
+
+    const distanceElement =
+        document.createElement(
+            "span"
+        );
+
+
+    distanceElement.className =
+        "gamePoiDistance";
+
+
+    distanceElement.textContent =
+        distanceText;
+
+
+    /* =====================================
+       ROTA BUTONU
+       ===================================== */
 
     const routeButton =
         document.createElement(
@@ -506,6 +603,77 @@ function showNativePoiPopup(
         "ROTA OLUŞTUR";
 
 
+    /* =====================================
+       FAVORİ BUTONU
+       ===================================== */
+
+    const favoriteButton =
+        document.createElement(
+            "button"
+        );
+
+
+    favoriteButton.type =
+        "button";
+
+
+    favoriteButton.className =
+        "gamePoiFavoriteButton";
+
+
+    const favoritePlace = {
+
+        name:
+            placeName,
+
+        latitude:
+            latitude,
+
+        longitude:
+            longitude
+
+    };
+
+
+    const alreadyFavorite =
+        preferences.favorites.some(
+            function (
+                place
+            ) {
+
+                return samePlace(
+
+                    place,
+
+                    favoritePlace
+
+                );
+
+            }
+        );
+
+
+    if (
+        alreadyFavorite
+    ) {
+
+        favoriteButton.textContent =
+            "★ FAVORİLERDE";
+
+
+        favoriteButton.disabled =
+            true;
+
+    }
+
+    else {
+
+        favoriteButton.textContent =
+            "☆ FAVORİYE EKLE";
+
+    }
+
+
     popupContent.appendChild(
         title
     );
@@ -517,7 +685,17 @@ function showNativePoiPopup(
 
 
     popupContent.appendChild(
+        distanceElement
+    );
+
+
+    popupContent.appendChild(
         routeButton
+    );
+
+
+    popupContent.appendChild(
+        favoriteButton
     );
 
 
@@ -570,6 +748,10 @@ function showNativePoiPopup(
     );
 
 
+    /* =====================================
+       ROTA
+       ===================================== */
+
     routeButton.addEventListener(
         "click",
         function (
@@ -606,6 +788,105 @@ function showNativePoiPopup(
                 }
 
             });
+
+        }
+    );
+
+
+    /* =====================================
+       FAVORİYE EKLE
+       ===================================== */
+
+    favoriteButton.addEventListener(
+        "click",
+        function (
+            event
+        ) {
+
+            event.stopPropagation();
+
+
+            if (
+                favoriteButton.disabled
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                preferences.favorites
+                    .length >= 30
+            ) {
+
+                showNotice(
+                    "Favorilerin dolu. Önce bir favori sil."
+                );
+
+                return;
+
+            }
+
+
+            const exists =
+                preferences.favorites.some(
+                    function (
+                        place
+                    ) {
+
+                        return samePlace(
+
+                            place,
+
+                            favoritePlace
+
+                        );
+
+                    }
+                );
+
+
+            if (
+                exists
+            ) {
+
+                favoriteButton.textContent =
+                    "★ FAVORİLERDE";
+
+
+                favoriteButton.disabled =
+                    true;
+
+
+                return;
+
+            }
+
+
+            preferences.favorites.push(
+                favoritePlace
+            );
+
+
+            persistPreferences();
+
+
+            renderPlaces();
+
+
+            favoriteButton.textContent =
+                "★ FAVORİLERDE";
+
+
+            favoriteButton.disabled =
+                true;
+
+
+            showNotice(
+                placeName +
+                " favorilere eklendi."
+            );
 
         }
     );

@@ -399,6 +399,402 @@ function setupGame3DBuildings() {
     }
 
 }
+function setupGameLabelHierarchy() {
+
+    const layers =
+        map.getStyle()?.layers || [];
+
+
+    layers.forEach(
+        function (layer) {
+
+            if (
+                layer.type !==
+                "symbol"
+            ) {
+
+                return;
+
+            }
+
+
+            const textField =
+                map.getLayoutProperty(
+                    layer.id,
+                    "text-field"
+                );
+
+
+            if (
+                textField === undefined ||
+                textField === null
+            ) {
+
+                return;
+
+            }
+
+
+            const visibility =
+                map.getLayoutProperty(
+                    layer.id,
+                    "visibility"
+                );
+
+
+            /*
+            Bizim önceki sistemimizin
+            kapattığı POI yazılarına
+            dokunma.
+            */
+
+            if (
+                visibility ===
+                "none"
+            ) {
+
+                return;
+
+            }
+
+
+            const id =
+                (
+                    layer.id || ""
+                ).toLowerCase();
+
+
+            const sourceLayer =
+                (
+                    layer[
+                        "source-layer"
+                    ] || ""
+                ).toLowerCase();
+
+
+            const filterText =
+                JSON.stringify(
+                    layer.filter || ""
+                ).toLowerCase();
+
+
+            const info =
+                id +
+                " " +
+                sourceLayer +
+                " " +
+                filterText;
+
+
+            /* =====================================
+               BÜYÜK ŞEHİR
+               ===================================== */
+
+            if (
+                info.includes("city") ||
+                info.includes("capital")
+            ) {
+
+                map.setLayerZoomRange(
+                    layer.id,
+                    6,
+                    24
+                );
+
+
+                map.setLayoutProperty(
+                    layer.id,
+                    "text-size",
+                    [
+                        "interpolate",
+                        ["linear"],
+                        ["zoom"],
+
+                        6, 13,
+                        9, 17,
+                        12, 22,
+                        15, 28
+                    ]
+                );
+
+
+                map.setLayoutProperty(
+                    layer.id,
+                    "text-padding",
+                    8
+                );
+
+
+                map.setPaintProperty(
+                    layer.id,
+                    "text-color",
+                    "#1c1a16"
+                );
+
+
+                map.setPaintProperty(
+                    layer.id,
+                    "text-halo-color",
+                    "#c7c0ae"
+                );
+
+
+                map.setPaintProperty(
+                    layer.id,
+                    "text-halo-width",
+                    2.2
+                );
+
+
+                return;
+
+            }
+
+
+            /* =====================================
+               İLÇE / KASABA
+               ===================================== */
+
+            if (
+                info.includes("town")
+            ) {
+
+                map.setLayerZoomRange(
+                    layer.id,
+                    8.5,
+                    24
+                );
+
+
+                map.setLayoutProperty(
+                    layer.id,
+                    "text-size",
+                    [
+                        "interpolate",
+                        ["linear"],
+                        ["zoom"],
+
+                        8.5, 11,
+                        11, 14,
+                        14, 18
+                    ]
+                );
+
+
+                map.setLayoutProperty(
+                    layer.id,
+                    "text-padding",
+                    7
+                );
+
+
+                return;
+
+            }
+
+
+            /* =====================================
+               KÖY
+               ===================================== */
+
+            if (
+                info.includes("village") ||
+                info.includes("hamlet")
+            ) {
+
+                map.setLayerZoomRange(
+                    layer.id,
+                    10.5,
+                    24
+                );
+
+
+                map.setLayoutProperty(
+                    layer.id,
+                    "text-size",
+                    [
+                        "interpolate",
+                        ["linear"],
+                        ["zoom"],
+
+                        10.5, 9,
+                        13, 11,
+                        16, 14
+                    ]
+                );
+
+
+                map.setLayoutProperty(
+                    layer.id,
+                    "text-padding",
+                    8
+                );
+
+
+                return;
+
+            }
+
+
+            /* =====================================
+               MAHALLE
+               ===================================== */
+
+            if (
+                info.includes("suburb") ||
+                info.includes(
+                    "neighbourhood"
+                ) ||
+                info.includes(
+                    "neighborhood"
+                )
+            ) {
+
+                map.setLayerZoomRange(
+                    layer.id,
+                    12.5,
+                    24
+                );
+
+
+                map.setLayoutProperty(
+                    layer.id,
+                   "text-size",
+[
+    "interpolate",
+    ["linear"],
+    ["zoom"],
+
+    12.5, 8,
+    15, 10,
+    17, 12
+]
+                );
+
+
+                map.setLayoutProperty(
+                    layer.id,
+                    "text-padding",
+                    10
+                );
+map.setPaintProperty(
+    layer.id,
+    "text-color",
+    "#3a372f"
+);
+
+map.setPaintProperty(
+    layer.id,
+    "text-halo-width",
+    1.2
+);
+
+                return;
+
+            }
+
+
+            /* =====================================
+               CADDE / SOKAK
+               ===================================== */
+
+            const isRoadName =
+
+                sourceLayer.includes(
+                    "transportation_name"
+                ) ||
+
+                info.includes(
+                    "road-label"
+                ) ||
+
+                info.includes(
+                    "road_label"
+                ) ||
+
+                info.includes(
+                    "road-name"
+                ) ||
+
+                info.includes(
+                    "road_name"
+                ) ||
+
+                info.includes(
+                    "street"
+                );
+
+
+            if (
+                isRoadName
+            ) {
+
+                map.setLayerZoomRange(
+                    layer.id,
+                    13.5,
+                    24
+                );
+
+
+                map.setLayoutProperty(
+                    layer.id,
+                    "text-size",
+                    [
+                        "interpolate",
+                        ["linear"],
+                        ["zoom"],
+
+                        13.5, 8,
+                        15, 9,
+                        17, 11,
+                        19, 13
+                    ]
+                );
+
+
+                map.setLayoutProperty(
+                    layer.id,
+                    "text-padding",
+                    5
+                );
+
+
+                map.setLayoutProperty(
+                    layer.id,
+                    "text-letter-spacing",
+                    0.05
+                );
+
+
+                map.setPaintProperty(
+                    layer.id,
+                    "text-color",
+                    "#28251e"
+                );
+
+
+                map.setPaintProperty(
+                    layer.id,
+                    "text-halo-color",
+                    "#c7c0ae"
+                );
+
+
+                map.setPaintProperty(
+                    layer.id,
+                    "text-halo-width",
+                    1.3
+                );
+
+
+                return;
+
+            }
+
+        }
+    );
+
+}
 map.on("load", function () {
 
     const layers = map.getStyle().layers;
@@ -416,14 +812,162 @@ map.on("load", function () {
 const name =
     id + " " + sourceLayer + " " + filterText;
 
-    // TÜM YAZI VE İKONLARI KAPAT
+    // =========================
+// GTA TARZI HARİTA YAZILARI
+// =========================
+
 if (layer.type === "symbol") {
+
+    const textField =
+        map.getLayoutProperty(
+            layer.id,
+            "text-field"
+        );
+
+
+    const hasText =
+        textField !== undefined &&
+        textField !== null;
+
+
+    /*
+    ŞEHİR / İLÇE / MAHALLE
+    */
+
+    const isPlaceLabel =
+        hasText &&
+        (
+            sourceLayer.includes("place") ||
+
+            name.includes("place-label") ||
+            name.includes("place_label") ||
+
+            name.includes("city") ||
+            name.includes("town") ||
+            name.includes("village") ||
+
+            name.includes("suburb") ||
+
+            name.includes("neighbourhood") ||
+            name.includes("neighborhood")
+        );
+
+
+    /*
+    CADDE / SOKAK / YOL
+    */
+
+    const isRoadLabel =
+        hasText &&
+        (
+            sourceLayer.includes(
+                "transportation_name"
+            ) ||
+
+            name.includes("road-label") ||
+            name.includes("road_label") ||
+
+            name.includes("road-name") ||
+            name.includes("road_name") ||
+
+            name.includes("street") ||
+            name.includes("highway-name")
+        );
+
+
+    /*
+    Bunlardan biri değilse
+    yine gizle.
+    */
+
+    if (
+        !isPlaceLabel &&
+        !isRoadLabel
+    ) {
+
+        map.setLayoutProperty(
+            layer.id,
+            "visibility",
+            "none"
+        );
+
+        return;
+
+    }
+
+
+    /*
+    İSTEDİĞİMİZ YAZIYSA AÇ
+    */
 
     map.setLayoutProperty(
         layer.id,
         "visibility",
-        "none"
+        "visible"
     );
+
+
+    /*
+    GTA HARİTA RENGİ
+    */
+
+    map.setPaintProperty(
+        layer.id,
+        "text-color",
+        "#211f1a"
+    );
+
+
+    map.setPaintProperty(
+        layer.id,
+        "text-halo-color",
+        "#c7c0ae"
+    );
+
+
+    map.setPaintProperty(
+        layer.id,
+        "text-halo-width",
+        1.5
+    );
+
+
+    map.setPaintProperty(
+        layer.id,
+        "text-halo-blur",
+        0.4
+    );
+
+
+    /*
+    SOKAKLAR
+    */
+
+    if (isRoadLabel) {
+
+        map.setLayoutProperty(
+            layer.id,
+            "text-letter-spacing",
+            0.06
+        );
+
+    }
+
+
+    /*
+    ŞEHİR / MAHALLE
+    */
+
+    if (isPlaceLabel) {
+
+        map.setPaintProperty(
+            layer.id,
+            "text-halo-width",
+            2
+        );
+
+    }
+
 
     return;
 }    
@@ -808,6 +1352,8 @@ setupGame3DBuildings();
 
 setupSearchResultLayers();
 
+setupGameLabelHierarchy();
+
 }); // map.on("load") kapanıyor
 
 // =========================
@@ -989,7 +1535,7 @@ currentLocation = {
 }
 locationButton.addEventListener(
     "click",
-    function () {
+    function (event) {
 
         // Her tıklamada o anki
         // gerçek GPS konumuna git
@@ -997,13 +1543,14 @@ locationButton.addEventListener(
 
         // Telefonun baktığı yönü al
         if (
-            typeof requestHeadingPermission ===
-            "function"
-        ) {
+    event?.isTrusted &&
+    typeof requestHeadingPermission ===
+        "function"
+) {
 
-            requestHeadingPermission();
+    requestHeadingPermission();
 
-        }
+}
 
         // =========================
         // GPS ZATEN AÇIKSA
@@ -1920,55 +2467,11 @@ function showPlayer(
 
         markerElement.innerHTML = `
 
-    <svg
-        class="playerMarkerSvg"
-        viewBox="0 0 64 64"
-        xmlns="http://www.w3.org/2000/svg"
+    <img
+        class="playerMarkerImage"
+        src="poi-icons/player-marker.png"
+        alt=""
     >
-
-        <!-- SİYAH DIŞ KONTUR -->
-        <path
-            d="
-                M32 4
-
-                C30 4 29 6 28 9
-
-                L12 48
-
-                C10 53 14 56 19 53
-
-                L32 45
-
-                L45 53
-
-                C50 56 54 53 52 48
-
-                L36 9
-
-                C35 6 34 4 32 4
-
-                Z
-            "
-            fill="#111111"
-        />
-
-        <!-- BEYAZ İÇ -->
-        <path
-            d="
-                M32 10
-
-                L18 46
-
-                L32 38
-
-                L46 46
-
-                Z
-            "
-            fill="#ffffff"
-        />
-
-    </svg>
 
 `;
 
@@ -2923,24 +3426,33 @@ function updatePlayerDirection() {
         return;
     }
 
+
     const markerElement =
         playerMarker.getElement();
 
-    const markerSvg =
+
+    const markerImage =
         markerElement.querySelector(
-            ".playerMarkerSvg"
+            ".playerMarkerImage"
         );
 
-    if (!markerSvg) {
+
+    if (!markerImage) {
         return;
     }
 
-    let heading = null;
 
-    // Önce cihaz pusulası
+    let heading =
+        null;
+
+
+    /* Önce telefon pusulası */
+
     if (
         deviceHeading !== null &&
-        Number.isFinite(deviceHeading)
+        Number.isFinite(
+            deviceHeading
+        )
     ) {
 
         heading =
@@ -2948,10 +3460,14 @@ function updatePlayerDirection() {
 
     }
 
-    // Olmazsa GPS hareket yönü
+
+    /* Pusula yoksa GPS yönü */
+
     else if (
         lastGpsHeading !== null &&
-        Number.isFinite(lastGpsHeading)
+        Number.isFinite(
+            lastGpsHeading
+        )
     ) {
 
         heading =
@@ -2959,26 +3475,30 @@ function updatePlayerDirection() {
 
     }
 
-    // Geçerli yön yoksa marker'a
-    // hiçbir transform uygulama
+
     if (
         heading === null ||
-        !Number.isFinite(heading)
+        !Number.isFinite(
+            heading
+        )
     ) {
 
-        markerSvg.style.transform =
+        markerImage.style.transform =
             "rotate(0deg)";
 
         return;
 
     }
 
+
     const mapBearing =
         map.getBearing();
+
 
     let relativeHeading =
         heading -
         mapBearing;
+
 
     relativeHeading =
         (
@@ -2986,7 +3506,8 @@ function updatePlayerDirection() {
             360
         ) % 360;
 
-    markerSvg.style.transform =
+
+    markerImage.style.transform =
         `rotate(${relativeHeading}deg)`;
 
 }
@@ -5990,13 +6511,11 @@ destinationElement.id =
 
 destinationElement.innerHTML = `
 
-    <div class="waypointBeam"></div>
-
-    <div class="waypointGlow"></div>
-
-    <div class="waypointRing"></div>
-
-    <div class="waypointCore"></div>
+    <img
+        class="destinationMarkerImage"
+        src="poi-icons/destination-marker.png"
+        alt=""
+    >
 
 `;
 
@@ -6007,7 +6526,7 @@ destinationElement.innerHTML = `
                 destinationElement,
 
             anchor:
-                "bottom"
+                "center"
 
         })
 

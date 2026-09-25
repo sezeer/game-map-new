@@ -5,7 +5,8 @@ let routeRequestId = 0;
 let searchRequestId = 0;
 let routeAlternatives = [];
 let selectedRouteIndex = 0;
-
+let resumeGpsAfterPageShow =
+    false;
 
 function clearAlternativeRouteLayers() {
 
@@ -846,14 +847,144 @@ document.getElementById("cancelRoute").addEventListener("click", () => {
 });
 window.addEventListener("online", renderConnectionStatus);
 window.addEventListener("offline", () => { renderConnectionStatus(); showNotice("İnternet kesildi. Yeni aramalar, rotalar ve harita alanları yüklenemeyebilir."); });
-document.addEventListener("visibilitychange", syncWakeLock);
-window.addEventListener("pagehide", () => {
-    if (watchId !== null) navigator.geolocation.clearWatch(watchId);
-    watchId = null;
-    lastGpsFixAt = 0;
-    invalidateRouteRequest(); cancelSearchRequest(); stopNavigationExtras();
-});
-window.addEventListener("pageshow", () => { renderConnectionStatus(); syncWakeLock(); });
+function restoreGpsAfterResume() {
+
+    if (
+        !resumeGpsAfterPageShow ||
+        !navigator.geolocation
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        watchId !== null &&
+        gpsIsFresh()
+    ) {
+
+        resumeGpsAfterPageShow =
+            false;
+
+        return;
+
+    }
+
+
+    if (
+        watchId !== null
+    ) {
+
+        navigator.geolocation
+            .clearWatch(
+                watchId
+            );
+
+        watchId =
+            null;
+
+    }
+
+
+    /*
+    KONUMUM butonunun mevcut GPS
+    başlatma sistemini yeniden kullan.
+    */
+
+    locationButton.click();
+
+
+    /*
+    Arka plandan dönüşte haritayı
+    gereksiz yere zıplatma.
+    Navigasyon açıksa kamera zaten
+    kendi sisteminden güncellenecek.
+    */
+
+    centerOnNextGps =
+        false;
+
+
+    resumeGpsAfterPageShow =
+        false;
+
+}
+
+
+document.addEventListener(
+    "visibilitychange",
+    function () {
+
+        syncWakeLock();
+
+
+        if (
+            document.visibilityState ===
+                "visible"
+        ) {
+
+            setTimeout(
+                restoreGpsAfterResume,
+                250
+            );
+
+        }
+
+    }
+);
+
+
+window.addEventListener(
+    "pagehide",
+    function () {
+
+        resumeGpsAfterPageShow =
+            watchId !== null;
+
+
+        if (
+            watchId !== null
+        ) {
+
+            navigator.geolocation
+                .clearWatch(
+                    watchId
+                );
+
+        }
+
+
+        watchId =
+            null;
+
+        lastGpsFixAt =
+            0;
+
+
+        invalidateRouteRequest();
+        cancelSearchRequest();
+        stopNavigationExtras();
+
+    }
+);
+
+
+window.addEventListener(
+    "pageshow",
+    function () {
+
+        renderConnectionStatus();
+        syncWakeLock();
+
+
+        setTimeout(
+            restoreGpsAfterResume,
+            250
+        );
+
+    }
+);
 setInterval(renderConnectionStatus, 5000);
 renderPlaces(); updateOptionButtons(); renderConnectionStatus();
 const isDevelopment =

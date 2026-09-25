@@ -39,7 +39,13 @@ body {
     overflow: hidden;
     background: var(--map-bg);
 }
-
+@font-face {
+    font-family: "Pricedown";
+    src: url("./vendor/fonts/pricedown.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
 body {
     font-family: Arial, sans-serif;
 }
@@ -2398,4 +2404,1223 @@ body.navigation-active #routeInfo {
     opacity:
         .75;
 
+}
+/* =========================================
+   POI POPUP DETAYLARI
+   ========================================= */
+
+.gamePoiPopup {
+
+    min-width:
+        180px;
+
+}
+
+
+.gamePoiCategory {
+
+    color:
+        #9fbd32 !important;
+
+}
+
+
+.gamePoiDistance {
+
+    margin-top:
+        3px;
+
+    margin-bottom:
+        7px;
+
+    color:
+        #ddd !important;
+
+    font-size:
+        14px !important;
+
+}
+
+
+.gamePoiFavoriteButton {
+
+    width:
+        100%;
+
+    min-height:
+        34px;
+
+    margin-top:
+        5px;
+
+    padding:
+        5px 10px;
+
+    background:
+        #222;
+
+    color:
+        #eee;
+
+    border:
+        2px solid #111;
+
+    outline:
+        1px solid #777;
+
+    font-family:
+        "Teko",
+        Impact,
+        sans-serif;
+
+    font-size:
+        16px;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+}
+
+
+.gamePoiFavoriteButton:hover {
+
+    background:
+        #353d2b;
+
+}
+
+
+.gamePoiFavoriteButton:disabled {
+
+    color:
+        #d9f07f;
+
+    background:
+        #34451f;
+
+    border-color:
+        #9fbd32;
+
+    opacity:
+        1;
+
+    cursor:
+        default;
+
+}
+/* =========================================
+   PRICEDOWN — GAME MAP
+   ========================================= */
+
+#searchBox,
+#searchBox button,
+#searchBox input,
+
+#routeInfo,
+#routeInfo *,
+
+#navigationInstruction,
+#navigationWords,
+#navigationDistance,
+#navigationAction,
+#navigationRoad,
+
+#speedHud,
+#speedValue,
+#speedUnit,
+
+#locationButton,
+
+#mapTools,
+#mapTools button,
+#toolsPanel,
+#toolsPanel h2,
+#toolsPanel h3,
+
+#routeChoices,
+#routeChoices button,
+
+#searchResults,
+.searchResultItem,
+.searchResultName,
+.searchResultAddress,
+.searchResultDistance,
+
+.gamePoiPopup,
+.gamePoiPopup *,
+.poiCategoryButton {
+
+    font-family:
+        "Pricedown",
+        Impact,
+        sans-serif !important;
+
+}
+
+
+/* Yön oku Pricedown olmasın */
+#navigationArrow {
+
+    font-family:
+        Arial,
+        sans-serif !important;
+
+}
+/* =========================================
+   YENİ PLAYER MARKER
+   ========================================= */
+
+#playerMarker {
+
+    width:
+        38px !important;
+
+    height:
+        38px !important;
+
+    background:
+        transparent !important;
+
+    border:
+        0 !important;
+
+    box-shadow:
+        none !important;
+
+    overflow:
+        visible !important;
+
+}
+
+
+.playerMarkerImage {
+
+    display:
+        block;
+
+    width:
+        38px;
+
+    height:
+        38px;
+
+    object-fit:
+        contain;
+
+    transform-origin:
+        center center;
+
+    transition:
+        transform 0.15s linear;
+
+    filter:
+        drop-shadow(
+            1px 2px 1px
+            rgba(0, 0, 0, 0.4)
+        );
+
+    pointer-events:
+        none;
+
+}
+/* =========================================
+   YENİ HEDEF MARKER
+   ========================================= */
+
+#destinationMarker {
+
+    width:
+        46px !important;
+
+    height:
+        46px !important;
+
+    position:
+        relative;
+
+    overflow:
+        visible !important;
+
+    background:
+        transparent !important;
+
+    pointer-events:
+        none;
+
+}
+
+
+.destinationMarkerImage {
+
+    display:
+        block;
+
+    width:
+        46px;
+
+    height:
+        46px;
+
+    object-fit:
+        contain;
+
+    filter:
+        drop-shadow(
+            2px 3px 2px
+            rgba(0, 0, 0, 0.45)
+        );
+
+}
+/* =========================================================
+   GAME MAP — GTA TARZI NAVİGASYON HUD
+   EN SONDA KALSIN
+   ========================================================= */
+
+
+/* =========================================
+   SOL ÜST ANA NAVİGASYON PANELİ
+   ========================================= */
+
+body.navigation-active #navigationInstruction {
+
+    position: fixed !important;
+
+    top:
+        calc(var(--safe-top) + 18px)
+        !important;
+
+    left:
+        calc(var(--safe-left) + 18px)
+        !important;
+
+    width:
+        330px !important;
+
+    min-height:
+        104px !important;
+
+    padding:
+        8px 12px !important;
+
+    display:
+        flex !important;
+
+    align-items:
+        center !important;
+
+    gap:
+        12px !important;
+
+    color:
+        #ffffff;
+
+    background:
+        rgba(8, 8, 8, 0.94) !important;
+
+    border:
+        3px solid #0a0a0a !important;
+
+    outline:
+        2px solid rgba(220, 220, 220, 0.85)
+        !important;
+
+    border-radius:
+        2px !important;
+
+    box-shadow:
+        5px 5px 0
+        rgba(0, 0, 0, 0.55)
+        !important;
+
+    overflow:
+        hidden;
+
+}
+
+
+/* Yeşil GTA vurgu çizgisi */
+
+body.navigation-active
+#navigationInstruction::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    left:
+        0;
+
+    top:
+        0;
+
+    width:
+        100%;
+
+    height:
+        5px;
+
+    background:
+        #9fbd32;
+
+    box-shadow:
+        0 1px 0 #d9ee73;
+
+}
+
+
+/* =========================================
+   DÖNÜŞ İKONU ALANI
+   ========================================= */
+
+body.navigation-active #navigationArrow {
+
+    flex:
+        0 0 82px !important;
+
+    width:
+        82px !important;
+
+    height:
+        82px !important;
+
+    display:
+        flex !important;
+
+    align-items:
+        center !important;
+
+    justify-content:
+        center !important;
+
+    margin:
+        2px 0 0 0;
+
+    color:
+        #ffffff !important;
+
+    background:
+        rgba(20, 20, 20, 0.96);
+
+    border:
+        2px solid #050505;
+
+    outline:
+        1px solid #666;
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(255,255,255,0.05);
+
+}
+
+
+/* SVG dönüş oku */
+
+body.navigation-active
+#navigationArrow
+.maneuverIcon {
+
+    width:
+        58px !important;
+
+    height:
+        58px !important;
+
+    color:
+        #ffffff !important;
+
+    filter:
+        drop-shadow(
+            3px 3px 0
+            rgba(0,0,0,0.9)
+        );
+
+}
+
+
+/* =========================================
+   YAZI ALANI
+   ========================================= */
+
+body.navigation-active #navigationWords {
+
+    flex:
+        1 1 auto;
+
+    min-width:
+        0;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    justify-content:
+        center;
+
+    overflow:
+        hidden;
+
+}
+
+
+/* Mesafe */
+
+body.navigation-active
+#navigationDistance {
+
+    margin:
+        0 !important;
+
+    color:
+        #c7e64b !important;
+
+    font-family:
+        "Pricedown",
+        Impact,
+        sans-serif
+        !important;
+
+    font-size:
+        35px !important;
+
+    font-weight:
+        normal !important;
+
+    line-height:
+        0.9 !important;
+
+    letter-spacing:
+        0.5px;
+
+    white-space:
+        nowrap;
+
+    text-shadow:
+        3px 3px 0 #000;
+
+}
+
+
+/* SAĞA DÖN / DÜZ DEVAM vb */
+
+body.navigation-active
+#navigationAction {
+
+    margin-top:
+        7px !important;
+
+    color:
+        #ffffff !important;
+
+    font-family:
+        "Pricedown",
+        Impact,
+        sans-serif
+        !important;
+
+    font-size:
+        22px !important;
+
+    font-weight:
+        normal !important;
+
+    line-height:
+        0.95 !important;
+
+    letter-spacing:
+        0.4px;
+
+    white-space:
+        nowrap;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+
+    text-shadow:
+        2px 2px 0 #000;
+
+}
+
+
+/* Yol adı */
+
+body.navigation-active
+#navigationRoad {
+
+    margin-top:
+        7px !important;
+
+    max-width:
+        195px !important;
+
+    color:
+        #aaa69b !important;
+
+    font-family:
+        "Pricedown",
+        Impact,
+        sans-serif
+        !important;
+
+    font-size:
+        13px !important;
+
+    font-weight:
+        normal !important;
+
+    line-height:
+        1 !important;
+
+    letter-spacing:
+        0.4px;
+
+    white-space:
+        nowrap;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+
+    text-transform:
+        uppercase;
+
+    text-shadow:
+        1px 1px 0 #000;
+
+}
+
+
+/* =========================================
+   DÖNÜŞ ÇOK YAKINSA
+   ========================================= */
+
+body.navigation-active
+#navigationInstruction.turn-now {
+
+    outline-color:
+        #c7e64b !important;
+
+    box-shadow:
+
+        5px 5px 0
+        rgba(0,0,0,0.55),
+
+        0 0 15px
+        rgba(159,189,50,0.55)
+
+        !important;
+
+}
+
+
+body.navigation-active
+#navigationInstruction.turn-now::before {
+
+    height:
+        7px;
+
+    background:
+        #c7e64b;
+
+}
+
+
+body.navigation-active
+#navigationInstruction.turn-now
+#navigationDistance {
+
+    color:
+        #ffffff !important;
+
+}
+
+
+body.navigation-active
+#navigationInstruction.turn-now
+#navigationArrow {
+
+    outline-color:
+        #9fbd32;
+
+}
+
+
+body.navigation-active
+#navigationInstruction.turn-now
+.maneuverIcon {
+
+    transform:
+        scale(1.08);
+
+}
+
+
+/* Eski pembe pulse animasyonunu kaldır */
+
+body.navigation-active
+#navigationInstruction.turn-now {
+
+    animation:
+        none !important;
+
+}
+
+
+/* =========================================
+   SAĞ ÜST KALAN SÜRE / MESAFE
+   ========================================= */
+
+body.navigation-active #routeInfo {
+
+    top:
+        calc(var(--safe-top) + 74px)
+        !important;
+
+    right:
+        calc(var(--safe-right) + 18px)
+        !important;
+
+    min-width:
+        150px !important;
+
+    padding:
+        8px 12px !important;
+
+    color:
+        #ffffff !important;
+
+    background:
+        rgba(8,8,8,0.94) !important;
+
+    border:
+        3px solid #080808 !important;
+
+    outline:
+        1px solid #aaa !important;
+
+    border-radius:
+        2px !important;
+
+    font-family:
+        "Pricedown",
+        Impact,
+        sans-serif
+        !important;
+
+    font-size:
+        20px !important;
+
+    font-weight:
+        normal !important;
+
+    text-shadow:
+        2px 2px 0 #000;
+
+    box-shadow:
+        4px 4px 0
+        rgba(0,0,0,0.5);
+
+}
+
+
+/* =========================================
+   HIZ GÖSTERGESİ
+   ========================================= */
+
+body.navigation-active #speedHud {
+
+    width:
+        82px !important;
+
+    height:
+        70px !important;
+
+    left:
+        calc(var(--safe-left) + 18px)
+        !important;
+
+    bottom:
+        calc(var(--safe-bottom) + 18px)
+        !important;
+
+    background:
+        rgba(8,8,8,0.94)
+        !important;
+
+    border:
+        3px solid #080808
+        !important;
+
+    outline:
+        1px solid #aaa
+        !important;
+
+    border-radius:
+        2px !important;
+
+    box-shadow:
+        4px 4px 0
+        rgba(0,0,0,0.5)
+        !important;
+
+}
+
+
+body.navigation-active
+#speedValue {
+
+    color:
+        #ffffff;
+
+    font-family:
+        "Pricedown",
+        Impact,
+        sans-serif
+        !important;
+
+    font-size:
+        34px !important;
+
+    font-weight:
+        normal !important;
+
+    line-height:
+        0.85;
+
+    text-shadow:
+        2px 2px 0 #000;
+
+}
+
+
+body.navigation-active
+#speedUnit {
+
+    margin-top:
+        6px;
+
+    color:
+        #9fbd32 !important;
+
+    font-family:
+        "Pricedown",
+        Impact,
+        sans-serif
+        !important;
+
+    font-size:
+        11px !important;
+
+    font-weight:
+        normal;
+
+    letter-spacing:
+        0.7px;
+
+}
+
+
+/* =========================================
+   TELEFON
+   ========================================= */
+
+@media (max-width: 600px) {
+
+    body.navigation-active
+    #navigationInstruction {
+
+        top:
+            calc(var(--safe-top) + 8px)
+            !important;
+
+        left:
+            calc(var(--safe-left) + 8px)
+            !important;
+
+        width:
+            calc(100vw - 126px)
+            !important;
+
+        min-height:
+            82px !important;
+
+        padding:
+            7px 8px !important;
+
+        gap:
+            7px !important;
+
+    }
+
+
+    body.navigation-active
+    #navigationArrow {
+
+        flex-basis:
+            58px !important;
+
+        width:
+            58px !important;
+
+        height:
+            58px !important;
+
+    }
+
+
+    body.navigation-active
+    #navigationArrow
+    .maneuverIcon {
+
+        width:
+            42px !important;
+
+        height:
+            42px !important;
+
+    }
+
+
+    body.navigation-active
+    #navigationDistance {
+
+        font-size:
+            27px !important;
+
+    }
+
+
+    body.navigation-active
+    #navigationAction {
+
+        margin-top:
+            4px !important;
+
+        font-size:
+            17px !important;
+
+    }
+
+
+    body.navigation-active
+    #navigationRoad {
+
+        margin-top:
+            4px !important;
+
+        max-width:
+            100% !important;
+
+        font-size:
+            10px !important;
+
+    }
+
+
+    body.navigation-active
+    #routeInfo {
+
+        top:
+            calc(var(--safe-top) + 57px)
+            !important;
+
+        right:
+            calc(var(--safe-right) + 8px)
+            !important;
+
+        width:
+            104px !important;
+
+        min-width:
+            104px !important;
+
+        padding:
+            7px 3px !important;
+
+        font-size:
+            14px !important;
+
+    }
+
+
+    body.navigation-active
+    #speedHud {
+
+        width:
+            68px !important;
+
+        height:
+            58px !important;
+
+        left:
+            calc(var(--safe-left) + 10px)
+            !important;
+
+        bottom:
+            calc(var(--safe-bottom) + 10px)
+            !important;
+
+    }
+
+
+    body.navigation-active
+    #speedValue {
+
+        font-size:
+            28px !important;
+
+    }
+
+
+    body.navigation-active
+    #speedUnit {
+
+        font-size:
+            9px !important;
+
+    }
+
+}
+/* =========================================================
+   RESPONSIVE HUD — TELEFON DİKEY / YATAY
+   EN ALTA KOY
+   ========================================================= */
+
+/* Ortak telefon davranışları */
+@media (max-width: 900px) {
+
+    body,
+    html {
+        overscroll-behavior: none;
+    }
+
+    /* Tarayıcı safe area desteği */
+    :root {
+        --safe-top: env(safe-area-inset-top, 0px);
+        --safe-right: env(safe-area-inset-right, 0px);
+        --safe-bottom: env(safe-area-inset-bottom, 0px);
+        --safe-left: env(safe-area-inset-left, 0px);
+    }
+
+    /* Navigasyon kutusu */
+    body.navigation-active #navigationInstruction {
+        z-index: 3000 !important;
+    }
+
+    /* Sağ üst kalan süre kutusu */
+    body.navigation-active #routeInfo {
+        z-index: 3000 !important;
+    }
+
+    /* Sol alt hız kutusu */
+    body.navigation-active #speedHud {
+        z-index: 3000 !important;
+    }
+}
+/* =========================================================
+   TELEFON DİKEY
+   ========================================================= */
+@media (max-width: 600px) and (orientation: portrait) {
+
+    body.navigation-active #navigationInstruction {
+        top: calc(var(--safe-top) + 8px) !important;
+        left: calc(var(--safe-left) + 8px) !important;
+        width: calc(100vw - 16px) !important;
+        max-width: 320px !important;
+        min-height: 78px !important;
+        padding: 7px 8px !important;
+        gap: 8px !important;
+    }
+
+    body.navigation-active #navigationArrow {
+        flex: 0 0 54px !important;
+        width: 54px !important;
+        height: 54px !important;
+    }
+
+    body.navigation-active #navigationArrow .maneuverIcon {
+        width: 38px !important;
+        height: 38px !important;
+    }
+
+    body.navigation-active #navigationDistance {
+        font-size: 26px !important;
+        line-height: 0.95 !important;
+    }
+
+    body.navigation-active #navigationAction {
+        font-size: 17px !important;
+        margin-top: 4px !important;
+        line-height: 0.95 !important;
+    }
+
+    body.navigation-active #navigationRoad {
+        font-size: 10px !important;
+        margin-top: 3px !important;
+        max-width: 180px !important;
+    }
+
+    body.navigation-active #routeInfo {
+        top: calc(var(--safe-top) + 92px) !important;
+        right: calc(var(--safe-right) + 8px) !important;
+        min-width: 104px !important;
+        padding: 7px 8px !important;
+        font-size: 14px !important;
+    }
+
+    body.navigation-active #speedHud {
+        left: calc(var(--safe-left) + 8px) !important;
+        bottom: calc(var(--safe-bottom) + 8px) !important;
+        width: 64px !important;
+        height: 62px !important;
+    }
+
+    body.navigation-active #speedValue {
+        font-size: 26px !important;
+        line-height: 0.9 !important;
+    }
+
+    body.navigation-active #speedUnit {
+        font-size: 9px !important;
+        margin-top: 4px !important;
+    }
+
+    /* Konum butonu */
+    #recenterButton,
+    #myLocationButton,
+    #konumButton {
+        right: calc(var(--safe-right) + 8px) !important;
+        bottom: calc(var(--safe-bottom) + 8px) !important;
+        transform: scale(0.92);
+        transform-origin: bottom right;
+    }
+
+    /* Menü butonu */
+    #menuButton,
+    .menuButton {
+        left: calc(var(--safe-left) + 8px) !important;
+        bottom: calc(var(--safe-bottom) + 78px) !important;
+        transform: scale(0.9);
+        transform-origin: bottom left;
+    }
+}
+/* =========================================================
+   TELEFON YATAY
+   ========================================================= */
+@media (max-height: 500px) and (orientation: landscape) {
+
+    body.navigation-active #navigationInstruction {
+        top: calc(var(--safe-top) + 6px) !important;
+        left: calc(var(--safe-left) + 6px) !important;
+        width: 240px !important;
+        min-height: 64px !important;
+        padding: 6px 7px !important;
+        gap: 7px !important;
+    }
+
+    body.navigation-active #navigationArrow {
+        flex: 0 0 44px !important;
+        width: 44px !important;
+        height: 44px !important;
+    }
+
+    body.navigation-active #navigationArrow .maneuverIcon {
+        width: 30px !important;
+        height: 30px !important;
+    }
+
+    body.navigation-active #navigationDistance {
+        font-size: 20px !important;
+        line-height: 0.9 !important;
+    }
+
+    body.navigation-active #navigationAction {
+        font-size: 13px !important;
+        margin-top: 2px !important;
+        line-height: 0.9 !important;
+    }
+
+    body.navigation-active #navigationRoad {
+        font-size: 8px !important;
+        margin-top: 2px !important;
+        max-width: 140px !important;
+    }
+
+    body.navigation-active #routeInfo {
+        top: calc(var(--safe-top) + 50px) !important;
+        right: calc(var(--safe-right) + 6px) !important;
+        min-width: 92px !important;
+        padding: 6px 8px !important;
+        font-size: 12px !important;
+    }
+
+    body.navigation-active #speedHud {
+        left: calc(var(--safe-left) + 6px) !important;
+        bottom: calc(var(--safe-bottom) + 6px) !important;
+        width: 58px !important;
+        height: 56px !important;
+    }
+
+    body.navigation-active #speedValue {
+        font-size: 22px !important;
+    }
+
+    body.navigation-active #speedUnit {
+        font-size: 8px !important;
+        margin-top: 3px !important;
+    }
+
+    /* Sağ alt konum */
+    #recenterButton,
+    #myLocationButton,
+    #konumButton {
+        right: calc(var(--safe-right) + 6px) !important;
+        bottom: calc(var(--safe-bottom) + 6px) !important;
+        transform: scale(0.86);
+        transform-origin: bottom right;
+    }
+
+    /* Sol alt menü */
+    #menuButton,
+    .menuButton {
+        left: calc(var(--safe-left) + 6px) !important;
+        bottom: calc(var(--safe-bottom) + 66px) !important;
+        transform: scale(0.82);
+        transform-origin: bottom left;
+    }
+}
+@media (max-width: 600px) and (orientation: portrait) {
+    #searchPanel,
+    #topBar,
+    .searchShell {
+        top: calc(var(--safe-top) + 8px) !important;
+        right: calc(var(--safe-right) + 8px) !important;
+        width: calc(100vw - 16px) !important;
+        max-width: 340px !important;
+        transform: none !important;
+    }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+    #searchPanel,
+    #topBar,
+    .searchShell {
+        top: calc(var(--safe-top) + 6px) !important;
+        right: calc(var(--safe-right) + 6px) !important;
+        width: 300px !important;
+        max-width: calc(100vw - 12px) !important;
+        transform: none !important;
+    }
 }
