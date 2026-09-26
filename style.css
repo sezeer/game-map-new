@@ -6612,3 +6612,555 @@ html[data-theme="gtav"] #locationButton:hover {
     }
 
 }
+/* =========================================================
+   GTA V — FINAL MOBILE LAYOUT FIX
+   ========================================================= */
+
+html[data-theme="gtav"] {
+    --map-bg: #242424;
+}
+
+html[data-theme="gtav"],
+html[data-theme="gtav"] body {
+    background: #242424 !important;
+}
+
+
+/* =========================================================
+   TELEFON DİKEY
+   ========================================================= */
+
+@media (max-width: 600px) and (orientation: portrait) {
+
+    /* -----------------------------
+       ROTA ÖNİZLEME
+       ----------------------------- */
+
+    html[data-theme="gtav"]
+    body:not(.navigation-active)
+    #searchBox {
+
+        top:
+            calc(var(--safe-top) + 8px)
+            !important;
+
+        left:
+            8px !important;
+
+        right:
+            8px !important;
+
+        width:
+            auto !important;
+
+        max-width:
+            none !important;
+
+        height:
+            48px !important;
+
+        display:
+            grid !important;
+
+        grid-template-columns:
+            minmax(0, 1fr)
+            58px
+            72px
+            !important;
+
+        gap:
+            4px !important;
+
+        padding:
+            4px !important;
+    }
+
+
+    html[data-theme="gtav"]
+    body:not(.navigation-active)
+    #searchInput {
+
+        width:
+            100% !important;
+
+        min-width:
+            0 !important;
+    }
+
+
+    html[data-theme="gtav"]
+    body:not(.navigation-active)
+    #searchButton {
+
+        width:
+            58px !important;
+
+        min-width:
+            0 !important;
+
+        padding:
+            0 !important;
+    }
+
+
+    html[data-theme="gtav"]
+    body:not(.navigation-active)
+    #routeButton {
+
+        width:
+            72px !important;
+
+        min-width:
+            0 !important;
+
+        padding:
+            0 !important;
+    }
+
+
+    /* ARAÇ / YÜRÜME / BİSİKLET */
+
+    html[data-theme="gtav"]
+    body:not(.navigation-active)
+    #routeModeBar {
+
+        top:
+            calc(var(--safe-top) + 64px)
+            !important;
+
+        left:
+            8px !important;
+
+        right:
+            8px !important;
+
+        width:
+            auto !important;
+
+        display:
+            grid !important;
+
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr))
+            !important;
+    }
+
+
+    html[data-theme="gtav"]
+    body:not(.navigation-active)
+    .routeModeButton {
+
+        width:
+            100% !important;
+
+        min-width:
+            0 !important;
+
+        padding:
+            0 4px !important;
+    }
+
+
+    /* SÜRE / MESAFE */
+
+    html[data-theme="gtav"]
+    body:not(.navigation-active)
+    #routeInfo {
+
+        top:
+            calc(var(--safe-top) + 112px)
+            !important;
+
+        right:
+            8px !important;
+
+        left:
+            auto !important;
+
+        width:
+            auto !important;
+
+        min-width:
+            138px !important;
+
+        max-width:
+            calc(100vw - 16px)
+            !important;
+
+        padding:
+            7px 9px !important;
+
+        font-size:
+            13px !important;
+    }
+
+
+    /* ALTERNATİF ROTALAR */
+
+    html[data-theme="gtav"]
+    body:not(.navigation-active)
+    #routeChoices {
+
+        top:
+            calc(var(--safe-top) + 154px)
+            !important;
+
+        left:
+            8px !important;
+
+        right:
+            8px !important;
+
+        width:
+            auto !important;
+
+        max-width:
+            none !important;
+
+        max-height:
+            155px !important;
+
+        overflow-y:
+            auto !important;
+
+        display:
+            flex !important;
+
+        flex-direction:
+            column !important;
+
+        gap:
+            4px !important;
+    }
+
+
+    html[data-theme="gtav"]
+    body:not(.navigation-active)
+    #routeChoices button {
+
+        flex:
+            0 0 44px !important;
+
+        width:
+            100% !important;
+
+        height:
+            44px !important;
+
+        min-height:
+            44px !important;
+
+        padding:
+            0 11px !important;
+
+        font-size:
+            13px !important;
+    }
+
+
+    /* -----------------------------
+       NAVİGASYON AKTİF
+       ----------------------------- */
+
+    html[data-theme="gtav"]
+    body.navigation-active
+    #searchBox {
+
+        top:
+            calc(var(--safe-top) + 8px)
+            !important;
+
+        left:
+            auto !important;
+
+        right:
+            8px !important;
+
+        width:
+            96px !important;
+
+        max-width:
+            96px !important;
+
+        height:
+            42px !important;
+
+        padding:
+            0 !important;
+
+        display:
+            block !important;
+
+        background:
+            transparent !important;
+
+        border:
+            0 !important;
+
+        outline:
+            0 !important;
+
+        box-shadow:
+            none !important;
+    }
+
+
+    html[data-theme="gtav"]
+    body.navigation-active
+    #routeButton {
+
+        width:
+            96px !important;
+
+        min-width:
+            96px !important;
+
+        height:
+            42px !important;
+
+        padding:
+            0 !important;
+    }
+
+
+    /* SOL ÜST YÖN PANELİ */
+
+    html[data-theme="gtav"]
+    body.navigation-active
+    #navigationInstruction {
+
+        top:
+            calc(var(--safe-top) + 8px)
+            !important;
+
+        left:
+            8px !important;
+
+        width:
+            calc(100vw - 120px)
+            !important;
+
+        max-width:
+            none !important;
+
+        min-height:
+            72px !important;
+    }
+
+
+    /* ETA */
+
+    html[data-theme="gtav"]
+    body.navigation-active
+    #routeInfo {
+
+        top:
+            calc(var(--safe-top) + 88px)
+            !important;
+
+        right:
+            8px !important;
+
+        left:
+            auto !important;
+
+        width:
+            auto !important;
+
+        min-width:
+            136px !important;
+    }
+
+
+    /* HIZ */
+
+    html[data-theme="gtav"]
+    body.navigation-active
+    #speedHud {
+
+        left:
+            calc(var(--safe-left) + 8px)
+            !important;
+
+        bottom:
+            calc(var(--safe-bottom) + 8px)
+            !important;
+    }
+
+
+    /* GPS + MENÜ HIZIN ÜSTÜNE ÇIKSIN */
+
+    html[data-theme="gtav"]
+    body.navigation-active
+    #mapTools {
+
+        left:
+            calc(var(--safe-left) + 8px)
+            !important;
+
+        bottom:
+            calc(var(--safe-bottom) + 72px)
+            !important;
+    }
+
+
+    html[data-theme="gtav"]
+    body.navigation-active
+    #locationButton {
+
+        right:
+            calc(var(--safe-right) + 8px)
+            !important;
+
+        bottom:
+            calc(var(--safe-bottom) + 8px)
+            !important;
+    }
+
+}
+
+
+/* =========================================================
+   TELEFON YATAY
+   ========================================================= */
+
+@media (max-height: 500px) and (orientation: landscape) {
+
+    html[data-theme="gtav"]
+    body.navigation-active
+    #navigationInstruction {
+
+        top:
+            calc(var(--safe-top) + 8px)
+            !important;
+
+        left:
+            calc(var(--safe-left) + 8px)
+            !important;
+
+        width:
+            300px !important;
+
+        min-height:
+            72px !important;
+    }
+
+
+    html[data-theme="gtav"]
+    body.navigation-active
+    #searchBox {
+
+        top:
+            calc(var(--safe-top) + 8px)
+            !important;
+
+        left:
+            auto !important;
+
+        right:
+            calc(var(--safe-right) + 8px)
+            !important;
+
+        width:
+            104px !important;
+
+        height:
+            42px !important;
+
+        padding:
+            0 !important;
+
+        background:
+            transparent !important;
+
+        border:
+            0 !important;
+
+        outline:
+            0 !important;
+
+        box-shadow:
+            none !important;
+    }
+
+
+    html[data-theme="gtav"]
+    body.navigation-active
+    #routeButton {
+
+        width:
+            104px !important;
+
+        min-width:
+            104px !important;
+
+        height:
+            42px !important;
+    }
+
+
+    html[data-theme="gtav"]
+    body.navigation-active
+    #routeInfo {
+
+        top:
+            calc(var(--safe-top) + 58px)
+            !important;
+
+        right:
+            calc(var(--safe-right) + 8px)
+            !important;
+
+        min-width:
+            136px !important;
+    }
+
+
+    html[data-theme="gtav"]
+    body.navigation-active
+    #speedHud {
+
+        left:
+            calc(var(--safe-left) + 8px)
+            !important;
+
+        bottom:
+            calc(var(--safe-bottom) + 8px)
+            !important;
+
+        width:
+            62px !important;
+
+        height:
+            54px !important;
+    }
+
+
+    html[data-theme="gtav"]
+    body.navigation-active
+    #mapTools {
+
+        left:
+            calc(var(--safe-left) + 8px)
+            !important;
+
+        bottom:
+            calc(var(--safe-bottom) + 70px)
+            !important;
+    }
+
+
+    html[data-theme="gtav"]
+    body.navigation-active
+    #locationButton {
+
+        right:
+            calc(var(--safe-right) + 8px)
+            !important;
+
+        bottom:
+            calc(var(--safe-bottom) + 8px)
+            !important;
+    }
+
+}
