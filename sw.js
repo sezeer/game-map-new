@@ -1,6 +1,9 @@
-const CACHE_NAME = "gamemap-shell-v4";
+const CACHE_NAME =
+    "gamemap-shell-v5";
+
 
 const SHELL = [
+
     "./",
     "./index.html",
     "./style.css",
@@ -18,7 +21,57 @@ const SHELL = [
 
     "./Pricedown.otf",
 
+    /* GTA V FONTLARI */
 
+    "./assets/themes/gtav/fonts/Chalet-LondonNineteenSixty.ttf",
+    "./assets/themes/gtav/fonts/Chalet-ComprimeCologneSixty.ttf",
+
+
+    /* SAN ANDREAS MARKERLARI */
+
+    "./assets/themes/sanandreas/markers/player.png",
+    "./assets/themes/sanandreas/markers/target.png",
+
+
+    /* SAN ANDREAS POI */
+
+    "./assets/themes/sanandreas/icons/market.png",
+    "./assets/themes/sanandreas/icons/gym.png",
+    "./assets/themes/sanandreas/icons/restoran.png",
+    "./assets/themes/sanandreas/icons/kafe.png",
+    "./assets/themes/sanandreas/icons/benzinlik.png",
+    "./assets/themes/sanandreas/icons/hastane.png",
+    "./assets/themes/sanandreas/icons/eczane.png",
+    "./assets/themes/sanandreas/icons/otel.png",
+    "./assets/themes/sanandreas/icons/giyim.png",
+
+
+    /* GTA V POI */
+
+    "./assets/themes/gtav/icons/market.png",
+    "./assets/themes/gtav/icons/gym.png",
+    "./assets/themes/gtav/icons/restoran.png",
+    "./assets/themes/gtav/icons/kafe.png",
+    "./assets/themes/gtav/icons/benzinlik.png",
+    "./assets/themes/gtav/icons/hastane.png",
+    "./assets/themes/gtav/icons/eczane.png",
+    "./assets/themes/gtav/icons/otel.png",
+    "./assets/themes/gtav/icons/giyim.png" ,
+
+    /* CYBERPUNK POI */
+
+"./assets/themes/cyberpunk/icons/market.png",
+"./assets/themes/cyberpunk/icons/gym.png",
+"./assets/themes/cyberpunk/icons/restoran.png",
+"./assets/themes/cyberpunk/icons/kafe.png",
+"./assets/themes/cyberpunk/icons/benzinlik.png",
+"./assets/themes/cyberpunk/icons/hastane.png",
+"./assets/themes/cyberpunk/icons/eczane.png",
+"./assets/themes/cyberpunk/icons/otel.png",
+"./assets/themes/cyberpunk/icons/giyim.png"
+
+    
+    
 ];
 
 
@@ -40,10 +93,8 @@ self.addEventListener(
 
 
                 /*
-                Dosyaları tek tek ekliyoruz.
-
-                Bir dosya bulunamazsa
-                bütün Service Worker çökmesin.
+                Bir dosya eksik olsa bile
+                bütün kurulum çökmesin.
                 */
 
                 await Promise.all(
@@ -63,7 +114,8 @@ self.addEventListener(
 
                                 console.warn(
                                     "Cache'e eklenemedi:",
-                                    path
+                                    path,
+                                    error
                                 );
 
                             }
@@ -73,11 +125,30 @@ self.addEventListener(
 
                 );
 
-
-                await self.skipWaiting();
-
             })()
         );
+
+    }
+);
+
+
+/* =========================================
+   YENİ SÜRÜMÜ AKTİF ET
+   ========================================= */
+
+self.addEventListener(
+    "message",
+    function (event) {
+
+        if (
+            event.data &&
+            event.data.type ===
+                "SKIP_WAITING"
+        ) {
+
+            self.skipWaiting();
+
+        }
 
     }
 );
@@ -159,7 +230,16 @@ self.addEventListener(
             );
 
 
+        /*
+        Sadece bizim uygulama dosyaları.
+
+        Harita tile,
+        Photon,
+        OSRM vb. buraya girmez.
+        */
+
         const isShell =
+
             url.origin ===
                 self.location.origin &&
 
@@ -167,23 +247,18 @@ self.addEventListener(
                 function (path) {
 
                     return (
+
                         new URL(
                             path,
                             self.registration.scope
                         ).pathname ===
-                        url.pathname
+                            url.pathname
+
                     );
 
                 }
             );
 
-
-        /*
-        Harita tile,
-        arama,
-        rota vb.
-        cache'e girmez.
-        */
 
         if (!isShell) {
             return;
@@ -200,11 +275,11 @@ self.addEventListener(
 
 
                 /*
-                Önce internetten güncel dosyayı al.
+                ÖNCE İNTERNET.
 
-                Böylece geliştirme sırasında
-                eski app.js / style.css
-                sorunu yaşamayız.
+                Böylece GitHub'a yeni sürüm
+                yüklediğimizde eski JS/CSS'e
+                takılmayız.
                 */
 
                 try {
@@ -236,8 +311,7 @@ self.addEventListener(
                 catch (error) {
 
                     /*
-                    İnternet yoksa
-                    cache'deki dosyaya dön.
+                    İnternet yoksa cache.
                     */
 
                     const cached =
@@ -247,7 +321,9 @@ self.addEventListener(
 
 
                     if (cached) {
+
                         return cached;
+
                     }
 
 

@@ -7,7 +7,9 @@ const THEME_STORAGE_KEY =
 
 const GAME_THEMES = [
     "classic",
-    "gtav"
+    "gtav",
+    "cyberpunk",
+    "nfs"
 ];
 
 

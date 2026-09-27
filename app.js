@@ -809,124 +809,276 @@ function applyGameBaseMapTheme() {
     }
 
 
-    const isGtaV =
-        (
-            window.GameTheme?.getCurrent?.() ||
-            document.documentElement.dataset.theme
-        ) === "gtav";
+    const currentTheme =
+    (
+        window.GameTheme?.getCurrent?.() ||
+        document.documentElement.dataset.theme ||
+        "classic"
+    );
+
+
+const isGtaV =
+    currentTheme === "gtav";
+
+
+const isCyberpunk =
+    currentTheme === "cyberpunk";
+
+const isNfs =
+    currentTheme === "nfs";    
 
 
     const colors =
-        isGtaV
-
+    isNfs
         ? {
-    background:
-        "#242424",
 
-    water:
-        "#657783",
-
-    park:
-        "#262a27",
-
-    public:
-        "#2b2b2b",
-
-    urban:
-        "#292929",
-
-    farmland:
-        "#272927",
-
-    sand:
-        "#303030",
-
-    airport:
-        "#303030",
-
-    building:
-        "#323232",
-
-    building3d:
-        "#383838",
-
-    roadMajor:
-        "#dedede",
-
-    roadMedium:
-        "#b8b8b8",
-
-    roadMinor:
-        "#777777",
-
-    roadCasing:
-        "#161616",
-
-    rail:
-        "#666666",
-
-    waterway:
-        "#657783",
-
-    placeText:
-        "#eeeeee",
-
-    roadText:
-        "#c8c8c8",
-
-    textHalo:
-        "#242424"
-}
-
-        : {
             background:
-                "#9e9482",
+                "#2b2b2b",
 
             water:
-                "#7f94b3",
+                "#08263d",
 
             park:
-                "#456b2f",
+                "#353535",
 
             public:
-                "#b6b1a5",
+                "#3c3c3c",
 
             urban:
-                "#b0aea6",
+                "#303030",
 
             farmland:
-                "#788953",
+                "#393939",
 
             sand:
-                "#e3cf75",
+                "#474747",
 
             airport:
-                "#9b9b96",
+                "#323232",
 
             building:
-                "#d9d7cf",
+                "#414141",
 
             building3d:
-                "#c7c3b8",
+                "#494949",
 
-            road:
-                "#111111",
+            roadMajor:
+    "#d0d0ca",
+
+roadMedium:
+    "#b5b5af",
+
+roadMinor:
+    "#92928d",
+
+roadCasing:
+    "#080808",
 
             rail:
-                "#6b241c",
+                "#686868",
+
+            boundary:
+                "#555555",
 
             waterway:
-                "#7f94b3",
+                "#86d7e6",
 
             placeText:
-                "#211f1a",
+                "#d8d8d2",
 
             roadText:
-                "#28251e",
+                "#d0d0ca",
 
             textHalo:
-                "#c7c0ae"
-        };
+                "#080808"
+
+        }
+
+        : isCyberpunk
+        ? {
+
+            background:
+                "#141b3d",
+
+            water:
+                "#202d61",
+
+            park:
+                "#172543",
+
+            public:
+                "#1c2445",
+
+            urban:
+                "#18203c",
+
+            farmland:
+                "#17213f",
+
+            sand:
+                "#252947",
+
+            airport:
+                "#1a2343",
+
+            building:
+                "#e64f4b",
+
+            building3d:
+                "#f05a50",
+
+            roadMajor:
+                "#ddd99b",
+
+            roadMedium:
+                "#55c9d6",
+
+            roadMinor:
+                "#248db5",
+
+            roadCasing:
+                "#29304e",
+
+            rail:
+                "#29bcd0",
+
+            boundary:
+                "#3af09a",
+
+            waterway:
+                "#298fbd",
+
+            placeText:
+                "#e6e7ea",
+
+            roadText:
+                "#f1edc1",
+
+            textHalo:
+                "#10162f"
+
+        }
+
+        : isGtaV
+
+            ? {
+
+                background:
+                    "#242424",
+
+                water:
+                    "#657783",
+
+                park:
+                    "#262a27",
+
+                public:
+                    "#2b2b2b",
+
+                urban:
+                    "#292929",
+
+                farmland:
+                    "#272927",
+
+                sand:
+                    "#303030",
+
+                airport:
+                    "#303030",
+
+                building:
+                    "#323232",
+
+                building3d:
+                    "#383838",
+
+                roadMajor:
+                    "#dedede",
+
+                roadMedium:
+                    "#b8b8b8",
+
+                roadMinor:
+                    "#777777",
+
+                roadCasing:
+                    "#161616",
+
+                rail:
+                    "#666666",
+
+                boundary:
+                    "#666666",
+
+                waterway:
+                    "#657783",
+
+                placeText:
+                    "#eeeeee",
+
+                roadText:
+                    "#c8c8c8",
+
+                textHalo:
+                    "#242424"
+
+            }
+
+            : {
+
+                background:
+                    "#9e9482",
+
+                water:
+                    "#7f94b3",
+
+                park:
+                    "#456b2f",
+
+                public:
+                    "#b6b1a5",
+
+                urban:
+                    "#b0aea6",
+
+                farmland:
+                    "#788953",
+
+                sand:
+                    "#e3cf75",
+
+                airport:
+                    "#9b9b96",
+
+                building:
+                    "#d9d7cf",
+
+                building3d:
+                    "#c7c3b8",
+
+                road:
+                    "#111111",
+
+                rail:
+                    "#6b241c",
+
+                boundary:
+                    "#6b241c",
+
+                waterway:
+                    "#7f94b3",
+
+                placeText:
+                    "#211f1a",
+
+                roadText:
+                    "#28251e",
+
+                textHalo:
+                    "#c7c0ae"
+
+            };
 
 
     const layers =
@@ -1091,15 +1243,53 @@ function applyGameBaseMapTheme() {
 
 
                     else if (
-                        name.includes(
-                            "building"
-                        )
-                    ) {
+    name.includes(
+        "building"
+    )
+) {
 
-                        fillColor =
-                            colors.building;
+    fillColor =
+        colors.building;
 
-                    }
+
+    /* MOST WANTED 2005:
+       binaları geri plana at */
+
+    if (isNfs) {
+
+        map.setPaintProperty(
+            layer.id,
+            "fill-opacity",
+            0.18
+        );
+
+    }
+
+    else {
+
+        /* Diğer temalara geçince
+           eski bina görünürlüğünü geri getir */
+
+        map.setPaintProperty(
+            layer.id,
+            "fill-opacity",
+            [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+
+                10, 0,
+                12, 0.10,
+                13, 0.25,
+                14, 0.45,
+                15, 0.70,
+                17, 1
+            ]
+        );
+
+    }
+
+}
 
 
                     if (
@@ -1115,7 +1305,17 @@ function applyGameBaseMapTheme() {
                     }
 
                 }
-
+map.setPaintProperty(
+    layer.id,
+    "fill-extrusion-opacity",
+    isNfs
+        ? 0
+        : isCyberpunk
+            ? 0.76
+            : isGtaV
+                ? 0.68
+                : 0.88
+);
 
                 /* =====================
                    3D BİNALAR
@@ -1163,6 +1363,28 @@ function applyGameBaseMapTheme() {
 
 
                     else if (
+    name.includes("boundary") ||
+    name.includes("admin")
+) {
+
+    map.setPaintProperty(
+        layer.id,
+        "line-color",
+        colors.boundary
+    );
+
+    if (isCyberpunk) {
+
+        map.setPaintProperty(
+            layer.id,
+            "line-opacity",
+            0.9
+        );
+
+    }
+
+}
+                    else if (
                         name.includes("rail") ||
                         name.includes("railway")
                     ) {
@@ -1184,7 +1406,112 @@ function applyGameBaseMapTheme() {
 
     let roadColor;
 
-    if (!isGtaV) {
+
+/* MOST WANTED 2005 */
+
+if (isNfs) {
+
+    const isRoadCasing =
+        name.includes("casing") ||
+        name.includes("outline");
+
+    roadColor =
+    isRoadCasing
+        ? "#6f6f6a"
+        : "#c2c2bc";
+
+}
+
+
+/* SAN ANDREAS */
+
+else if (
+    !isGtaV &&
+    !isCyberpunk
+) {
+
+    roadColor =
+        "#111111";
+
+}
+
+
+/* GTA V / CYBERPUNK */
+
+else if (
+    name.includes("casing") ||
+    name.includes("outline")
+) {
+
+    roadColor =
+        colors.roadCasing;
+
+}
+
+else if (
+    name.includes("motorway") ||
+    name.includes("trunk") ||
+    name.includes("primary") ||
+    name.includes("major")
+) {
+
+    roadColor =
+        colors.roadMajor;
+
+}
+
+else if (
+    name.includes("secondary") ||
+    name.includes("tertiary")
+) {
+
+    roadColor =
+        colors.roadMedium;
+
+}
+
+else {
+
+    roadColor =
+        colors.roadMinor;
+
+}
+
+
+map.setPaintProperty(
+    layer.id,
+    "line-color",
+    roadColor
+);
+
+
+    /* TEMA YOL YOĞUNLUĞU */
+
+    map.setPaintProperty(
+        layer.id,
+        "line-opacity",
+
+        isCyberpunk
+            ? 0.9
+
+            : isNfs
+                ? 1
+
+                : isGtaV
+                    ? 0.95
+
+                    : 1
+    );
+
+} {
+
+    let roadColor;
+
+    if (
+    !isGtaV &&
+    !isCyberpunk &&
+    !isNfs
+) {
 
         roadColor =
             "#111111";
@@ -1237,15 +1564,24 @@ function applyGameBaseMapTheme() {
     );
 
 
-    if (isGtaV) {
+    if (
+    isGtaV ||
+    isCyberpunk ||
+    isNfs
+) {
 
-        map.setPaintProperty(
-            layer.id,
-            "line-opacity",
-            0.95
-        );
+    map.setPaintProperty(
+        layer.id,
+        "line-opacity",
 
-    }
+        isCyberpunk
+            ? 0.9
+            : isNfs
+                ? 1
+                : 0.95
+    );
+
+}
 
 }
 
@@ -1292,7 +1628,24 @@ function applyGameBaseMapTheme() {
                         name.includes(
                             "street"
                         );
+/* MOST WANTED 2005:
+   sokak isimlerini gizle */
 
+if (isRoadLabel) {
+
+    map.setLayoutProperty(
+        layer.id,
+        "visibility",
+        isNfs
+            ? "none"
+            : "visible"
+    );
+
+    if (isNfs) {
+        return;
+    }
+
+}
 
                     map.setPaintProperty(
 
@@ -1324,18 +1677,30 @@ function applyGameBaseMapTheme() {
 
                         "text-halo-width",
 
-isGtaV
+isNfs
+    ? 2.4
+    : (
+        isGtaV ||
+        isCyberpunk
+    )
     ? 2
     : 1.5
     
 
                     );
-                    if (isGtaV) {
+                    if (
+    isGtaV ||
+    isCyberpunk ||
+    isNfs
+) {
 
     map.setPaintProperty(
         layer.id,
         "text-halo-blur",
-        0.8
+
+isNfs
+    ? 0
+    : 0.8
     );
 
 }
@@ -1356,7 +1721,116 @@ isGtaV
         }
     );
 
+/* =========================================
+   MOST WANTED 2005 — YOLLARI ZORLA BOYA
+   ========================================= */
 
+if (isNfs) {
+
+    const nfsRoadLayers =
+        map.getStyle()?.layers || [];
+
+    nfsRoadLayers.forEach(
+        function (roadLayer) {
+
+            const roadId =
+                (
+                    roadLayer.id || ""
+                ).toLowerCase();
+
+            const roadSourceLayer =
+                (
+                    roadLayer["source-layer"] || ""
+                ).toLowerCase();
+
+
+            if (
+                roadLayer.type !== "line" ||
+                !(
+                    roadSourceLayer.includes(
+                        "transportation"
+                    ) ||
+                    roadId.includes("road") ||
+                    roadId.includes("highway")
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            const isNfsRoadCasing =
+    roadId.includes("casing") ||
+    roadId.includes("outline");
+
+
+let nfsRoadColor;
+
+
+/* SİYAH YOL DIŞ HATTI */
+
+if (isNfsRoadCasing) {
+
+    nfsRoadColor =
+        "#111111";
+
+}
+
+
+/* OTOYOL / ANA YOL */
+
+else if (
+    roadId.includes("motorway") ||
+    roadId.includes("trunk") ||
+    roadId.includes("primary")
+) {
+
+    nfsRoadColor =
+        "#a9a9a4";
+
+}
+
+
+/* ORTA YOL */
+
+else if (
+    roadId.includes("secondary") ||
+    roadId.includes("tertiary")
+) {
+
+    nfsRoadColor =
+        "#92928e";
+
+}
+
+
+/* KÜÇÜK YOLLAR */
+
+else {
+
+    nfsRoadColor =
+        "#747470";
+
+}
+
+
+            map.setPaintProperty(
+                roadLayer.id,
+                "line-color",
+                nfsRoadColor
+            );
+
+            map.setPaintProperty(
+                roadLayer.id,
+                "line-opacity",
+                1
+            );
+
+        }
+    );
+
+}
     /* Özel 3D bina katmanımız */
 
     if (
@@ -1377,9 +1851,13 @@ isGtaV
         map.setPaintProperty(
     "game-buildings-3d",
     "fill-extrusion-opacity",
-    isGtaV
-        ? 0.68
-        : 0.88
+   isCyberpunk
+    ? 0.76
+    : isNfs
+        ? 0.50
+        : isGtaV
+            ? 0.68
+            : 0.88
 );  
 
     }
@@ -3130,7 +3608,43 @@ function getGameThemeRouteColor() {
 
 
 function getPlayerMarkerMarkup() {
+if (
+    getCurrentGameThemeName() ===
+    "cyberpunk"
+) {
 
+    return `
+
+        <svg
+            class="playerMarkerVisual playerMarkerCyberpunk"
+            viewBox="0 0 64 64"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+        >
+
+            <path
+                d="M32 4 L56 55 L32 44 L8 55 Z"
+                fill="#00f0ff"
+                stroke="#05070a"
+                stroke-width="7"
+                stroke-linejoin="round"
+            />
+
+            <path
+                d="M32 12 L46 44 L32 37 L18 44 Z"
+                fill="#fcee0a"
+            />
+
+            <path
+                d="M32 17 L38 35 L32 32 L26 35 Z"
+                fill="#ffffff"
+            />
+
+        </svg>
+
+    `;
+
+}
     if (
         getCurrentGameThemeName() ===
         "gtav"
@@ -3179,7 +3693,65 @@ function getPlayerMarkerMarkup() {
 
 
 function getDestinationMarkerMarkup() {
+if (
+    getCurrentGameThemeName() ===
+    "cyberpunk"
+) {
 
+    return `
+
+        <svg
+            class="destinationMarkerVisual destinationMarkerCyberpunk"
+            viewBox="0 0 64 64"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+        >
+
+            <path
+                d="M32 5
+                   L39 17
+                   L53 11
+                   L47 25
+                   L59 32
+                   L47 39
+                   L53 53
+                   L39 47
+                   L32 59
+                   L25 47
+                   L11 53
+                   L17 39
+                   L5 32
+                   L17 25
+                   L11 11
+                   L25 17
+                   Z"
+                fill="#070a0f"
+                stroke="#00f0ff"
+                stroke-width="4"
+                stroke-linejoin="round"
+            />
+
+            <circle
+                cx="32"
+                cy="32"
+                r="13"
+                fill="none"
+                stroke="#fcee0a"
+                stroke-width="4"
+            />
+
+            <circle
+                cx="32"
+                cy="32"
+                r="4"
+                fill="#ffffff"
+            />
+
+        </svg>
+
+    `;
+
+}
     if (
         getCurrentGameThemeName() ===
         "gtav"

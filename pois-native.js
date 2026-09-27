@@ -906,11 +906,21 @@ function getNativePoiThemeName() {
         "classic";
 
 
-    return (
-        currentTheme === "gtav"
-            ? "gtav"
-            : "sanandreas"
-    );
+    if (
+    currentTheme === "cyberpunk"
+) {
+    return "cyberpunk";
+}
+
+
+if (
+    currentTheme === "gtav"
+) {
+    return "gtav";
+}
+
+
+return "sanandreas";
 
 }
 
@@ -1304,7 +1314,56 @@ function setupPoiCategoryControls() {
     renderPoiCategoryButtons();
 
 }
+/* =========================================
+   POI ZOOM ÖNCELİĞİ
+   ========================================= */
 
+function getPoiMinZoom(
+    categoryId
+) {
+
+    /* HER ZAMAN ÖNEMLİ */
+
+    if (
+        categoryId === "market" ||
+        categoryId === "restaurant" ||
+        categoryId === "cafe"
+    ) {
+
+        return 12.5;
+
+    }
+
+
+    /* ORTA ÖNEM */
+
+    if (
+        categoryId === "fuel" ||
+        categoryId === "clothing" ||
+        categoryId === "gym"
+    ) {
+
+        return 14.5;
+
+    }
+
+
+    /* YAKINDA AÇILSIN */
+
+    if (
+        categoryId === "pharmacy" ||
+        categoryId === "hotel" ||
+        categoryId === "hospital"
+    ) {
+
+        return 16;
+
+    }
+
+
+    return 14.5;
+
+}
 /* =========================================
    KATMANLARI KUR
    ========================================= */
@@ -1423,7 +1482,9 @@ async function setupNativePoiSystem() {
                 "poi",
 
             minzoom:
-                12.5,
+    getPoiMinZoom(
+        category.id
+    ),
 
             filter:
                 createNativePoiFilter(
